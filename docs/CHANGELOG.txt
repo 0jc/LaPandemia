@@ -1,0 +1,8 @@
+CHANGELOG
+
+Cambios presentados el 2021/01/22
+---------------------------------
+Se establece una estructura de código básica para poder cargar diferentes
+pantallas, poder administrar recursos (sprites individuales, atlas de imágenes,
+música, efectos sonoros...), seguir al personaje con la cámara y capturar los
+gestos con los que se mueve al personaje.
