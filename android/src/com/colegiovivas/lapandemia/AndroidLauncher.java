@@ -1,10 +1,9 @@
-package com.example.testgame;
+package com.colegiovivas.lapandemia;
 
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.example.testgame.MyTestGame;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -15,6 +14,6 @@ public class AndroidLauncher extends AndroidApplication {
 		config.useAccelerometer = false;
 		config.useCompass = false;
 
-		initialize(new MyTestGame(), config);
+		initialize(new LaPandemia(), config);
 	}
 }

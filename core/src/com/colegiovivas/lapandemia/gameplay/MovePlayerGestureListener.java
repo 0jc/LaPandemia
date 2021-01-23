@@ -1,4 +1,4 @@
-package com.example.testgame.gameplay;
+package com.colegiovivas.lapandemia.gameplay;
 
 import com.badlogic.gdx.input.GestureDetector;
 

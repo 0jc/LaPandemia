@@ -1,19 +1,18 @@
-package com.example.testgame;
+package com.colegiovivas.lapandemia;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Array;
-import com.example.testgame.pooling.ArrayPool;
-import com.example.testgame.pooling.RectanglePool;
-import com.example.testgame.level.Level;
-import com.example.testgame.level.Fan;
-import com.example.testgame.level.Wall;
-import com.example.testgame.screens.GameScreen;
-import com.example.testgame.screens.LoadingScreen;
+import com.colegiovivas.lapandemia.pooling.ArrayPool;
+import com.colegiovivas.lapandemia.pooling.RectanglePool;
+import com.colegiovivas.lapandemia.level.Level;
+import com.colegiovivas.lapandemia.level.Fan;
+import com.colegiovivas.lapandemia.level.Wall;
+import com.colegiovivas.lapandemia.screens.GameScreen;
+import com.colegiovivas.lapandemia.screens.LoadingScreen;
 
-public class MyTestGame extends Game {
+public class LaPandemia extends Game {
 	// Radio ancho:alto de los viewports de las pantallas.
     public static final float V_RATIO = 5f/3f;
     // Tamaños de los viewports de las pantallas.

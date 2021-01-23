@@ -1,4 +1,4 @@
-package com.example.testgame.screens;
+package com.colegiovivas.lapandemia.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -11,10 +11,10 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.example.testgame.MyTestGame;
+import com.colegiovivas.lapandemia.LaPandemia;
 
 public class LoadingScreen implements Screen {
-    private final MyTestGame parent;
+    private final LaPandemia parent;
     private final Viewport viewport;
     private final OrthographicCamera camera;
     private final GlyphLayout loadingTitleLayout;
@@ -23,11 +23,11 @@ public class LoadingScreen implements Screen {
     // Espacio entre el texto "Cargando..." y el porcentaje de carga.
     private static final float LINE_SPACING = 20;
 
-    public LoadingScreen(final MyTestGame parent) {
+    public LoadingScreen(final LaPandemia parent) {
         this.parent = parent;
 
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(MyTestGame.V_WIDTH, MyTestGame.V_HEIGHT, camera);
+        viewport = new ExtendViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, camera);
         loadingTitleLayout = new GlyphLayout();
         loadedPercentLayout = new GlyphLayout();
     }

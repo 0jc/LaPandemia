@@ -1,4 +1,4 @@
-package com.example.testgame.pooling;
+package com.colegiovivas.lapandemia.pooling;
 
 import com.badlogic.gdx.utils.Pool;
 

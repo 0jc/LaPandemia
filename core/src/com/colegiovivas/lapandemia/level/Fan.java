@@ -1,4 +1,4 @@
-package com.example.testgame.level;
+package com.colegiovivas.lapandemia.level;
 
 public class Fan {
     public float x;

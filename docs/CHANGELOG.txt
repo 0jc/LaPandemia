@@ -25,3 +25,7 @@ partida, se utilizan fondos (pools) para las clases Rectangle y Array. Esto
 implica la creación de cuatro clases nuevas (dos por cada clase con fondo) y,
 ante la previsión de que se necesitarán añadir aún más en el futuro, se ha
 designado un package propio para ellas.
+
+Finalmente, el package principal se ha renombrado de com.example.testgame a
+com.colegiovivas.lapandemia, y la clase MyTestGame se ha renombrado a
+LaPandemia.

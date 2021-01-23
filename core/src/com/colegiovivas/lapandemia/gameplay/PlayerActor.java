@@ -1,4 +1,4 @@
-package com.example.testgame.gameplay;
+package com.colegiovivas.lapandemia.gameplay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -7,15 +7,15 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.example.testgame.MyTestGame;
-import com.example.testgame.pooling.PoolableArray;
-import com.example.testgame.pooling.PoolableRectangle;
+import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.pooling.PoolableArray;
+import com.colegiovivas.lapandemia.pooling.PoolableRectangle;
 
 public class PlayerActor extends Actor {
     private final Animation<TextureRegion> noMasksAnimation;
     private final Animation<TextureRegion> fewMasksAnimation;
     private final Animation<TextureRegion> manyMasksAnimation;
-    private final MyTestGame game;
+    private final LaPandemia game;
 
     // Cada cuánto se incrementa el nivel de salud (segundos) y nivel máximo.
     private static final float HEALTH_TICK = 1;
@@ -40,7 +40,7 @@ public class PlayerActor extends Actor {
     private int health;
     private float healthTime;
 
-    public PlayerActor(float x, float y, final MyTestGame game) {
+    public PlayerActor(float x, float y, final LaPandemia game) {
         this.game = game;
         setBounds(x, y, 64, 64);
         setDirection(0, 0);

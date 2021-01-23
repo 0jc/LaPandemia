@@ -1,4 +1,4 @@
-package com.example.testgame.level;
+package com.colegiovivas.lapandemia.level;
 
 import com.badlogic.gdx.utils.Array;
 

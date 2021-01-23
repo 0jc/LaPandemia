@@ -1,4 +1,4 @@
-package com.example.testgame.screens;
+package com.colegiovivas.lapandemia.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -8,25 +8,25 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.example.testgame.MyTestGame;
-import com.example.testgame.gameplay.MovePlayerGestureListener;
-import com.example.testgame.gameplay.PlayerActor;
-import com.example.testgame.gameplay.FanActor;
-import com.example.testgame.gameplay.WallActor;
-import com.example.testgame.level.Level;
+import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.gameplay.MovePlayerGestureListener;
+import com.colegiovivas.lapandemia.gameplay.PlayerActor;
+import com.colegiovivas.lapandemia.gameplay.FanActor;
+import com.colegiovivas.lapandemia.gameplay.WallActor;
+import com.colegiovivas.lapandemia.level.Level;
 
 public class GameScreen implements Screen {
-    private final MyTestGame parent;
+    private final LaPandemia parent;
     private final Level level;
     private final Viewport viewport;
     private final Stage stage;
     private final PlayerActor playerActor;
 
-    public GameScreen(final MyTestGame parent, final Level level) {
+    public GameScreen(final LaPandemia parent, final Level level) {
         this.parent = parent;
         this.level = level;
 
-        viewport = new ExtendViewport(MyTestGame.V_WIDTH, MyTestGame.V_HEIGHT);
+        viewport = new ExtendViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT);
         stage = new Stage(viewport);
 
         playerActor = new PlayerActor(level.startX, level.startY, parent);
@@ -65,10 +65,10 @@ public class GameScreen implements Screen {
         // Se muestra siempre el mayor espacio posible alrededor del personaje, pero sin
         // hacer scroll más allá de los límites del mapa. Cuando el personaje no está
         // cerca de los bordes, aparece en el centro de la pantalla.
-        float leftBound = MyTestGame.V_WIDTH/2;
-        float rightBound = level.width - MyTestGame.V_WIDTH/2;
-        float lowerBound = MyTestGame.V_HEIGHT/2 + 1;
-        float upperBound = level.height - MyTestGame.V_HEIGHT/2 - 1;
+        float leftBound = LaPandemia.V_WIDTH/2;
+        float rightBound = level.width - LaPandemia.V_WIDTH/2;
+        float lowerBound = LaPandemia.V_HEIGHT/2 + 1;
+        float upperBound = level.height - LaPandemia.V_HEIGHT/2 - 1;
         float xToCenter = playerActor.getX() + playerActor.getWidth()/2;
         float yToCenter = playerActor.getY() + playerActor.getHeight()/2;
 

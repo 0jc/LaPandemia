@@ -1,24 +1,20 @@
-package com.example.testgame.gameplay;
+package com.colegiovivas.lapandemia.gameplay;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.example.testgame.MyTestGame;
-import com.example.testgame.level.Wall;
+import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.level.Wall;
 
 public class WallActor extends Actor {
     private final Texture texture;
     private final Wall wall;
-    private final MyTestGame game;
+    private final LaPandemia game;
     private float elapsedTime;
 
-    public WallActor(final Wall wall, final MyTestGame game) {
+    public WallActor(final Wall wall, final LaPandemia game) {
         this.wall = wall;
         this.game = game;
         this.texture = game.assetManager.get("wall.png");
