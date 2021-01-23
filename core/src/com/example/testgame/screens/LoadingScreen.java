@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -42,6 +43,8 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("player-no-masks.pack", TextureAtlas.class);
         parent.assetManager.load("player-few-masks.pack", TextureAtlas.class);
         parent.assetManager.load("player-many-masks.pack", TextureAtlas.class);
+        parent.assetManager.load("fan.pack", TextureAtlas.class);
+        parent.assetManager.load("wall.png", Texture.class);
 
         loadingTitleLayout.setText(
                 (BitmapFont)parent.assetManager.get("fonts/nice32.fnt"), "Cargando...");

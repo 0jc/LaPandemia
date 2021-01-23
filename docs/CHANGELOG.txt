@@ -6,3 +6,22 @@ Se establece una estructura de código básica para poder cargar diferentes
 pantallas, poder administrar recursos (sprites individuales, atlas de imágenes,
 música, efectos sonoros...), seguir al personaje con la cámara y capturar los
 gestos con los que se mueve al personaje.
+
+
+Cambios presentados el 2021/01/23
+---------------------------------
+Se plantea un mecanismo básico de cargado de niveles recibiendo una instancia
+de una clase `Level`.
+
+Se introducen los actores WallActor y FanActor. El primero representa un muro
+de dimensiones múltiples de 32 píxeles, que se utilizará para las paredes de
+los niveles, mientras que el segundo representa una ventilador en marcha.
+
+PlayerActor gestiona ahora también las colisiones con estos dos nuevos elementos,
+siendo consciente además de su nivel de salud y pudiendo morirse.
+
+Para evitar invocar al recolector de basura dentro de lo posible durante la
+partida, se utilizan fondos (pools) para las clases Rectangle y Array. Esto
+implica la creación de cuatro clases nuevas (dos por cada clase con fondo) y,
+ante la previsión de que se necesitarán añadir aún más en el futuro, se ha
+designado un package propio para ellas.

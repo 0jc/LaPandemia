@@ -3,6 +3,13 @@ package com.example.testgame;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
+import com.example.testgame.pooling.ArrayPool;
+import com.example.testgame.pooling.RectanglePool;
+import com.example.testgame.level.Level;
+import com.example.testgame.level.Fan;
+import com.example.testgame.level.Wall;
 import com.example.testgame.screens.GameScreen;
 import com.example.testgame.screens.LoadingScreen;
 
@@ -15,6 +22,8 @@ public class MyTestGame extends Game {
 
 	public SpriteBatch batch;
 	public AssetManager assetManager;
+	public RectanglePool rectPool;
+	public ArrayPool<Actor> actorArrayPool;
 
 	private LoadingScreen loadingScreen = null;
 	private GameScreen gameScreen = null;
@@ -23,6 +32,8 @@ public class MyTestGame extends Game {
 	public void create() {
 	    batch = new SpriteBatch();
 		assetManager = new AssetManager();
+		rectPool = new RectanglePool();
+		actorArrayPool = new ArrayPool<>();
 
 		loadingScreen = new LoadingScreen(this);
 	    setScreen(loadingScreen);
@@ -34,7 +45,23 @@ public class MyTestGame extends Game {
 	// tras eventos como el pause/resume (que puede ocurrir al pulsar
 	// el botón home y volver a entrar), pudiendo restaurar otras pantallas.
 	public void resourcesLoaded() {
-		gameScreen = new GameScreen(this);
+	    Level testLevel = new Level();
+	    testLevel.width = 1600;
+	    testLevel.height = 960;
+	    testLevel.startX = 800;
+	    testLevel.startY = 480;
+	    testLevel.startXDir = 0;
+	    testLevel.startYDir = 1;
+	    testLevel.walls.add(new Wall(600, 320, 32*10, 32 * 5));
+
+	    testLevel.walls.add(new Wall(0, 0, testLevel.width, 32));
+	    testLevel.walls.add(new Wall(0, 32, 32, testLevel.height - 32));
+	    testLevel.walls.add(new Wall(32, testLevel.height - 32, testLevel.width - 32, 32));
+	    testLevel.walls.add(new Wall(testLevel.width - 32, 32, 32, testLevel.height - 64));
+
+	    testLevel.fans.add(new Fan(728, 640));
+
+		gameScreen = new GameScreen(this, testLevel);
 		setScreen(gameScreen);
 
 		loadingScreen.dispose();
