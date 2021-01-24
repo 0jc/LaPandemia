@@ -45,8 +45,8 @@ public class LaPandemia extends Game {
 	// el botón home y volver a entrar), pudiendo restaurar otras pantallas.
 	public void resourcesLoaded() {
 	    Level testLevel = new Level();
-	    testLevel.width = 1600;
-	    testLevel.height = 960;
+	    testLevel.width = 1600 + 2*32;
+	    testLevel.height = 960 + 2*32;
 	    testLevel.startX = 800;
 	    testLevel.startY = 480;
 	    testLevel.startXDir = 0;

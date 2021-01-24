@@ -29,3 +29,13 @@ designado un package propio para ellas.
 Finalmente, el package principal se ha renombrado de com.example.testgame a
 com.colegiovivas.lapandemia, y la clase MyTestGame se ha renombrado a
 LaPandemia.
+
+
+Cambios presentados el 2021/01/24
+---------------------------------
+Se implementa la capacidad de hacer zoom hacia dentro y hacia fuera mediante el
+gesto pinch. Se añaden medidas explícitamente para que no se interprete
+erróneamente que el usuario desea realizar el gesto tap si levanta uno de los
+dedos antes que el otro durante el zoom, para evitar que el zoom cambie mientras
+los dedos estén quietos y para que siga sin poder observarse la zona fuera de
+rango del mapa.
