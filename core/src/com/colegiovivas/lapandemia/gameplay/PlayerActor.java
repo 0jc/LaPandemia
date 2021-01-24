@@ -50,11 +50,11 @@ public class PlayerActor extends Actor {
         health = MAX_HEALTH;
 
         noMasksAnimation = new Animation<TextureRegion>(1f,
-                ((TextureAtlas) game.assetManager.get("player-no-masks.pack")).getRegions());
+                ((TextureAtlas)game.assetManager.get("player-no-masks.pack")).getRegions());
         fewMasksAnimation = new Animation<TextureRegion>(1f,
-                ((TextureAtlas) game.assetManager.get("player-few-masks.pack")).getRegions());
+                ((TextureAtlas)game.assetManager.get("player-few-masks.pack")).getRegions());
         manyMasksAnimation = new Animation<TextureRegion>(1f,
-                ((TextureAtlas) game.assetManager.get("player-many-masks.pack")).getRegions());
+                ((TextureAtlas)game.assetManager.get("player-many-masks.pack")).getRegions());
 
         maskCount = 0;
         alive = true;
@@ -92,8 +92,8 @@ public class PlayerActor extends Actor {
         elapsedTime += Gdx.graphics.getDeltaTime();
         Animation<TextureRegion> animation =
                 maskCount == 0
-                ? noMasksAnimation
-                : (maskCount < 3) ? fewMasksAnimation : manyMasksAnimation;
+                        ? noMasksAnimation
+                        : (maskCount < 3) ? fewMasksAnimation : manyMasksAnimation;
         batch.draw(
                 animation.getKeyFrame(elapsedTime, true),
                 getX(), getY());
@@ -120,7 +120,7 @@ public class PlayerActor extends Actor {
         PoolableRectangle rOther = game.rectPool.obtain();
         PoolableArray<Actor> collidingActors = game.actorArrayPool.obtain();
         try {
-            rPlayer.set(getX() + speed*delta*xDir, getY() + speed*delta*yDir, getWidth(), getHeight());
+            rPlayer.set(getX() + speed * delta * xDir, getY() + speed * delta * yDir, getWidth(), getHeight());
             for (Actor actor : getStage().getActors()) {
                 if (actor != this) {
                     rOther.set(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
@@ -152,7 +152,7 @@ public class PlayerActor extends Actor {
 
             if (bumpedWall != null && bumpedFan == null) {
                 float spaceWithin = getCollisionDistance(bumpedWall) - 1;
-                setPosition(getX() + xDir*spaceWithin, getY() + yDir*spaceWithin);
+                setPosition(getX() + xDir * spaceWithin, getY() + yDir * spaceWithin);
                 setDirection(-xDir, -yDir);
 
                 healthTime = 0;
@@ -162,7 +162,7 @@ public class PlayerActor extends Actor {
                 }
             } else if (bumpedFan != null) {
                 float spaceWithin = getCollisionDistance(bumpedFan) - 1;
-                setPosition(getX() + xDir*spaceWithin, getY() + yDir*spaceWithin);
+                setPosition(getX() + xDir * spaceWithin, getY() + yDir * spaceWithin);
                 alive = false;
             } else {
                 setBounds(rPlayer.x, rPlayer.y, rPlayer.width, rPlayer.height);

@@ -1,8 +1,6 @@
 package com.colegiovivas.lapandemia.gameplay;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 
@@ -10,7 +8,7 @@ public class ZoomGestureListener extends GestureDetector.GestureAdapter {
     // Razón que indica cuánto se modifica el zoom en función de cuántos píxeles se
     // separan los dedos durante el gesto pinch. Valores más grandes harán que el
     // zoom sea más brusco.
-    private static final float ZOOM_DISTANCE_RATIO = 0.1f/50f;
+    private static final float ZOOM_DISTANCE_RATIO = 0.1f / 50f;
 
     private final GameScreen gameScreen;
 
@@ -40,7 +38,7 @@ public class ZoomGestureListener extends GestureDetector.GestureAdapter {
         }
         float distance = pointer2.dst(pointer1);
         float delta = distance - lastDistance;
-        gameScreen.zoom(-delta*ZOOM_DISTANCE_RATIO);
+        gameScreen.zoom(-delta * ZOOM_DISTANCE_RATIO);
         lastDistance = distance;
         return true;
     }

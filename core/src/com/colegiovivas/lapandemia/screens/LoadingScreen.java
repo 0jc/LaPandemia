@@ -60,7 +60,7 @@ public class LoadingScreen implements Screen {
         BitmapFont nice32 = (BitmapFont)parent.assetManager.get("fonts/nice32.fnt");
 
         loadedPercentLayout.setText(
-                nice32, String.format("%.0f%%", parent.assetManager.getProgress()*100));
+                nice32, String.format("%.0f%%", parent.assetManager.getProgress() * 100));
 
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -72,13 +72,13 @@ public class LoadingScreen implements Screen {
         nice32.draw(
                 parent.batch,
                 loadingTitleLayout,
-                -loadingTitleLayout.width/2,
-                +(loadingTitleLayout.height + LINE_SPACING + loadedPercentLayout.height)/2);
+                -loadingTitleLayout.width / 2,
+                +(loadingTitleLayout.height + LINE_SPACING + loadedPercentLayout.height) / 2);
         nice32.draw(
                 parent.batch,
                 loadedPercentLayout,
-                -loadedPercentLayout.width/2,
-                -(loadingTitleLayout.height + LINE_SPACING + loadedPercentLayout.height)/2);
+                -loadedPercentLayout.width / 2,
+                -(loadingTitleLayout.height + LINE_SPACING + loadedPercentLayout.height) / 2);
         parent.batch.end();
     }
 

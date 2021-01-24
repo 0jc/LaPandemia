@@ -19,8 +19,8 @@ public class FanActor extends Actor {
     public FanActor(final Fan fan, final LaPandemia game) {
         this.fan = fan;
         this.game = game;
-        this.animation = new Animation<TextureRegion>(1f/5f,
-                ((TextureAtlas) game.assetManager.get("fan.pack")).getRegions());
+        this.animation = new Animation<TextureRegion>(1f / 5f,
+                ((TextureAtlas)game.assetManager.get("fan.pack")).getRegions());
 
         setBounds(fan.x, fan.y, 64, 64);
         elapsedTime = 0;

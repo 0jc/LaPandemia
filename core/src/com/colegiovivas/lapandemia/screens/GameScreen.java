@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -76,8 +75,7 @@ public class GameScreen implements Screen {
         // coordenadas de la cámara que centren al personaje lo máximo posible sin
         // salir de los límites del mapa.
         if (LaPandemia.V_WIDTH * newZoom <= level.width
-            && LaPandemia.V_HEIGHT * newZoom <= level.height)
-        {
+                && LaPandemia.V_HEIGHT * newZoom <= level.height) {
             camera.zoom = newZoom;
         }
     }
@@ -86,12 +84,12 @@ public class GameScreen implements Screen {
         // Se muestra siempre el mayor espacio posible alrededor del personaje, pero sin
         // hacer scroll más allá de los límites del mapa. Cuando el personaje no está
         // cerca de los bordes, aparece en el centro de la pantalla.
-        float leftBound = LaPandemia.V_WIDTH*camera.zoom/2;
+        float leftBound = LaPandemia.V_WIDTH * camera.zoom / 2;
         float rightBound = level.width - leftBound;
-        float lowerBound = camera.zoom*LaPandemia.V_HEIGHT/2 + 1;
+        float lowerBound = camera.zoom * LaPandemia.V_HEIGHT / 2 + 1;
         float upperBound = level.height - lowerBound;
-        float xToCenter = playerActor.getX() + playerActor.getWidth()/2;
-        float yToCenter = playerActor.getY() + playerActor.getHeight()/2;
+        float xToCenter = playerActor.getX() + playerActor.getWidth() / 2;
+        float yToCenter = playerActor.getY() + playerActor.getHeight() / 2;
 
         camera.position.x = MathUtils.clamp(xToCenter, leftBound, rightBound);
         camera.position.y = MathUtils.clamp(yToCenter, lowerBound, upperBound);
