@@ -14,8 +14,8 @@ import com.colegiovivas.lapandemia.screens.LoadingScreen;
 
 public class LaPandemia extends Game {
 	// Radio ancho:alto de los viewports de las pantallas.
-    public static final float V_RATIO = 5f/3f;
-    // Tamaños de los viewports de las pantallas.
+	public static final float V_RATIO = 5f/3f;
+	// Tamaños de los viewports de las pantallas.
 	public static final float V_WIDTH = 800;
 	public static final float V_HEIGHT = V_WIDTH/V_RATIO;
 
