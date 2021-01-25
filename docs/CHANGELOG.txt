@@ -92,3 +92,10 @@ múltiples veces. Se debía a que CollisionPool.reset no restauraba el valor
 de player a null, lo que hacía que, tras entrar un virus en colisión con el
 PlayerActor, este evento también fuera reportado falsamente en las futuras
 llamadas a init().
+
+
+Cambios presentados el 2021/01/25 (3)
+-------------------------------------
+Se cambia el movimiento de los virus para ser mucho menos caótico, aunque sigue
+(y seguirá) siendo aleatorio. También se cambia cómo responden cuando chocan con
+otro virus; simplemente cambian de dirección.

@@ -10,15 +10,21 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.screens.GameScreen;
 
 public class VirusActor extends Actor implements Pool.Poolable {
     private final LaPandemia game;
     private final Animation<TextureRegion> animation;
+    private static final float SPEED = 100;
+    private static final float MIN_DIR_TICK = 0.7f;
+    private static final float MAX_DIR_TICK = 1.5f;
 
-    private float elapsedTime;
-    private float speed;
+    private float animationTime;
     private boolean alive;
+
+    private float directionTime;
+    private float directionTick;
+    private float xDir;
+    private float yDir;
 
     public VirusActor(final LaPandemia game) {
         this.game = game;
@@ -33,15 +39,17 @@ public class VirusActor extends Actor implements Pool.Poolable {
 
     public VirusActor init(float x, float y) {
         setPosition(x, y);
-        speed = 3;
         alive = true;
         return this;
     }
 
     @Override
     public void reset() {
-        elapsedTime = 0;
-        speed = 0;
+        animationTime = 0;
+        directionTime = 0;
+        directionTick = 0;
+        xDir = 0;
+        yDir = 0;
         alive = false;
     }
 
@@ -55,9 +63,9 @@ public class VirusActor extends Actor implements Pool.Poolable {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (alive) {
-            elapsedTime += Gdx.graphics.getDeltaTime();
+            animationTime += Gdx.graphics.getDeltaTime();
             batch.draw(
-                    animation.getKeyFrame(elapsedTime, true),
+                    animation.getKeyFrame(animationTime, true),
                     getX(), getY());
         }
     }
@@ -69,39 +77,34 @@ public class VirusActor extends Actor implements Pool.Poolable {
             return;
         }
 
-        // Este tipo de movimiento será posiblemente remplazado por un Action.
-        float xDisplacement = 0;
-        float yDisplacement = 0;
-        switch (MathUtils.random(1, 4)) {
-            case 1:
-                xDisplacement = 1;
-                break;
-            case 2:
-                xDisplacement = -1;
-                break;
-            case 3:
-                yDisplacement = 1;
-                break;
-            case 4:
-                yDisplacement = -1;
-                break;
+        directionTime += delta;
+        if (directionTick == 0 || directionTime >= directionTick) {
+            directionTick = MathUtils.random(MIN_DIR_TICK, MAX_DIR_TICK);
+            directionTime = 0;
+            xDir = MathUtils.random(-1, 1);
+            yDir = MathUtils.random(-1 ,1);
         }
 
-        xDisplacement *= speed;
-        yDisplacement *= speed;
+        float xDisplacement = xDir * SPEED * delta;
+        float yDisplacement = yDir * SPEED * delta;
 
         CollisionInfo collisionInfo = game.collisionInfoPool.obtain().init(
                 this, xDisplacement, yDisplacement);
         try {
             if (collisionInfo.walls.size > 0) {
+                directionTick = 0;
                 return;
             }
             if (collisionInfo.player != null) {
                 collisionInfo.player.infect(this);
                 return;
             }
-            if (collisionInfo.fans.size > 0 || collisionInfo.viruses.size > 0) {
+            if (collisionInfo.fans.size > 0) {
                 remove();
+                return;
+            }
+            if (collisionInfo.viruses.size > 0) {
+                directionTick = 0;
                 return;
             }
         } finally {
