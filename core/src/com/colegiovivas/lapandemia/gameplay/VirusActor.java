@@ -100,15 +100,7 @@ public class VirusActor extends Actor implements Pool.Poolable {
                 remove();
                 return;
             }
-            if (collisionInfo.fans.size > 0) {
-                remove();
-                return;
-            }
-            if (collisionInfo.viruses.size > 0) {
-                for (int i = 0; i < collisionInfo.viruses.size; i++) {
-                    VirusActor virus = (VirusActor)collisionInfo.viruses.get(i);
-                    virus.remove();
-                }
+            if (collisionInfo.fans.size > 0 || collisionInfo.viruses.size > 0) {
                 remove();
                 return;
             }

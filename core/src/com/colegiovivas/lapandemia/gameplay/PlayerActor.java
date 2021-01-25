@@ -105,7 +105,6 @@ public class PlayerActor extends Actor {
         if (!alive) {
             // Por lo de pronto tan solo se para de mover el personaje. Más adelante se
             // implementará la lógica real del fin de la partida.
-            Gdx.app.log("LaPandemia", "!alive");
             return;
         }
 
