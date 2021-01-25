@@ -46,6 +46,7 @@ public class CollisionInfo implements Pool.Poolable {
             game.actorArrayPool.free(viruses);
             viruses = null;
         }
+        player = null;
         collidingActor = null;
         stage = null;
         effectiveXDisplacement = 0;
