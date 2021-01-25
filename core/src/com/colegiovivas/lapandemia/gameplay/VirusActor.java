@@ -47,6 +47,7 @@ public class VirusActor extends Actor implements Pool.Poolable {
 
     @Override
     public boolean remove() {
+        alive = false;
         game.virusPool.free(this);
         return super.remove();
     }
