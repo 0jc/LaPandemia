@@ -83,3 +83,12 @@ en los próximos commits. Concretamente:
   sea porque tanto el PlayerActor como el propio Virus gestionan estas colisiones.
 - Cuando dos virus chocan entre sí, solo uno de los dos debe desaparecer. Sin
   embargo, actualmente se eliminan los dos.
+
+
+Cambios presentados el 2021/01/25 (2)
+-------------------------------------
+Se corrige el bug que provocaba que la colisión con un virus contabilizase
+múltiples veces. Se debía a que CollisionPool.reset no restauraba el valor
+de player a null, lo que hacía que, tras entrar un virus en colisión con el
+PlayerActor, este evento también fuera reportado falsamente en las futuras
+llamadas a init().
