@@ -43,6 +43,7 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("player-no-masks.pack", TextureAtlas.class);
         parent.assetManager.load("player-few-masks.pack", TextureAtlas.class);
         parent.assetManager.load("player-many-masks.pack", TextureAtlas.class);
+        parent.assetManager.load("virus.pack", TextureAtlas.class);
         parent.assetManager.load("fan.pack", TextureAtlas.class);
         parent.assetManager.load("wall.png", Texture.class);
 

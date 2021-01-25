@@ -30,7 +30,7 @@ public class GameScreen implements Screen {
         viewport = new ExtendViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, camera);
         stage = new Stage(viewport);
 
-        playerActor = new PlayerActor(level.startX, level.startY, parent);
+        playerActor = new PlayerActor(level.startX, level.startY, parent, this);
         playerActor.setDirection(level.startXDir, level.startYDir);
         stage.addActor(playerActor);
 
@@ -40,6 +40,17 @@ public class GameScreen implements Screen {
         for (int i = 0; i < level.walls.size; i++) {
             stage.addActor(new WallActor(level.walls.get(i), parent));
         }
+
+        // Lo que procede es temporal y para hacer pruebas.
+        playerActor.setMaskCount(2);
+        VirusActor testVirus1 = parent.virusPool.obtain().init(playerActor.getX() + 100, playerActor.getY());
+        stage.addActor(testVirus1);
+
+        VirusActor testVirus2 = parent.virusPool.obtain().init(playerActor.getX() + 200, playerActor.getY());
+        stage.addActor(testVirus2);
+
+        VirusActor testVirus3 = parent.virusPool.obtain().init(playerActor.getX() + 200, playerActor.getY() - 300);
+        stage.addActor(testVirus3);
     }
 
     @Override
@@ -118,5 +129,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        parent.virusPool.clear();
     }
 }

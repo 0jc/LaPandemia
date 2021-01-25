@@ -8,14 +8,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.pooling.PoolableArray;
-import com.colegiovivas.lapandemia.pooling.PoolableRectangle;
+import com.colegiovivas.lapandemia.screens.GameScreen;
 
 public class PlayerActor extends Actor {
     private final Animation<TextureRegion> noMasksAnimation;
     private final Animation<TextureRegion> fewMasksAnimation;
     private final Animation<TextureRegion> manyMasksAnimation;
     private final LaPandemia game;
+    private final GameScreen gameScreen;
 
     // Cada cuánto se incrementa el nivel de salud (segundos) y nivel máximo.
     private static final float HEALTH_TICK = 1;
@@ -40,8 +40,9 @@ public class PlayerActor extends Actor {
     private int health;
     private float healthTime;
 
-    public PlayerActor(float x, float y, final LaPandemia game) {
+    public PlayerActor(float x, float y, final LaPandemia game, final GameScreen gameScreen) {
         this.game = game;
+        this.gameScreen = gameScreen;
         setBounds(x, y, 64, 64);
         setDirection(0, 0);
         elapsedTime = 0;
@@ -114,45 +115,15 @@ public class PlayerActor extends Actor {
             health = Math.min(MAX_HEALTH, health + 1);
         }
 
-        // Rectángulo del PlayerActor tras moverse a la siguiente posición.
-        PoolableRectangle rPlayer = game.rectPool.obtain();
-        // Rectángulo de otro actor para comprobar si hay colisión con rPlayer.
-        PoolableRectangle rOther = game.rectPool.obtain();
-        PoolableArray<Actor> collidingActors = game.actorArrayPool.obtain();
+        float xDisplacement = speed*delta*xDir;
+        float yDisplacement = speed*delta*yDir;
+        CollisionInfo collisionInfo = game.collisionInfoPool.obtain().init(
+                this, xDisplacement, yDisplacement);
         try {
-            rPlayer.set(getX() + speed * delta * xDir, getY() + speed * delta * yDir, getWidth(), getHeight());
-            for (Actor actor : getStage().getActors()) {
-                if (actor != this) {
-                    rOther.set(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
-                    if (rPlayer.overlaps(rOther)) {
-                        float distance = getCollisionDistance(actor);
-                        for (int i = collidingActors.size - 1; i >= 0; i--) {
-                            if (getCollisionDistance(collidingActors.get(i)) > distance) {
-                                // `actor` está físicamente antepuesto a `collidingActors.get(i)`,
-                                // por lo que este último no es un candidato real a ser colisionado.
-                                collidingActors.removeIndex(i);
-                            }
-                        }
-                        collidingActors.add(actor);
-                    }
-                }
-            }
-
-            // El PlayerActor chocará simultáneamente con todos los miembros de collidingActors.
-            WallActor bumpedWall = null;
-            FanActor bumpedFan = null;
-            for (Actor actor : collidingActors) {
-                if (actor instanceof WallActor) {
-                    bumpedWall = (WallActor)actor;
-                }
-                if (actor instanceof FanActor) {
-                    bumpedFan = (FanActor)actor;
-                }
-            }
-
-            if (bumpedWall != null && bumpedFan == null) {
-                float spaceWithin = getCollisionDistance(bumpedWall) - 1;
-                setPosition(getX() + xDir * spaceWithin, getY() + yDir * spaceWithin);
+            setPosition(
+                    getX() + collisionInfo.effectiveXDisplacement,
+                    getY() + collisionInfo.effectiveYDisplacement);
+            if (collisionInfo.walls.size != 0) {
                 setDirection(-xDir, -yDir);
 
                 healthTime = 0;
@@ -160,25 +131,33 @@ public class PlayerActor extends Actor {
                 if (health == 0) {
                     alive = false;
                 }
-            } else if (bumpedFan != null) {
-                float spaceWithin = getCollisionDistance(bumpedFan) - 1;
-                setPosition(getX() + xDir * spaceWithin, getY() + yDir * spaceWithin);
+                return;
+            }
+            if (collisionInfo.fans.size != 0) {
                 alive = false;
-            } else {
-                setBounds(rPlayer.x, rPlayer.y, rPlayer.width, rPlayer.height);
+                return;
+            }
+            if (collisionInfo.viruses.size != 0) {
+                for (int i = 0; i < collisionInfo.viruses.size; i++) {
+                    VirusActor virus = (VirusActor)collisionInfo.viruses.get(i);
+                    virus.remove();
+                    if (maskCount == 0) {
+                        alive = false;
+                        return;
+                    }
+                    maskCount--;
+                }
             }
         } finally {
-            game.rectPool.free(rPlayer);
-            game.rectPool.free(rOther);
+            game.collisionInfoPool.free(collisionInfo);
         }
     }
 
-    // Obtener la cantidad mínima de píxeles que se deben recorrer para colisionar
-    // con `actor`, dada la dirección actual del PlayerActor.
-    private float getCollisionDistance(Actor actor) {
-        if (xDir == -1) return getX() - (actor.getX() + actor.getWidth() - 1);
-        if (xDir == 1) return actor.getX() - (getX() + getWidth() - 1);
-        if (yDir == -1) return getY() - (actor.getY() + actor.getHeight() - 1);
-        else return actor.getY() - (getY() + getHeight() - 1);
+    public void infect() {
+        if (maskCount > 0) {
+            maskCount--;
+        } else {
+            alive = false;
+        }
     }
 }

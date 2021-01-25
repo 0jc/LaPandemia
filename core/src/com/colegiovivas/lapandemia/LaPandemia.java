@@ -1,14 +1,17 @@
 package com.colegiovivas.lapandemia;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.colegiovivas.lapandemia.pooling.ArrayPool;
+import com.colegiovivas.lapandemia.pooling.CollisionInfoPool;
 import com.colegiovivas.lapandemia.pooling.RectanglePool;
 import com.colegiovivas.lapandemia.level.Level;
 import com.colegiovivas.lapandemia.level.Fan;
 import com.colegiovivas.lapandemia.level.Wall;
+import com.colegiovivas.lapandemia.pooling.VirusPool;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
 
@@ -23,16 +26,21 @@ public class LaPandemia extends Game {
     public AssetManager assetManager;
     public RectanglePool rectPool;
     public ArrayPool<Actor> actorArrayPool;
+    public CollisionInfoPool collisionInfoPool;
+    public VirusPool virusPool;
 
     private LoadingScreen loadingScreen = null;
     private GameScreen gameScreen = null;
 
     @Override
     public void create() {
+        Gdx.app.log("LaPandemia", "create()");
         batch = new SpriteBatch();
         assetManager = new AssetManager();
         rectPool = new RectanglePool();
         actorArrayPool = new ArrayPool<>();
+        collisionInfoPool = new CollisionInfoPool(this);
+        virusPool = new VirusPool(this);
 
         loadingScreen = new LoadingScreen(this);
         setScreen(loadingScreen);

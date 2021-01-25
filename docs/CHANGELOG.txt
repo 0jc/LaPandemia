@@ -39,3 +39,47 @@ erróneamente que el usuario desea realizar el gesto tap si levanta uno de los
 dedos antes que el otro durante el zoom, para evitar que el zoom cambie mientras
 los dedos estén quietos y para que siga sin poder observarse la zona fuera de
 rango del mapa.
+
+
+Cambios presentados el 2021/01/25
+---------------------------------
+Se añade un primer modelo de virus como actor. Tal y como se especificó en el
+anteproyecto, su movimiento consiste en un píxel de desplazamiento hacia alguna
+de las cuatro direcciones posibles por cada llamada a act(). Esta clase de
+movimiento resulta no ser tan buena idea, por lo que se cambiará a otra clase
+de movimiento aleatorio menos caótica.
+
+Hasta el momento, el único actor que necesitaba comprobar sus colisiones con
+otros actores era PlayerActor, y la lógica con la que se obtenía información
+como con qué actores se colisionaría tras un desplazamiento o las coordenadas
+finales en las que el actor quedaría tras la colisión estaba contenida dentro
+del propio PlayerActor. Ya que muchos de los mismos problemas surgen ahora para
+VirusActor, el código relevante se mueve a una nueva clase, denominada
+CollisionInfo, que ambos actores utilizan y que, tras inicializarse, almacena
+información sobre una colisión. Para evitar instanciar esta clase múltiples
+veces por renderizado, se prepara un fondo.
+
+Algunos fondos como CollisionInfo utilizan recursos como Arrays que se deben
+liberar en reset() y, por tanto, reinicializar tras la llamada a obtain().
+Para hacer este proceso cómodo y simple, se implementa una función init() en
+cada objeto que implementa Poolable, que hace las preparaciones pertinentes y
+devuelve la propia instancia. De este modo, los objetos se obtendrán siempre
+no mediante .obtain() sino mediante .obtain().init(...).
+
+Los VirusActor son otro candidato idóneo a ser gestionados mediante un fondo, ya
+que deberán aparecer y desaparecer constantemente durante las partidas. Para
+asegurarnos de que las instancias de VirusActor se devuelven al fondo cuando
+se eliminan los virus, se sobreescribe remove() para primero liberar el
+objeto.
+
+Finalmente, se añade código en GameScreen para iniciar la partida cargada con
+tres virus en posiciones predefinidas, y se establece un número de mascarillas
+para el PlayerActor. Este fragmento de código solo existirá temporalmente para
+hacer pruebas.
+
+Actualmente hay algunos bugs con la gestión de los virus que serán corregidos
+en los próximos commits. Concretamente:
+- Parece ser posible que un virus infecte dos veces al PlayerActor. Posiblemente
+  sea porque tanto el PlayerActor como el propio Virus gestionan estas colisiones.
+- Cuando dos virus chocan entre sí, solo uno de los dos debe desaparecer. Sin
+  embargo, actualmente se eliminan los dos.
