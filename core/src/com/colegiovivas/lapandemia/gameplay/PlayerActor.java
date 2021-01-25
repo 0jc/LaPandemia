@@ -92,7 +92,7 @@ public class PlayerActor extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         elapsedTime += Gdx.graphics.getDeltaTime();
         Animation<TextureRegion> animation =
-                maskCount == 0
+                maskCount <= 0
                         ? noMasksAnimation
                         : (maskCount < 3) ? fewMasksAnimation : manyMasksAnimation;
         batch.draw(
@@ -139,12 +139,7 @@ public class PlayerActor extends Actor {
             if (collisionInfo.viruses.size != 0) {
                 for (int i = 0; i < collisionInfo.viruses.size; i++) {
                     VirusActor virus = (VirusActor)collisionInfo.viruses.get(i);
-                    virus.remove();
-                    if (maskCount == 0) {
-                        alive = false;
-                        return;
-                    }
-                    maskCount--;
+                    infect(virus);
                 }
             }
         } finally {
@@ -152,10 +147,10 @@ public class PlayerActor extends Actor {
         }
     }
 
-    public void infect() {
-        if (maskCount > 0) {
-            maskCount--;
-        } else {
+    public void infect(VirusActor virus) {
+        virus.remove();
+        maskCount--;
+        if (maskCount < 0) {
             alive = false;
         }
     }

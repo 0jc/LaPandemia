@@ -97,8 +97,7 @@ public class VirusActor extends Actor implements Pool.Poolable {
                 return;
             }
             if (collisionInfo.player != null) {
-                collisionInfo.player.infect();
-                remove();
+                collisionInfo.player.infect(this);
                 return;
             }
             if (collisionInfo.fans.size > 0 || collisionInfo.viruses.size > 0) {
