@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.gameplay.*;
@@ -34,7 +35,7 @@ public class GameScreen implements Screen {
         this.level = level;
 
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, camera);
+        viewport = new StretchViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, camera);
         stage = new Stage(viewport);
 
         playerActor = new PlayerActor(level.startX, level.startY, parent, this);
@@ -70,25 +71,14 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        int virusCount = 0;
-        for (Actor actor : stage.getActors()) {
-            if (actor instanceof VirusActor) {
-                virusCount++;
-            }
-        }
-
         lastVirusTime += delta;
-        if (virusCount < level.maxVirusCount && lastVirusTime >= 2) {
+        if (lastVirusTime >= 2) {
             PoolableRectangle rect = parent.rectPool.obtain().init();
             rect.set(0, 0, 32, 64);
             try {
                 if (tryAssignCoords(rect)) {
-                    Gdx.app.log("LaPandemia", "Assign successful");
                     lastVirusTime = 0;
-                    virusCount++;
                     stage.addActor(parent.virusPool.obtain().init(rect.x, rect.y));
-                } else {
-                    Gdx.app.log("LaPandemia", "Assign successful");
                 }
             } finally {
                 parent.rectPool.free(rect);
@@ -103,7 +93,8 @@ public class GameScreen implements Screen {
     }
 
     public void zoom(float delta) {
-        float newZoom = MathUtils.clamp(camera.zoom + delta, 1f, 3f);
+        //float newZoom = MathUtils.clamp(camera.zoom + delta, 0.8f, 1.6f);
+        float newZoom = Math.max(camera.zoom + delta, 0.8f);
         // Multiplicando una distancia en unidades del mundo por el zoom obtenemos su
         // distancia en píxeles de pantalla. Sabiendo esto, nos aseguramos de que el
         // nuevo zoom no sea tan grande que el mapa entero se quede pequeño en alguno

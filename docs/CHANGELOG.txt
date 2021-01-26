@@ -99,3 +99,15 @@ Cambios presentados el 2021/01/25 (3)
 Se cambia el movimiento de los virus para ser mucho menos caótico, aunque sigue
 (y seguirá) siendo aleatorio. También se cambia cómo responden cuando chocan con
 otro virus; simplemente cambian de dirección.
+
+
+Cambios presentados el 2021/01/25
+---------------------------------
+Se empieza a utilizar StretchViewport en vez de ExtendViewport para corregir
+un bug en el que se mostraban regiones fuera de límites en algunos dispositivos.
+
+También se elimina el número máximo de virus que pueden existir en un mapa.
+
+Se introducen los siguientes cambios, sujetos a volver a cambiar en el futuro:
+- No existe actualmente un zoom máximo.
+- El nivel de demostración es más complejo.

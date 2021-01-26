@@ -6,6 +6,10 @@ public class Wall {
     public float w;
     public float h;
 
+    public Wall(float x, float y, float w, float h, float factor) {
+        this(x*factor, y*factor, w*factor, h*factor);
+    }
+
     public Wall(float x, float y, float w, float h) {
         // Ya que el bitmap patrón es de 32x32.
         if (w % 32 != 0 || h % 32 != 0) {

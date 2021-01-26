@@ -24,9 +24,6 @@ public class Level {
     // Las hélices, que matan tanto a enemigos como al personaje.
     public Array<Fan> fans;
 
-    // No se puede exceder esta cantidad de virus en el nivel.
-    public int maxVirusCount;
-
     public Level() {
         fans = new Array<>();
         walls = new Array<>();
