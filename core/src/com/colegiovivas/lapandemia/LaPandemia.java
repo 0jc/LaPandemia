@@ -59,6 +59,7 @@ public class LaPandemia extends Game {
         testLevel.startY = 480;
         testLevel.startXDir = 0;
         testLevel.startYDir = 1;
+        testLevel.maxVirusCount = 300;
         testLevel.walls.add(new Wall(600, 320, 32 * 10, 32 * 5));
 
         testLevel.walls.add(new Wall(0, 0, testLevel.width, 32));

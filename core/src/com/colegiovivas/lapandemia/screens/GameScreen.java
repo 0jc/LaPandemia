@@ -7,20 +7,27 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.gameplay.*;
 import com.colegiovivas.lapandemia.level.Level;
+import com.colegiovivas.lapandemia.pooling.PoolableRectangle;
 
 public class GameScreen implements Screen {
+    private static final float SAFE_DISTANCE = 400;
+
     private final LaPandemia parent;
     private final Level level;
     private final Viewport viewport;
     private final Stage stage;
     private final PlayerActor playerActor;
     private final OrthographicCamera camera;
+
+    private float lastVirusTime;
 
     public GameScreen(final LaPandemia parent, final Level level) {
         this.parent = parent;
@@ -41,16 +48,10 @@ public class GameScreen implements Screen {
             stage.addActor(new WallActor(level.walls.get(i), parent));
         }
 
+        lastVirusTime = 0;
+
         // Lo que procede es temporal y para hacer pruebas.
         playerActor.setMaskCount(2);
-        VirusActor testVirus1 = parent.virusPool.obtain().init(playerActor.getX() + 100, playerActor.getY());
-        stage.addActor(testVirus1);
-
-        VirusActor testVirus2 = parent.virusPool.obtain().init(playerActor.getX() + 200, playerActor.getY());
-        stage.addActor(testVirus2);
-
-        VirusActor testVirus3 = parent.virusPool.obtain().init(playerActor.getX() + 200, playerActor.getY() - 300);
-        stage.addActor(testVirus3);
     }
 
     @Override
@@ -68,6 +69,31 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        int virusCount = 0;
+        for (Actor actor : stage.getActors()) {
+            if (actor instanceof VirusActor) {
+                virusCount++;
+            }
+        }
+
+        lastVirusTime += delta;
+        if (virusCount < level.maxVirusCount && lastVirusTime >= 2) {
+            PoolableRectangle rect = parent.rectPool.obtain().init();
+            rect.set(0, 0, 32, 64);
+            try {
+                if (tryAssignCoords(rect)) {
+                    Gdx.app.log("LaPandemia", "Assign successful");
+                    lastVirusTime = 0;
+                    virusCount++;
+                    stage.addActor(parent.virusPool.obtain().init(rect.x, rect.y));
+                } else {
+                    Gdx.app.log("LaPandemia", "Assign successful");
+                }
+            } finally {
+                parent.rectPool.free(rect);
+            }
+        }
 
         stage.act();
         // El orden de las siguientes dos líneas es importante. Si se invierten, el movimiento
@@ -104,6 +130,37 @@ public class GameScreen implements Screen {
 
         camera.position.x = MathUtils.clamp(xToCenter, leftBound, rightBound);
         camera.position.y = MathUtils.clamp(yToCenter, lowerBound, upperBound);
+    }
+
+    private boolean tryAssignCoords(Rectangle outCoords) {
+        // No generamos coordenadas demasiado cerca de los bordes del mapa, donde de
+        // todos modos es improbable que no haya muros en cualquier nivel.
+        outCoords.x = MathUtils.random(32, level.width - 32 - 64);
+        outCoords.y = MathUtils.random(32, level.height - 32 - 64);
+
+        PoolableRectangle actorRect = parent.rectPool.obtain().init();
+        try {
+            for (Actor actor : stage.getActors()) {
+                if (actor instanceof PlayerActor) {
+                    actorRect.x = actor.getX() - SAFE_DISTANCE;
+                    actorRect.y = actor.getY() - SAFE_DISTANCE;
+                    actorRect.width = 2*SAFE_DISTANCE + actor.getWidth();
+                    actorRect.height = 2*SAFE_DISTANCE + actor.getHeight();
+                } else {
+                    actorRect.x = actor.getX();
+                    actorRect.y = actor.getY();
+                    actorRect.width = actor.getWidth();
+                    actorRect.height = actor.getHeight();
+                }
+
+                if (actorRect.overlaps(outCoords)) {
+                    return false;
+                }
+            }
+        } finally {
+            parent.rectPool.free(actorRect);
+        }
+        return true;
     }
 
     @Override
