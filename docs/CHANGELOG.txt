@@ -116,3 +116,18 @@ Se introducen los siguientes cambios, sujetos a volver a cambiar en el futuro:
 Cambios presentados el 2021/01/28 (2)
 -------------------------------------
 Se añaden las mascarillas como actor.
+
+
+Cambios presentados el 2021/01/29
+---------------------------------
+Se introducen las clases ActorGenerator y GenerableActor, que ayudan a especificar
+de forma concisa y sin repetición de código la generación periódica de actores.
+Consecuentemente, desaparecen las clases VirusPool y MaskPool (además de que en
+el futuro no tendremos que crear todavía más fondos en el package pooling solo para
+este propósito), desaparecen los atributos correspondientes en la clase LaPandemia,
+etc.
+
+También se corrige como consecuencia natural un error de pérdida de memoria (memory
+leak) en GameScreen#dispose, donde solo se liberaban los VirusActor pero no los
+MaskActor. Tan solo es un ejemplo más de por qué haber reducido la duplicación de
+código es importante.

@@ -10,8 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.screens.GameScreen;
 
-public class VirusActor extends Actor implements Pool.Poolable {
+public class VirusActor extends GenerableActor {
     private final LaPandemia game;
     private final Animation<TextureRegion> animation;
     private static final float SPEED = 100;
@@ -37,8 +38,8 @@ public class VirusActor extends Actor implements Pool.Poolable {
         setHeight(64);
     }
 
-    public VirusActor init(float x, float y) {
-        setPosition(x, y);
+    public VirusActor init(GameScreen.ActorGenerator generator, float x, float y) {
+        super.init(generator, x, y);
         alive = true;
         return this;
     }
@@ -56,7 +57,6 @@ public class VirusActor extends Actor implements Pool.Poolable {
     @Override
     public boolean remove() {
         alive = false;
-        game.virusPool.free(this);
         return super.remove();
     }
 

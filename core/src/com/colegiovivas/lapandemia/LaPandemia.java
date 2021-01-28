@@ -22,8 +22,6 @@ public class LaPandemia extends Game {
     public RectanglePool rectPool;
     public ArrayPool<Actor> actorArrayPool;
     public CollisionInfoPool collisionInfoPool;
-    public VirusPool virusPool;
-    public MaskPool maskPool;
 
     private LoadingScreen loadingScreen = null;
     private GameScreen gameScreen = null;
@@ -36,8 +34,6 @@ public class LaPandemia extends Game {
         rectPool = new RectanglePool();
         actorArrayPool = new ArrayPool<>();
         collisionInfoPool = new CollisionInfoPool(this);
-        virusPool = new VirusPool(this);
-        maskPool = new MaskPool(this);
 
         loadingScreen = new LoadingScreen(this);
         setScreen(loadingScreen);
