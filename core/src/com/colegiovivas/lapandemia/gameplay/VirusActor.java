@@ -91,7 +91,7 @@ public class VirusActor extends Actor implements Pool.Poolable {
         CollisionInfo collisionInfo = game.collisionInfoPool.obtain().init(
                 this, xDisplacement, yDisplacement);
         try {
-            if (collisionInfo.walls.size > 0) {
+            if (collisionInfo.walls.size > 0 || collisionInfo.masks.size > 0) {
                 directionTick = 0;
                 return;
             }

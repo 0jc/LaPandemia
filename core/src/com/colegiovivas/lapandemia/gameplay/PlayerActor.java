@@ -136,11 +136,14 @@ public class PlayerActor extends Actor {
                 alive = false;
                 return;
             }
-            if (collisionInfo.viruses.size != 0) {
-                for (int i = 0; i < collisionInfo.viruses.size; i++) {
-                    VirusActor virus = (VirusActor)collisionInfo.viruses.get(i);
-                    infect(virus);
-                }
+
+            for (int i = 0; i < collisionInfo.masks.size; i++) {
+                MaskActor mask = (MaskActor)collisionInfo.masks.get(i);
+                collectMask(mask);
+            }
+            for (int i = 0; i < collisionInfo.viruses.size; i++) {
+                VirusActor virus = (VirusActor)collisionInfo.viruses.get(i);
+                infect(virus);
             }
         } finally {
             game.collisionInfoPool.free(collisionInfo);
@@ -153,5 +156,10 @@ public class PlayerActor extends Actor {
         if (maskCount < 0) {
             alive = false;
         }
+    }
+
+    public void collectMask(MaskActor mask) {
+        mask.remove();
+        maskCount++;
     }
 }

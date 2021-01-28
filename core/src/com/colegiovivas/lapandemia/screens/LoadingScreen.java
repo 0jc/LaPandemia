@@ -46,6 +46,7 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("virus.pack", TextureAtlas.class);
         parent.assetManager.load("fan.pack", TextureAtlas.class);
         parent.assetManager.load("wall.png", Texture.class);
+        parent.assetManager.load("mask.png", Texture.class);
 
         loadingTitleLayout.setText(
                 (BitmapFont)parent.assetManager.get("fonts/nice32.fnt"), "Cargando...");

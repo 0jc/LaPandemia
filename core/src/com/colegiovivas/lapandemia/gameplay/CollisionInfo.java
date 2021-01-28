@@ -18,6 +18,7 @@ public class CollisionInfo implements Pool.Poolable {
     public PoolableArray<Actor> walls;
     public PoolableArray<Actor> fans;
     public PoolableArray<Actor> viruses;
+    public PoolableArray<Actor> masks;
     public PlayerActor player;
 
     // Desplazamiento que collidingActor debe realizar finalmente. En caso de no haber
@@ -46,6 +47,10 @@ public class CollisionInfo implements Pool.Poolable {
             game.actorArrayPool.free(viruses);
             viruses = null;
         }
+        if (masks != null) {
+            game.actorArrayPool.free(masks);
+            masks = null;
+        }
         player = null;
         collidingActor = null;
         stage = null;
@@ -59,6 +64,7 @@ public class CollisionInfo implements Pool.Poolable {
         this.walls = game.actorArrayPool.obtain().init();
         this.fans = game.actorArrayPool.obtain().init();
         this.viruses = game.actorArrayPool.obtain().init();
+        this.masks = game.actorArrayPool.obtain().init();
         this.collidingActor = collidingActor;
         this.stage = collidingActor.getStage();
         effectiveXDisplacement = xDisplacement;
@@ -110,6 +116,9 @@ public class CollisionInfo implements Pool.Poolable {
                 }
                 else if (actor instanceof VirusActor) {
                     viruses.add(actor);
+                }
+                else if (actor instanceof MaskActor) {
+                    masks.add(actor);
                 }
             }
         } finally {

@@ -20,6 +20,7 @@ import com.colegiovivas.lapandemia.pooling.PoolableRectangle;
 
 public class GameScreen implements Screen {
     private static final float SAFE_DISTANCE = 400;
+    private static final float MAX_MASKS_IN_MAP = 3;
 
     private final LaPandemia parent;
     private final Level level;
@@ -27,8 +28,10 @@ public class GameScreen implements Screen {
     private final Stage stage;
     private final PlayerActor playerActor;
     private final OrthographicCamera camera;
+    private final ActorStats actorStats;
 
     private float lastVirusTime;
+    private float lastMaskTime;
 
     public GameScreen(final LaPandemia parent, final Level level) {
         this.parent = parent;
@@ -50,9 +53,9 @@ public class GameScreen implements Screen {
         }
 
         lastVirusTime = 0;
+        lastMaskTime = 0;
 
-        // Lo que procede es temporal y para hacer pruebas.
-        playerActor.setMaskCount(2);
+        actorStats = new ActorStats();
     }
 
     @Override
@@ -71,6 +74,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        actorStats.update();
+
         lastVirusTime += delta;
         if (lastVirusTime >= 2) {
             PoolableRectangle rect = parent.rectPool.obtain().init();
@@ -82,6 +87,24 @@ public class GameScreen implements Screen {
                 }
             } finally {
                 parent.rectPool.free(rect);
+            }
+        }
+
+        if (actorStats.maskCount == MAX_MASKS_IN_MAP) {
+            lastMaskTime = 0;
+        } else {
+            lastMaskTime += delta;
+            if (lastMaskTime >= 10) {
+                PoolableRectangle rect = parent.rectPool.obtain().init();
+                rect.set(0, 0, 64, 32);
+                try {
+                    if (tryAssignCoords(rect)) {
+                        lastMaskTime = 0;
+                        stage.addActor(parent.maskPool.obtain().init(rect.x, rect.y));
+                    }
+                } finally {
+                    parent.rectPool.free(rect);
+                }
             }
         }
 
@@ -178,5 +201,26 @@ public class GameScreen implements Screen {
     public void dispose() {
         stage.dispose();
         parent.virusPool.clear();
+    }
+
+    private class ActorStats {
+        public int virusCount;
+        public int maskCount;
+
+        public ActorStats() {
+        }
+
+        public void update() {
+            virusCount = 0;
+            maskCount = 0;
+
+            for (Actor actor : stage.getActors()) {
+                if (actor instanceof VirusActor) {
+                    virusCount++;
+                } else if (actor instanceof MaskActor) {
+                    maskCount++;
+                }
+            }
+        }
     }
 }

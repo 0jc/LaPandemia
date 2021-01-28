@@ -6,10 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.colegiovivas.lapandemia.level.*;
-import com.colegiovivas.lapandemia.pooling.ArrayPool;
-import com.colegiovivas.lapandemia.pooling.CollisionInfoPool;
-import com.colegiovivas.lapandemia.pooling.RectanglePool;
-import com.colegiovivas.lapandemia.pooling.VirusPool;
+import com.colegiovivas.lapandemia.pooling.*;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
 
@@ -26,6 +23,7 @@ public class LaPandemia extends Game {
     public ArrayPool<Actor> actorArrayPool;
     public CollisionInfoPool collisionInfoPool;
     public VirusPool virusPool;
+    public MaskPool maskPool;
 
     private LoadingScreen loadingScreen = null;
     private GameScreen gameScreen = null;
@@ -39,6 +37,7 @@ public class LaPandemia extends Game {
         actorArrayPool = new ArrayPool<>();
         collisionInfoPool = new CollisionInfoPool(this);
         virusPool = new VirusPool(this);
+        maskPool = new MaskPool(this);
 
         loadingScreen = new LoadingScreen(this);
         setScreen(loadingScreen);
