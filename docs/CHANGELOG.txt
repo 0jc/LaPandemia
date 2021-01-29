@@ -131,3 +131,12 @@ También se corrige como consecuencia natural un error de pérdida de memoria (m
 leak) en GameScreen#dispose, donde solo se liberaban los VirusActor pero no los
 MaskActor. Tan solo es un ejemplo más de por qué haber reducido la duplicación de
 código es importante.
+
+
+Cambios presentados el 2021/01/29
+---------------------------------
+Tras observar más detenidamente el ciclo de vida de los fondos, se ha eliminado por
+completo el package "pooling" a favor de crear fondos anónimos desde la clase principal
+del juego. Además, la función init() se ha eliminado de donde era innecesaria, ya que
+complicaba las cosas más de lo que ayudaba debido a las limitaciones del sistema
+tipado de Java.
