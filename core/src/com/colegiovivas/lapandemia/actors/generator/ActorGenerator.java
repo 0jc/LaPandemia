@@ -1,13 +1,12 @@
-package com.colegiovivas.lapandemia.gameplay.generator;
+package com.colegiovivas.lapandemia.actors.generator;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.gameplay.GenerableActor;
-import com.colegiovivas.lapandemia.gameplay.PlayerActor;
+import com.colegiovivas.lapandemia.actors.GenerableActor;
+import com.colegiovivas.lapandemia.actors.PlayerActor;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 
 public class ActorGenerator {

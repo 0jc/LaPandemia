@@ -1,10 +1,8 @@
-package com.colegiovivas.lapandemia.gameplay;
+package com.colegiovivas.lapandemia.actors;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.LaPandemia;
 
 public class MaskActor extends GenerableActor {

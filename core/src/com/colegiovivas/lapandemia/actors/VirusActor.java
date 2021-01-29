@@ -1,4 +1,4 @@
-package com.colegiovivas.lapandemia.gameplay;
+package com.colegiovivas.lapandemia.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,7 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.gameplay.generator.ActorGenerator;
+import com.colegiovivas.lapandemia.actors.generator.ActorGenerator;
+import com.colegiovivas.lapandemia.gameplay.CollisionInfo;
 
 public class VirusActor extends GenerableActor {
     private final LaPandemia game;

@@ -13,10 +13,12 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.gameplay.*;
-import com.colegiovivas.lapandemia.gameplay.generator.ActorGenerator;
-import com.colegiovivas.lapandemia.gameplay.generator.ActorGeneratorFactory;
-import com.colegiovivas.lapandemia.level.Level;
+import com.colegiovivas.lapandemia.actors.*;
+import com.colegiovivas.lapandemia.actors.generator.ActorGenerator;
+import com.colegiovivas.lapandemia.actors.generator.ActorGeneratorFactory;
+import com.colegiovivas.lapandemia.gestures.MovePlayerGestureListener;
+import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
+import com.colegiovivas.lapandemia.levels.Level;
 
 public class GameScreen implements Screen {
     private static final float MAX_MASKS_IN_MAP = 3;

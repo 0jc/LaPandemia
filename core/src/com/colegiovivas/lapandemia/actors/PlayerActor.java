@@ -1,4 +1,4 @@
-package com.colegiovivas.lapandemia.gameplay;
+package com.colegiovivas.lapandemia.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.gameplay.CollisionInfo;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 
 public class PlayerActor extends Actor {

@@ -1,8 +1,8 @@
-package com.colegiovivas.lapandemia.gameplay;
+package com.colegiovivas.lapandemia.actors;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Pool;
-import com.colegiovivas.lapandemia.gameplay.generator.ActorGenerator;
+import com.colegiovivas.lapandemia.actors.generator.ActorGenerator;
 
 public abstract class GenerableActor extends Actor implements Pool.Poolable {
     private ActorGenerator generator;

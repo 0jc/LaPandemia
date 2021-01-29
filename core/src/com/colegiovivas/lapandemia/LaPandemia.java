@@ -9,7 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.gameplay.CollisionInfo;
-import com.colegiovivas.lapandemia.level.*;
+import com.colegiovivas.lapandemia.levels.Fan;
+import com.colegiovivas.lapandemia.levels.Level;
+import com.colegiovivas.lapandemia.levels.Wall;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
 

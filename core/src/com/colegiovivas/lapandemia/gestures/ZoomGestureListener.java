@@ -1,4 +1,4 @@
-package com.colegiovivas.lapandemia.gameplay;
+package com.colegiovivas.lapandemia.gestures;
 
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;

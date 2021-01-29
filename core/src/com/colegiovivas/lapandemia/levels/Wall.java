@@ -1,4 +1,4 @@
-package com.colegiovivas.lapandemia.level;
+package com.colegiovivas.lapandemia.levels;
 
 public class Wall {
     public float x;

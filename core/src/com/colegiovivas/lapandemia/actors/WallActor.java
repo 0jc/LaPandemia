@@ -1,4 +1,4 @@
-package com.colegiovivas.lapandemia.gameplay;
+package com.colegiovivas.lapandemia.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.level.Wall;
+import com.colegiovivas.lapandemia.levels.Wall;
 
 public class WallActor extends Actor {
     private final Texture texture;

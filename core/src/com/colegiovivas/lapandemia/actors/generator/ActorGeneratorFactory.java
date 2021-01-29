@@ -1,9 +1,8 @@
-package com.colegiovivas.lapandemia.gameplay.generator;
+package com.colegiovivas.lapandemia.actors.generator;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.gameplay.GenerableActor;
+import com.colegiovivas.lapandemia.actors.GenerableActor;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 
 public class ActorGeneratorFactory {

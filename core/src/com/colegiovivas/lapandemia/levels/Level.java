@@ -1,4 +1,4 @@
-package com.colegiovivas.lapandemia.level;
+package com.colegiovivas.lapandemia.levels;
 
 import com.badlogic.gdx.utils.Array;
 
