@@ -141,4 +141,7 @@ del juego. Además, la función init() se ha eliminado de donde era innecesaria,
 complicaba las cosas más de lo que ayudaba debido a las limitaciones del sistema
 tipado de Java.
 
-Se mueve ActorGenerator fuera de GameScreen.
+Se mueve ActorGenerator fuera de GameScreen y se establece una estructura ligeramente
+distinta de packages más apropiada a cómo ha ido evolucionando el proyecto. Ahora, los
+actores se encuentran en el package "actors"; los GestureListeners, en "gestures"; y
+"level" pasa a llamarse "levels" por seguir la convención de utilizar el plural.
