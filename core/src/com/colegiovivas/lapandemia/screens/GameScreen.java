@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
@@ -16,10 +14,11 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.gameplay.*;
+import com.colegiovivas.lapandemia.gameplay.generator.ActorGenerator;
+import com.colegiovivas.lapandemia.gameplay.generator.ActorGeneratorFactory;
 import com.colegiovivas.lapandemia.level.Level;
 
 public class GameScreen implements Screen {
-    private static final float SAFE_DISTANCE = 400;
     private static final float MAX_MASKS_IN_MAP = 3;
 
     private final LaPandemia parent;
@@ -49,19 +48,32 @@ public class GameScreen implements Screen {
             stage.addActor(new WallActor(level.walls.get(i), parent));
         }
 
+        ActorGeneratorFactory agf = new ActorGeneratorFactory(this, parent);
         actorGenerators = new Array<>();
-        actorGenerators.add(new ActorGenerator(2, 32, 64, null, new Pool<GenerableActor>() {
+        actorGenerators.add(agf.getInstance(2, 32, 64, null, new Pool<GenerableActor>() {
             @Override
             protected VirusActor newObject() {
                 return new VirusActor(parent);
             }
         }));
-        actorGenerators.add(new ActorGenerator(10, 64, 32, 3f, new Pool<GenerableActor>() {
+        actorGenerators.add(agf.getInstance(10, 64, 32, 3f, new Pool<GenerableActor>() {
             @Override
             protected MaskActor newObject() {
                 return new MaskActor(parent);
             }
         }));
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public float getWorldWidth() {
+        return level.width;
+    }
+
+    public float getWorldHeight() {
+        return level.height;
     }
 
     @Override
@@ -150,85 +162,4 @@ public class GameScreen implements Screen {
         }
     }
 
-    public class ActorGenerator {
-        private final float tick;
-        private final float width;
-        private final float height;
-        private final Float maxCount;
-        private final Pool<GenerableActor> generableActorPool;
-
-        private int count;
-        private float lastActorTime;
-
-        public ActorGenerator(final float tick, final float width, final float height, final Float maxCount,
-                              final Pool<GenerableActor> generableActorPool)
-        {
-            this.tick = tick;
-            this.width = width;
-            this.height = height;
-            this.maxCount = maxCount;
-            this.generableActorPool = generableActorPool;
-        }
-
-        public Pool<GenerableActor> getPool() {
-            return generableActorPool;
-        }
-
-        public void remove(GenerableActor actor) {
-            count--;
-            generableActorPool.free(actor);
-        }
-
-        public void render(float delta) {
-            if (maxCount != null && count == maxCount) {
-                lastActorTime = 0;
-            } else {
-                lastActorTime += delta;
-                if (lastActorTime >= tick) {
-                    Rectangle rect = parent.rectPool.obtain();
-                    rect.set(0, 0, width, height);
-                    try {
-                        if (tryAssignCoords(rect)) {
-                            lastActorTime = 0;
-                            stage.addActor(generableActorPool.obtain().init(this, rect.x, rect.y));
-                            count++;
-                        }
-                    } finally {
-                        parent.rectPool.free(rect);
-                    }
-                }
-            }
-        }
-
-        private boolean tryAssignCoords(Rectangle outCoords) {
-            // No generamos coordenadas demasiado cerca de los bordes del mapa, donde de
-            // todos modos es improbable que no haya muros en cualquier nivel.
-            outCoords.x = MathUtils.random(32, level.width - 32 - 64);
-            outCoords.y = MathUtils.random(32, level.height - 32 - 64);
-
-            Rectangle actorRect = parent.rectPool.obtain();
-            try {
-                for (Actor actor : stage.getActors()) {
-                    if (actor instanceof PlayerActor) {
-                        actorRect.x = actor.getX() - SAFE_DISTANCE;
-                        actorRect.y = actor.getY() - SAFE_DISTANCE;
-                        actorRect.width = 2*SAFE_DISTANCE + actor.getWidth();
-                        actorRect.height = 2*SAFE_DISTANCE + actor.getHeight();
-                    } else {
-                        actorRect.x = actor.getX();
-                        actorRect.y = actor.getY();
-                        actorRect.width = actor.getWidth();
-                        actorRect.height = actor.getHeight();
-                    }
-
-                    if (actorRect.overlaps(outCoords)) {
-                        return false;
-                    }
-                }
-            } finally {
-                parent.rectPool.free(actorRect);
-            }
-            return true;
-        }
-    }
 }

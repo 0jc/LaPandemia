@@ -6,11 +6,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.screens.GameScreen;
+import com.colegiovivas.lapandemia.gameplay.generator.ActorGenerator;
 
 public class VirusActor extends GenerableActor {
     private final LaPandemia game;
@@ -39,7 +37,7 @@ public class VirusActor extends GenerableActor {
     }
 
     @Override
-    public VirusActor init(GameScreen.ActorGenerator generator, float x, float y) {
+    public VirusActor init(ActorGenerator generator, float x, float y) {
         super.init(generator, x, y);
         alive = true;
         return this;

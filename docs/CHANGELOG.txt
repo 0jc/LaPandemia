@@ -140,3 +140,5 @@ completo el package "pooling" a favor de crear fondos anónimos desde la clase p
 del juego. Además, la función init() se ha eliminado de donde era innecesaria, ya que
 complicaba las cosas más de lo que ayudaba debido a las limitaciones del sistema
 tipado de Java.
+
+Se mueve ActorGenerator fuera de GameScreen.
