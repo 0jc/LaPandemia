@@ -12,13 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.gameplay.*;
 import com.colegiovivas.lapandemia.level.Level;
-import com.colegiovivas.lapandemia.pooling.PoolableRectangle;
 
 public class GameScreen implements Screen {
     private static final float SAFE_DISTANCE = 400;
@@ -187,7 +185,7 @@ public class GameScreen implements Screen {
             } else {
                 lastActorTime += delta;
                 if (lastActorTime >= tick) {
-                    PoolableRectangle rect = parent.rectPool.obtain().init();
+                    Rectangle rect = parent.rectPool.obtain();
                     rect.set(0, 0, width, height);
                     try {
                         if (tryAssignCoords(rect)) {
@@ -208,7 +206,7 @@ public class GameScreen implements Screen {
             outCoords.x = MathUtils.random(32, level.width - 32 - 64);
             outCoords.y = MathUtils.random(32, level.height - 32 - 64);
 
-            PoolableRectangle actorRect = parent.rectPool.obtain().init();
+            Rectangle actorRect = parent.rectPool.obtain();
             try {
                 for (Actor actor : stage.getActors()) {
                     if (actor instanceof PlayerActor) {

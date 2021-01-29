@@ -1,11 +1,11 @@
 package com.colegiovivas.lapandemia.gameplay;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.pooling.PoolableArray;
-import com.colegiovivas.lapandemia.pooling.PoolableRectangle;
 
 public class CollisionInfo implements Pool.Poolable {
     private final LaPandemia game;
@@ -15,10 +15,10 @@ public class CollisionInfo implements Pool.Poolable {
     public Stage stage;
 
     // Los diferentes tipos de actores con los que collidingActor entraría en colisión.
-    public PoolableArray<Actor> walls;
-    public PoolableArray<Actor> fans;
-    public PoolableArray<Actor> viruses;
-    public PoolableArray<Actor> masks;
+    public Array<Actor> walls;
+    public Array<Actor> fans;
+    public Array<Actor> viruses;
+    public Array<Actor> masks;
     public PlayerActor player;
 
     // Desplazamiento que collidingActor debe realizar finalmente. En caso de no haber
@@ -61,20 +61,20 @@ public class CollisionInfo implements Pool.Poolable {
     public CollisionInfo init(Actor collidingActor, float xDisplacement, float yDisplacement) {
         int xDir = xDisplacement == 0 ? 0 : xDisplacement < 0 ? -1 : 1;
         int yDir = yDisplacement == 0 ? 0 : yDisplacement < 0 ? -1 : 1;
-        this.walls = game.actorArrayPool.obtain().init();
-        this.fans = game.actorArrayPool.obtain().init();
-        this.viruses = game.actorArrayPool.obtain().init();
-        this.masks = game.actorArrayPool.obtain().init();
+        this.walls = game.actorArrayPool.obtain();
+        this.fans = game.actorArrayPool.obtain();
+        this.viruses = game.actorArrayPool.obtain();
+        this.masks = game.actorArrayPool.obtain();
         this.collidingActor = collidingActor;
         this.stage = collidingActor.getStage();
         effectiveXDisplacement = xDisplacement;
         effectiveYDisplacement = yDisplacement;
 
         // Rectángulo del PlayerActor tras moverse a la siguiente posición.
-        PoolableRectangle rPlayer = game.rectPool.obtain().init();
+        Rectangle rPlayer = game.rectPool.obtain();
         // Rectángulo de otro actor para comprobar si hay colisión con rPlayer.
-        PoolableRectangle rOther = game.rectPool.obtain().init();
-        PoolableArray<Actor> collidedActors = game.actorArrayPool.obtain().init();
+        Rectangle rOther = game.rectPool.obtain();
+        Array<Actor> collidedActors = game.actorArrayPool.obtain();
 
         try {
             rPlayer.set(

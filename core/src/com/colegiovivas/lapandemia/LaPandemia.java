@@ -4,9 +4,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
+import com.colegiovivas.lapandemia.gameplay.CollisionInfo;
 import com.colegiovivas.lapandemia.level.*;
-import com.colegiovivas.lapandemia.pooling.*;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
 
@@ -19,9 +22,9 @@ public class LaPandemia extends Game {
 
     public SpriteBatch batch;
     public AssetManager assetManager;
-    public RectanglePool rectPool;
-    public ArrayPool<Actor> actorArrayPool;
-    public CollisionInfoPool collisionInfoPool;
+    public Pool<Rectangle> rectPool;
+    public Pool<Array<Actor>> actorArrayPool;
+    public Pool<CollisionInfo> collisionInfoPool;
 
     private LoadingScreen loadingScreen = null;
     private GameScreen gameScreen = null;
@@ -31,9 +34,38 @@ public class LaPandemia extends Game {
         Gdx.app.log("LaPandemia", "create()");
         batch = new SpriteBatch();
         assetManager = new AssetManager();
-        rectPool = new RectanglePool();
-        actorArrayPool = new ArrayPool<>();
-        collisionInfoPool = new CollisionInfoPool(this);
+
+        abstract class PoolableRectangle extends Rectangle implements Pool.Poolable {}
+        rectPool = new Pool<Rectangle>() {
+            @Override
+            protected PoolableRectangle newObject() {
+                return new PoolableRectangle() {
+                    @Override
+                    public void reset() {
+                        set(0, 0, 0, 0);
+                    }
+                };
+            }
+        };
+
+        abstract class PoolableArray<T> extends Array<T> implements Pool.Poolable {}
+        actorArrayPool = new Pool<Array<Actor>>() {
+            @Override
+            protected PoolableArray<Actor> newObject() {
+                return new PoolableArray<Actor>() {
+                    @Override
+                    public void reset() {
+                        clear();
+                    }
+                };
+            }
+        };
+        collisionInfoPool = new Pool<CollisionInfo>() {
+            @Override
+            protected CollisionInfo newObject() {
+                return new CollisionInfo(LaPandemia.this);
+            }
+        };
 
         loadingScreen = new LoadingScreen(this);
         setScreen(loadingScreen);
