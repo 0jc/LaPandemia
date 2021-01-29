@@ -38,6 +38,7 @@ public class VirusActor extends GenerableActor {
         setHeight(64);
     }
 
+    @Override
     public VirusActor init(GameScreen.ActorGenerator generator, float x, float y) {
         super.init(generator, x, y);
         alive = true;
