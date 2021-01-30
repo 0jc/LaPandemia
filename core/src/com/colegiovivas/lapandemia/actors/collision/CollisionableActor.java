@@ -10,10 +10,10 @@ public class CollisionableActor extends Actor {
         this.collisionDispatcher = collisionDispatcher;
     }
 
-    public void collidedBy(CollisionableActor actor, ActorId id, float srcX, float srcY) {
+    public void collidedBy(CollisionableActor actor, ActorId id, int srcX, int srcY) {
 
     }
-    public void collidedWith(CollisionableActor actor, ActorId id, float srcX, float srcY) {
+    public void collidedWith(CollisionableActor actor, ActorId id, int srcX, int srcY) {
 
     }
 }

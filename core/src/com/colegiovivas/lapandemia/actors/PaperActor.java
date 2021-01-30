@@ -4,20 +4,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.actors.collision.CollisionDispatcher;
 import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
 
-public class MaskActor extends GenerableActor {
+public class PaperActor extends GenerableActor {
     private final Texture texture;
     private final LaPandemia game;
 
-    public MaskActor(final LaPandemia game) {
+    public PaperActor(final LaPandemia game) {
         this.game = game;
-        this.texture = game.assetManager.get("mask.png");
+        this.texture = game.assetManager.get("toiletpaper.png");
 
         setTouchable(Touchable.enabled);
-        setWidth(64);
-        setHeight(32);
+        setSize(48, 48);
     }
 
     @Override

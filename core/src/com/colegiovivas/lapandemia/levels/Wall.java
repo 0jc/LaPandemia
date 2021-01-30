@@ -1,16 +1,16 @@
 package com.colegiovivas.lapandemia.levels;
 
 public class Wall {
-    public float x;
-    public float y;
-    public float w;
-    public float h;
+    public int x;
+    public int y;
+    public int w;
+    public int h;
 
-    public Wall(float x, float y, float w, float h, float factor) {
+    public Wall(int x, int y, int w, int h, int factor) {
         this(x*factor, y*factor, w*factor, h*factor);
     }
 
-    public Wall(float x, float y, float w, float h) {
+    public Wall(int x, int y, int w, int h) {
         // Ya que el bitmap patrón es de 32x32.
         if (w % 32 != 0 || h % 32 != 0) {
             throw new IllegalArgumentException();

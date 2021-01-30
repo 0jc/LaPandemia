@@ -38,6 +38,9 @@ public class PlayerActor extends CollisionableActor {
     private int health;
     private float healthTime;
 
+    // Cantidad de rollos de papel recogidos (equivalentes a puntos).
+    private int paperCount;
+
     // Para evitar que collidedWith gestione dos veces la colisión simultánea con
     // dos WallActors.
     private boolean wallCollisionSeen;
@@ -60,6 +63,7 @@ public class PlayerActor extends CollisionableActor {
                 ((TextureAtlas)game.assetManager.get("player-many-masks.pack")).getRegions());
 
         maskCount = 0;
+        paperCount = 0;
 
         setTouchable(Touchable.enabled);
     }
@@ -121,13 +125,13 @@ public class PlayerActor extends CollisionableActor {
             health = Math.min(MAX_HEALTH, health + 1);
         }
 
-        float xDisplacement = speed*delta*xDir;
-        float yDisplacement = speed*delta*yDir;
+        int xDisplacement = (int)Math.floor(speed*delta*xDir);
+        int yDisplacement = (int)Math.floor(speed*delta*yDir);
         collisionDispatcher.tryMove(this, xDisplacement, yDisplacement);
     }
 
     @Override
-    public void collidedWith(CollisionableActor actor, ActorId id, float srcX, float srcY) {
+    public void collidedWith(CollisionableActor actor, ActorId id, int srcX, int srcY) {
         switch (id) {
             case WALL:
                 if (!wallCollisionSeen) {
@@ -149,11 +153,15 @@ public class PlayerActor extends CollisionableActor {
             case VIRUS:
                 infected();
                 break;
+
+            case PAPER:
+                paperCount++;
+                break;
         }
     }
 
     @Override
-    public void collidedBy(CollisionableActor actor, ActorId id, float srcX, float srcY) {
+    public void collidedBy(CollisionableActor actor, ActorId id, int srcX, int srcY) {
         if (id == ActorId.VIRUS) {
             infected();
         }

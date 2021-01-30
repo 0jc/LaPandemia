@@ -23,8 +23,8 @@ public class VirusActor extends GenerableActor {
 
     private float directionTime;
     private float directionTick;
-    private float xDir;
-    private float yDir;
+    private int xDir;
+    private int yDir;
 
     public VirusActor(final LaPandemia game) {
         this.game = game;
@@ -84,14 +84,14 @@ public class VirusActor extends GenerableActor {
             yDir = MathUtils.random(-1 ,1);
         }
 
-        float xDisplacement = xDir * SPEED * delta;
-        float yDisplacement = yDir * SPEED * delta;
+        int xDisplacement = (int)Math.floor(xDir * SPEED * delta);
+        int yDisplacement = (int)Math.floor(yDir * SPEED * delta);
 
         collisionDispatcher.tryMove(this, xDisplacement, yDisplacement);
     }
 
     @Override
-    public void collidedWith(CollisionableActor actor, ActorId id, float srcX, float srcY) {
+    public void collidedWith(CollisionableActor actor, ActorId id, int srcX, int srcY) {
         switch (id) {
             case WALL:
             case MASK:
@@ -110,7 +110,7 @@ public class VirusActor extends GenerableActor {
     }
 
     @Override
-    public void collidedBy(CollisionableActor actor, ActorId id, float srcX, float srcY) {
+    public void collidedBy(CollisionableActor actor, ActorId id, int srcX, int srcY) {
         if (id == ActorId.PLAYER) {
             caughtPlayer();
         }

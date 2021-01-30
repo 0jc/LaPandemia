@@ -1,6 +1,7 @@
 package com.colegiovivas.lapandemia.actors.collision;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,9 +25,9 @@ public class CollisionDispatcher {
         actorRegistry.put(actorClass, id);
     }
 
-    public void tryMove(CollisionableActor actor, float xDisplacement, float yDisplacement) {
-        float srcX = actor.getX();
-        float srcY = actor.getY();
+    public void tryMove(CollisionableActor actor, int xDisplacement, int yDisplacement) {
+        int srcX = (int)actor.getX();
+        int srcY = (int)actor.getY();
         int xDir = xDisplacement == 0 ? 0 : xDisplacement < 0 ? -1 : 1;
         int yDir = yDisplacement == 0 ? 0 : yDisplacement < 0 ? -1 : 1;
 
@@ -36,7 +37,7 @@ public class CollisionDispatcher {
         Rectangle rOther = game.rectPool.obtain();
 
         Array<Actor> collidedActors = game.actorArrayPool.obtain();
-        Float minCollisionDistance = null;
+        Integer minCollisionDistance = null;
         try {
             rActor.set(actor.getX() + xDisplacement, actor.getY() + yDisplacement, actor.getWidth(),
                     actor.getHeight());
@@ -44,7 +45,7 @@ public class CollisionDispatcher {
                 if (currActor != actor) {
                     rOther.set(currActor.getX(), currActor.getY(), currActor.getWidth(), currActor.getHeight());
                     if (rActor.overlaps(rOther)) {
-                        float collisionDistance = collisionDistance(actor, currActor, xDir, yDir);
+                        int collisionDistance = collisionDistance(actor, currActor, xDir, yDir);
                         if (minCollisionDistance == null || minCollisionDistance >= collisionDistance) {
                             if (minCollisionDistance == null || minCollisionDistance > collisionDistance) {
                                 minCollisionDistance = collisionDistance;
@@ -56,8 +57,8 @@ public class CollisionDispatcher {
                 }
             }
 
-            float effectiveDx = minCollisionDistance == null ? xDisplacement : xDir*minCollisionDistance;
-            float effectiveDy = minCollisionDistance == null ? yDisplacement : yDir*minCollisionDistance;
+            int effectiveDx = minCollisionDistance == null ? xDisplacement : xDir*minCollisionDistance;
+            int effectiveDy = minCollisionDistance == null ? yDisplacement : yDir*minCollisionDistance;
             actor.setPosition(srcX + effectiveDx, srcY + effectiveDy);
 
             // `collidingActor` chocará **simultáneamente** con todos los miembros de collidedActors.
@@ -79,7 +80,7 @@ public class CollisionDispatcher {
     // Obtener la cantidad mínima de píxeles que collidingActor debe recorrer para colisionar
     // con collidedActor, dada la dirección actual de collidingActor. Tras realizarse el
     // desplazamiento, los actores se mostrarían el uno justo al lado del otro sin superponerse.
-    private static float collisionDistance(
+    private static int collisionDistance(
             Actor collidingActor, Actor collidedActor, int xDir, int yDir)
     {
         if (xDir != 0 && yDir != 0) {
@@ -98,13 +99,13 @@ public class CollisionDispatcher {
                         collisionDistance(collidingActor, collidedActor, 0, yDir));
             }
         } else if (xDir == -1) {
-            return Math.abs(collidingActor.getX() - (collidedActor.getX() + collidedActor.getWidth()));
+            return (int)Math.abs(collidingActor.getX() - (collidedActor.getX() + collidedActor.getWidth()));
         } else if (xDir == 1) {
-            return Math.abs(collidedActor.getX() - (collidingActor.getX() + collidingActor.getWidth()));
+            return (int)Math.abs(collidedActor.getX() - (collidingActor.getX() + collidingActor.getWidth()));
         } else if (yDir == -1) {
-            return Math.abs(collidingActor.getY() - (collidedActor.getY() + collidedActor.getHeight()));
+            return (int)Math.abs(collidingActor.getY() - (collidedActor.getY() + collidedActor.getHeight()));
         } else {
-            return Math.abs(collidedActor.getY() - (collidingActor.getY() + collidingActor.getHeight()));
+            return (int)Math.abs(collidedActor.getY() - (collidingActor.getY() + collidingActor.getHeight()));
         }
     }
 }

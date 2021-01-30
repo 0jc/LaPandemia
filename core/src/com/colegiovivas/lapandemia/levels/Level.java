@@ -7,12 +7,12 @@ public class Level {
     // (width, height). Las coordenadas inválidas no solo son inaccesibles para
     // los actores sino que además no se muestran al hacer scroll cerca de los bordes
     // del mapa.
-    public float width;
-    public float height;
+    public int width;
+    public int height;
 
     // Las coordenadas iniciales del PlayerActor.
-    public float startX;
-    public float startY;
+    public int startX;
+    public int startY;
 
     // La dirección inicial del PlayerActor.
     public int startXDir;

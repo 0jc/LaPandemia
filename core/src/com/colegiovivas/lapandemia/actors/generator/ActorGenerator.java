@@ -1,5 +1,6 @@
 package com.colegiovivas.lapandemia.actors.generator;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -70,8 +71,8 @@ public class ActorGenerator {
     private boolean tryAssignCoords(Rectangle outCoords) {
         // No generamos coordenadas demasiado cerca de los bordes del mapa, donde de
         // todos modos es improbable que no haya muros en cualquier nivel.
-        outCoords.x = MathUtils.random(32, gameScreen.getWorldWidth() - 32 - 64);
-        outCoords.y = MathUtils.random(32, gameScreen.getWorldHeight() - 32 - 64);
+        outCoords.x = MathUtils.random(32, (int)gameScreen.getWorldWidth() - 32 - 64);
+        outCoords.y = MathUtils.random(32, (int)gameScreen.getWorldHeight() - 32 - 64);
 
         Rectangle actorRect = game.rectPool.obtain();
         try {

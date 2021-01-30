@@ -47,6 +47,7 @@ public class GameScreen implements Screen {
         collisionDispatcher.register(ActorId.FAN, FanActor.class);
         collisionDispatcher.register(ActorId.VIRUS, VirusActor.class);
         collisionDispatcher.register(ActorId.MASK, MaskActor.class);
+        collisionDispatcher.register(ActorId.PAPER, PaperActor.class);
 
         playerActor = new PlayerActor(parent, this);
         playerActor.setPosition(level.startX, level.startY);
@@ -83,17 +84,23 @@ public class GameScreen implements Screen {
                 return new MaskActor(parent);
             }
         }));
+        actorGenerators.add(agf.getInstance(5, 48, 48, null, new Pool<GenerableActor>() {
+            @Override
+            protected PaperActor newObject() {
+                return new PaperActor(parent);
+            }
+        }));
     }
 
     public Stage getStage() {
         return stage;
     }
 
-    public float getWorldWidth() {
+    public int getWorldWidth() {
         return level.width;
     }
 
-    public float getWorldHeight() {
+    public int getWorldHeight() {
         return level.height;
     }
 
@@ -148,7 +155,7 @@ public class GameScreen implements Screen {
         // Se muestra siempre el mayor espacio posible alrededor del personaje, pero sin
         // hacer scroll más allá de los límites del mapa. Cuando el personaje no está
         // cerca de los bordes, aparece en el centro de la pantalla.
-        float leftBound = LaPandemia.V_WIDTH * camera.zoom / 2;
+        float leftBound = camera.zoom * LaPandemia.V_WIDTH / 2;
         float rightBound = level.width - leftBound;
         float lowerBound = camera.zoom * LaPandemia.V_HEIGHT / 2 + 1;
         float upperBound = level.height - lowerBound;

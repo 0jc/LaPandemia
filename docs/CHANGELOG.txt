@@ -164,3 +164,11 @@ personaje o el generador (para los objetos generados dinámicamente) se establec
 mediante setters, me pareció una decisión arbitraria que otra información como la
 posición inicial sí estuvieran en el constructor, por lo que ahora por coherencia
 ya no lo están.
+
+Se añade el papel higiénico como nuevo actor.
+
+Se pasa de un sistema de coordenadas de mundo reales a enteras debido a que la
+detección de colisiones tal y como está planteada para este juego estaba resultando
+problemática con variables float por los problemas propios de utilizar una
+representación de números reales de precisión limitada donde se necesita precisión
+ilimitada.
