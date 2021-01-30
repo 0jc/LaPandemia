@@ -85,6 +85,8 @@ public class LaPandemia extends Game {
         if (gameScreen != null) gameScreen.dispose();
         batch.dispose();
         assetManager.dispose();
+        rectPool.clear();
+        actorArrayPool.clear();
     }
 
     private Level getDemoLevel() {
