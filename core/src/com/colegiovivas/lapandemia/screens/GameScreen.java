@@ -24,8 +24,6 @@ import com.colegiovivas.lapandemia.levels.Level;
 import com.colegiovivas.lapandemia.levels.Wall;
 
 public class GameScreen implements Screen {
-    private static final float MAX_MASKS_IN_MAP = 3;
-
     private final LaPandemia parent;
     private final Level level;
     private final Viewport viewport;
