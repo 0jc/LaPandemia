@@ -26,6 +26,16 @@ public class VirusActor extends GenerableActor {
     private int xDir;
     private int yDir;
 
+    // El virus tiene una velocidad, pero debe moverse una cantidad entera de píxeles
+    // por frame. Por tanto, si, por ejemplo, debe moverse 3.4 píxeles hacia abajo,
+    // a su posición y se le sumará -3 y untraveledY será igual a -0.4. Este -0.4
+    // se acumulará así para el siguiente frame, por lo que, si en este debe bajar otros
+    // 2.8 píxeles, la distancia total que deberá recorrer será -0.4 + (-2.8) = -3.2,
+    // bajando otros 3 píxeles y teniendo untraveledY==-0.2 para el siguiente frame,
+    // y así sucesivamente.
+    private float untraveledX;
+    private float untraveledY;
+
     public VirusActor(final LaPandemia game) {
         this.game = game;
 
@@ -35,6 +45,8 @@ public class VirusActor extends GenerableActor {
         setTouchable(Touchable.enabled);
         setWidth(32);
         setHeight(64);
+        untraveledX = 0;
+        untraveledY = 0;
     }
 
     @Override
@@ -49,6 +61,8 @@ public class VirusActor extends GenerableActor {
         animationTime = 0;
         directionTime = 0;
         directionTick = 0;
+        untraveledX = 0;
+        untraveledY = 0;
         xDir = 0;
         yDir = 0;
         alive = false;
@@ -82,10 +96,16 @@ public class VirusActor extends GenerableActor {
             directionTime = 0;
             xDir = MathUtils.random(-1, 1);
             yDir = MathUtils.random(-1 ,1);
+            untraveledX = 0;
+            untraveledY = 0;
         }
 
-        int xDisplacement = (int)Math.floor(xDir * SPEED * delta);
-        int yDisplacement = (int)Math.floor(yDir * SPEED * delta);
+        untraveledX += xDir * SPEED * delta;
+        untraveledY += yDir * SPEED * delta;
+        int xDisplacement = xDir == 1 ? (int)Math.floor(untraveledX) : (int)Math.ceil(untraveledX);
+        int yDisplacement = yDir == 1 ? (int)Math.floor(untraveledY) : (int)Math.ceil(untraveledY);
+        untraveledX -= xDisplacement;
+        untraveledY -= yDisplacement;
 
         collisionDispatcher.tryMove(this, xDisplacement, yDisplacement);
     }
