@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.actors.generator.ActorGenerator;
-import com.colegiovivas.lapandemia.gameplay.CollisionInfo;
 
 public class VirusActor extends GenerableActor {
     private final LaPandemia game;
@@ -73,7 +73,6 @@ public class VirusActor extends GenerableActor {
     @Override
     public void act(float delta) {
         if (!alive) {
-            // El virus ha sido eliminado por otro actor en esta misma fase "act".
             return;
         }
 
@@ -88,29 +87,36 @@ public class VirusActor extends GenerableActor {
         float xDisplacement = xDir * SPEED * delta;
         float yDisplacement = yDir * SPEED * delta;
 
-        CollisionInfo collisionInfo = game.collisionInfoPool.obtain().init(
-                this, xDisplacement, yDisplacement);
-        try {
-            if (collisionInfo.walls.size > 0 || collisionInfo.masks.size > 0) {
-                directionTick = 0;
-                return;
-            }
-            if (collisionInfo.player != null) {
-                collisionInfo.player.infect(this);
-                return;
-            }
-            if (collisionInfo.fans.size > 0) {
-                remove();
-                return;
-            }
-            if (collisionInfo.viruses.size > 0) {
-                directionTick = 0;
-                return;
-            }
-        } finally {
-            game.collisionInfoPool.free(collisionInfo);
-        }
+        collisionDispatcher.tryMove(this, xDisplacement, yDisplacement);
+    }
 
-        setPosition(getX() + xDisplacement, getY() + yDisplacement);
+    @Override
+    public void collidedWith(CollisionableActor actor, ActorId id, float srcX, float srcY) {
+        switch (id) {
+            case WALL:
+            case MASK:
+            case VIRUS:
+                directionTick = 0;
+                break;
+
+            case FAN:
+                remove();
+                break;
+
+            case PLAYER:
+                caughtPlayer();
+                break;
+        }
+    }
+
+    @Override
+    public void collidedBy(CollisionableActor actor, ActorId id, float srcX, float srcY) {
+        if (id == ActorId.PLAYER) {
+            caughtPlayer();
+        }
+    }
+
+    private void caughtPlayer() {
+        remove();
     }
 }

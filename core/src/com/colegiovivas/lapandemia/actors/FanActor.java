@@ -8,9 +8,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.levels.Fan;
 
-public class FanActor extends Actor {
+public class FanActor extends CollisionableActor {
     private final Animation<TextureRegion> animation;
     private final Fan fan;
     private final LaPandemia game;
@@ -35,9 +36,5 @@ public class FanActor extends Actor {
         batch.draw(
                 animation.getKeyFrame(elapsedTime, true),
                 getX(), getY());
-    }
-
-    @Override
-    public void act(float delta) {
     }
 }

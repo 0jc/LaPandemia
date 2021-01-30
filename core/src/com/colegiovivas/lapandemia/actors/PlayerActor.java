@@ -8,10 +8,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.gameplay.CollisionInfo;
+import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 
-public class PlayerActor extends Actor {
+public class PlayerActor extends CollisionableActor {
     private final Animation<TextureRegion> noMasksAnimation;
     private final Animation<TextureRegion> fewMasksAnimation;
     private final Animation<TextureRegion> manyMasksAnimation;
@@ -34,12 +34,13 @@ public class PlayerActor extends Actor {
     // Mascarillas recolectadas.
     private int maskCount;
 
-    // Será false cuando el personaje se muera, es decir, cuando se termine la partida.
-    private boolean alive;
-
     // Salud y cuánto tiempo ha pasado desde su último incremento o decremento.
     private int health;
     private float healthTime;
+
+    // Para evitar que collidedWith gestione dos veces la colisión simultánea con
+    // dos WallActors.
+    private boolean wallCollisionSeen;
 
     public PlayerActor(float x, float y, final LaPandemia game, final GameScreen gameScreen) {
         this.game = game;
@@ -59,7 +60,6 @@ public class PlayerActor extends Actor {
                 ((TextureAtlas)game.assetManager.get("player-many-masks.pack")).getRegions());
 
         maskCount = 0;
-        alive = true;
 
         setTouchable(Touchable.enabled);
     }
@@ -89,6 +89,10 @@ public class PlayerActor extends Actor {
         this.yDir = yDir;
     }
 
+    public boolean isAlive() {
+        return maskCount >= 0 && health > 0;
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         elapsedTime += Gdx.graphics.getDeltaTime();
@@ -103,7 +107,9 @@ public class PlayerActor extends Actor {
 
     @Override
     public void act(float delta) {
-        if (!alive) {
+        wallCollisionSeen = false;
+
+        if (!isAlive()) {
             // Por lo de pronto tan solo se para de mover el personaje. Más adelante se
             // implementará la lógica real del fin de la partida.
             return;
@@ -117,50 +123,43 @@ public class PlayerActor extends Actor {
 
         float xDisplacement = speed*delta*xDir;
         float yDisplacement = speed*delta*yDir;
-        CollisionInfo collisionInfo = game.collisionInfoPool.obtain().init(
-                this, xDisplacement, yDisplacement);
-        try {
-            setPosition(
-                    getX() + collisionInfo.effectiveXDisplacement,
-                    getY() + collisionInfo.effectiveYDisplacement);
-            if (collisionInfo.walls.size != 0) {
-                setDirection(-xDir, -yDir);
+        collisionDispatcher.tryMove(this, xDisplacement, yDisplacement);
+    }
 
-                healthTime = 0;
-                health--;
-                if (health == 0) {
-                    alive = false;
+    @Override
+    public void collidedWith(CollisionableActor actor, ActorId id, float srcX, float srcY) {
+        switch (id) {
+            case WALL:
+                if (!wallCollisionSeen) {
+                    wallCollisionSeen = true;
+                    setDirection(-xDir, -yDir);
+                    healthTime = 0;
+                    health--;
                 }
-                return;
-            }
-            if (collisionInfo.fans.size != 0) {
-                alive = false;
-                return;
-            }
+                break;
 
-            for (int i = 0; i < collisionInfo.masks.size; i++) {
-                MaskActor mask = (MaskActor)collisionInfo.masks.get(i);
-                collectMask(mask);
-            }
-            for (int i = 0; i < collisionInfo.viruses.size; i++) {
-                VirusActor virus = (VirusActor)collisionInfo.viruses.get(i);
-                infect(virus);
-            }
-        } finally {
-            game.collisionInfoPool.free(collisionInfo);
+            case FAN:
+                health = 0;
+                break;
+
+            case MASK:
+                maskCount++;
+                break;
+
+            case VIRUS:
+                infected();
+                break;
         }
     }
 
-    public void infect(VirusActor virus) {
-        virus.remove();
+    @Override
+    public void collidedBy(CollisionableActor actor, ActorId id, float srcX, float srcY) {
+        if (id == ActorId.VIRUS) {
+            infected();
+        }
+    }
+
+    private void infected() {
         maskCount--;
-        if (maskCount < 0) {
-            alive = false;
-        }
-    }
-
-    public void collectMask(MaskActor mask) {
-        mask.remove();
-        maskCount++;
     }
 }

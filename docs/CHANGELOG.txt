@@ -145,3 +145,15 @@ Se mueve ActorGenerator fuera de GameScreen y se establece una estructura ligera
 distinta de packages más apropiada a cómo ha ido evolucionando el proyecto. Ahora, los
 actores se encuentran en el package "actors"; los GestureListeners, en "gestures"; y
 "level" pasa a llamarse "levels" por seguir la convención de utilizar el plural.
+
+
+Cambios presentados el 2021/01/30
+---------------------------------
+Se remplaza el modo en el que se trabaja con las colisiones entre personajes por una
+solución más orientada a eventos. Los actores notifican del movimiento que desean
+realizar a un objeto conocido como CollisionDispatcher, que determina hasta dónde
+pueden moverse, realiza el desplazamiento y notifica a los actores con los que se
+haya producido una colisión del hecho mediante eventos. Con este cambio se pretende
+tanto dejar de utilizar el objeto CollisionInfo (lo que ya se ha logrado) como
+simplificar la manera en la que se describen las interacciones entre actores (lo
+que considero que también se ha logrado con esto).

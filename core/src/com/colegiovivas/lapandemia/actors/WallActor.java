@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.levels.Wall;
 
-public class WallActor extends Actor {
+public class WallActor extends CollisionableActor {
     private final Texture texture;
     private final Wall wall;
     private final LaPandemia game;

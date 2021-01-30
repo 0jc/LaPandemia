@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.actors.collision.CollisionDispatcher;
+import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
 
 public class MaskActor extends GenerableActor {
     private final Texture texture;
@@ -29,6 +31,9 @@ public class MaskActor extends GenerableActor {
     }
 
     @Override
-    public void act(float delta) {
+    public void collidedBy(CollisionableActor actor, ActorId id, float srcX, float srcY) {
+        if (id == ActorId.PLAYER) {
+            remove();
+        }
     }
 }

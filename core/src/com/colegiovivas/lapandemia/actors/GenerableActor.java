@@ -1,10 +1,10 @@
 package com.colegiovivas.lapandemia.actors;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Pool;
+import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.actors.generator.ActorGenerator;
 
-public abstract class GenerableActor extends Actor implements Pool.Poolable {
+public abstract class GenerableActor extends CollisionableActor implements Pool.Poolable {
     private ActorGenerator generator;
 
     public GenerableActor init(ActorGenerator generator, float x, float y) {

@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.*;
+import com.colegiovivas.lapandemia.actors.collision.CollisionDispatcher;
 import com.colegiovivas.lapandemia.actors.generator.ActorGenerator;
 import com.colegiovivas.lapandemia.actors.generator.ActorGeneratorFactory;
 import com.colegiovivas.lapandemia.gestures.MovePlayerGestureListener;
@@ -30,6 +31,7 @@ public class GameScreen implements Screen {
     private final PlayerActor playerActor;
     private final OrthographicCamera camera;
     private final Array<ActorGenerator> actorGenerators;
+    private final CollisionDispatcher collisionDispatcher;
 
     public GameScreen(final LaPandemia parent, final Level level) {
         this.parent = parent;
@@ -39,15 +41,27 @@ public class GameScreen implements Screen {
         viewport = new StretchViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, camera);
         stage = new Stage(viewport);
 
+        collisionDispatcher = new CollisionDispatcher(parent, getStage());
+        collisionDispatcher.register(ActorId.PLAYER, PlayerActor.class);
+        collisionDispatcher.register(ActorId.WALL, WallActor.class);
+        collisionDispatcher.register(ActorId.FAN, FanActor.class);
+        collisionDispatcher.register(ActorId.VIRUS, VirusActor.class);
+        collisionDispatcher.register(ActorId.MASK, MaskActor.class);
+
         playerActor = new PlayerActor(level.startX, level.startY, parent, this);
+        playerActor.setCollisionDispatcher(collisionDispatcher);
         playerActor.setDirection(level.startXDir, level.startYDir);
         stage.addActor(playerActor);
 
         for (int i = 0; i < level.fans.size; i++) {
-            stage.addActor(new FanActor(level.fans.get(i), parent));
+            FanActor fanActor = new FanActor(level.fans.get(i), parent);
+            fanActor.setCollisionDispatcher(collisionDispatcher);
+            stage.addActor(fanActor);
         }
         for (int i = 0; i < level.walls.size; i++) {
-            stage.addActor(new WallActor(level.walls.get(i), parent));
+            WallActor wallActor = new WallActor(level.walls.get(i), parent);
+            wallActor.setCollisionDispatcher(collisionDispatcher);
+            stage.addActor(wallActor);
         }
 
         ActorGeneratorFactory agf = new ActorGeneratorFactory(this, parent);
@@ -76,6 +90,10 @@ public class GameScreen implements Screen {
 
     public float getWorldHeight() {
         return level.height;
+    }
+
+    public CollisionDispatcher getCollisionDispatcher() {
+        return collisionDispatcher;
     }
 
     @Override

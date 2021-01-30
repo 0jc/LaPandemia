@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import com.colegiovivas.lapandemia.gameplay.CollisionInfo;
 import com.colegiovivas.lapandemia.levels.Fan;
 import com.colegiovivas.lapandemia.levels.Level;
 import com.colegiovivas.lapandemia.levels.Wall;
@@ -26,7 +25,6 @@ public class LaPandemia extends Game {
     public AssetManager assetManager;
     public Pool<Rectangle> rectPool;
     public Pool<Array<Actor>> actorArrayPool;
-    public Pool<CollisionInfo> collisionInfoPool;
 
     private LoadingScreen loadingScreen = null;
     private GameScreen gameScreen = null;
@@ -60,12 +58,6 @@ public class LaPandemia extends Game {
                         clear();
                     }
                 };
-            }
-        };
-        collisionInfoPool = new Pool<CollisionInfo>() {
-            @Override
-            protected CollisionInfo newObject() {
-                return new CollisionInfo(LaPandemia.this);
             }
         };
 
