@@ -93,7 +93,7 @@ public class LaPandemia extends Game {
         Level level = new Level();
         level.width = 32*47;
         level.height = 32*39;
-        level.startX = 32;
+        level.startX = 106;
         level.startY = 32;
         level.startXDir = 1;
         level.startYDir = 0;
@@ -107,10 +107,14 @@ public class LaPandemia extends Game {
         level.walls.add(new Wall(23, 19, 1, 12, 32));
         level.walls.add(new Wall(7, 31, 33, 1, 32));
 
+        level.fans.add(new Fan(32 + 10, 32 + 10));
         level.fans.add(new Fan(32*44 - 10, 32 + 10));
+        level.fans.add(new Fan(32*(1 + 6 + 1) + 10, 32*(1 + 6 + 1) + 10));
         level.fans.add(new Fan(32*(1 + 6 + 15 + 3 + 12) - 10, 32*(1 + 6 + 1) + 10));
         level.fans.add(new Fan(32 + 10, 32*36 - 10));
+        level.fans.add(new Fan(32*44 - 10, 32*36 - 10));
         level.fans.add(new Fan(32*(1 + 6 + 15 + 2) + 10, 32*(1 + 6 + 1 + 21) - 10));
+        level.fans.add(new Fan(32*(1 + 6 + 14) - 10, 32*(1 + 6 + 1 + 21) - 10));
 
         level.walls.add(new Wall(0, 0, level.width, 32));
         level.walls.add(new Wall(0, 32, 32, level.height - 32));
