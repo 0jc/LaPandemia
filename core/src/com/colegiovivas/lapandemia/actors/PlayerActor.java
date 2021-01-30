@@ -42,10 +42,10 @@ public class PlayerActor extends CollisionableActor {
     // dos WallActors.
     private boolean wallCollisionSeen;
 
-    public PlayerActor(float x, float y, final LaPandemia game, final GameScreen gameScreen) {
+    public PlayerActor(final LaPandemia game, final GameScreen gameScreen) {
         this.game = game;
         this.gameScreen = gameScreen;
-        setBounds(x, y, 64, 64);
+        setSize(64, 64);
         setDirection(0, 0);
         elapsedTime = 0;
         healthTime = 0;

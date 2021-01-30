@@ -11,16 +11,13 @@ import com.colegiovivas.lapandemia.levels.Wall;
 
 public class WallActor extends CollisionableActor {
     private final Texture texture;
-    private final Wall wall;
     private final LaPandemia game;
     private float elapsedTime;
 
-    public WallActor(final Wall wall, final LaPandemia game) {
-        this.wall = wall;
+    public WallActor(final LaPandemia game) {
         this.game = game;
         this.texture = game.assetManager.get("wall.png");
 
-        setBounds(wall.x, wall.y, wall.w, wall.h);
         elapsedTime = 0;
 
         setTouchable(Touchable.enabled);

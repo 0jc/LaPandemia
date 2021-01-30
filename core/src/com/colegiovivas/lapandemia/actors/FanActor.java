@@ -13,17 +13,16 @@ import com.colegiovivas.lapandemia.levels.Fan;
 
 public class FanActor extends CollisionableActor {
     private final Animation<TextureRegion> animation;
-    private final Fan fan;
     private final LaPandemia game;
     private float elapsedTime;
 
-    public FanActor(final Fan fan, final LaPandemia game) {
-        this.fan = fan;
+    public FanActor(final LaPandemia game) {
         this.game = game;
         this.animation = new Animation<TextureRegion>(1f / 5f,
                 ((TextureAtlas)game.assetManager.get("fan.pack")).getRegions());
 
-        setBounds(fan.x, fan.y, 64, 64);
+        setWidth(64);
+        setHeight(64);
         elapsedTime = 0;
 
         setTouchable(Touchable.enabled);

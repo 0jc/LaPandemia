@@ -38,8 +38,8 @@ public class VirusActor extends GenerableActor {
     }
 
     @Override
-    public VirusActor init(ActorGenerator generator, float x, float y) {
-        super.init(generator, x, y);
+    public VirusActor init() {
+        super.init();
         alive = true;
         return this;
     }

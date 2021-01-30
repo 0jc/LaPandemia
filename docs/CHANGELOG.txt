@@ -157,3 +157,10 @@ haya producido una colisión del hecho mediante eventos. Con este cambio se pret
 tanto dejar de utilizar el objeto CollisionInfo (lo que ya se ha logrado) como
 simplificar la manera en la que se describen las interacciones entre actores (lo
 que considero que también se ha logrado con esto).
+
+Se simplifican los constructores de los actores para recibir solo información final
+como la instancia del objeto LaPandemia. Ya que algunos datos como la dirección del
+personaje o el generador (para los objetos generados dinámicamente) se establecen
+mediante setters, me pareció una decisión arbitraria que otra información como la
+posición inicial sí estuvieran en el constructor, por lo que ahora por coherencia
+ya no lo están.

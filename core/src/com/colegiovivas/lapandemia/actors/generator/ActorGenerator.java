@@ -53,7 +53,9 @@ public class ActorGenerator {
                 try {
                     if (tryAssignCoords(rect)) {
                         lastActorTime = 0;
-                        GenerableActor actor = generableActorPool.obtain().init(this, rect.x, rect.y);
+                        GenerableActor actor = generableActorPool.obtain().init();
+                        actor.setGenerator(this);
+                        actor.setPosition(rect.x, rect.y);
                         actor.setCollisionDispatcher(gameScreen.getCollisionDispatcher());
                         gameScreen.getStage().addActor(actor);
                         count++;

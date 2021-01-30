@@ -19,7 +19,9 @@ import com.colegiovivas.lapandemia.actors.generator.ActorGenerator;
 import com.colegiovivas.lapandemia.actors.generator.ActorGeneratorFactory;
 import com.colegiovivas.lapandemia.gestures.MovePlayerGestureListener;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
+import com.colegiovivas.lapandemia.levels.Fan;
 import com.colegiovivas.lapandemia.levels.Level;
+import com.colegiovivas.lapandemia.levels.Wall;
 
 public class GameScreen implements Screen {
     private static final float MAX_MASKS_IN_MAP = 3;
@@ -48,18 +50,23 @@ public class GameScreen implements Screen {
         collisionDispatcher.register(ActorId.VIRUS, VirusActor.class);
         collisionDispatcher.register(ActorId.MASK, MaskActor.class);
 
-        playerActor = new PlayerActor(level.startX, level.startY, parent, this);
+        playerActor = new PlayerActor(parent, this);
+        playerActor.setPosition(level.startX, level.startY);
         playerActor.setCollisionDispatcher(collisionDispatcher);
         playerActor.setDirection(level.startXDir, level.startYDir);
         stage.addActor(playerActor);
 
         for (int i = 0; i < level.fans.size; i++) {
-            FanActor fanActor = new FanActor(level.fans.get(i), parent);
+            Fan fan = level.fans.get(i);
+            FanActor fanActor = new FanActor(parent);
+            fanActor.setPosition(fan.x, fan.y);
             fanActor.setCollisionDispatcher(collisionDispatcher);
             stage.addActor(fanActor);
         }
         for (int i = 0; i < level.walls.size; i++) {
-            WallActor wallActor = new WallActor(level.walls.get(i), parent);
+            Wall wall = level.walls.get(i);
+            WallActor wallActor = new WallActor(parent);
+            wallActor.setBounds(wall.x, wall.y, wall.w, wall.h);
             wallActor.setCollisionDispatcher(collisionDispatcher);
             stage.addActor(wallActor);
         }
