@@ -171,4 +171,9 @@ Se pasa de un sistema de coordenadas de mundo reales a enteras debido a que la
 detección de colisiones tal y como está planteada para este juego estaba resultando
 problemática con variables float por los problemas propios de utilizar una
 representación de números reales de precisión limitada donde se necesita precisión
-ilimitada.
+ilimitada. Esto conlleva adaptar ligeramente la implementación del movimiento de
+los virus para que sigan pudiendo moverse a lo largo del tiempo como lo hacían pese
+a tener que especificar los desplazamientos en cada frame en cantidades enteras.
+
+Se limita la cantidad máxima de virus y de papel higiénico que pueden estar
+presentes en el mapa simultáneamente.
