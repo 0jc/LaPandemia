@@ -72,7 +72,7 @@ public class GameScreen implements Screen {
 
         ActorGeneratorFactory agf = new ActorGeneratorFactory(this, parent);
         actorGenerators = new Array<>();
-        actorGenerators.add(agf.getInstance(2, 32, 64, null, new Pool<GenerableActor>() {
+        actorGenerators.add(agf.getInstance(2, 32, 64, 100f, new Pool<GenerableActor>() {
             @Override
             protected VirusActor newObject() {
                 return new VirusActor(parent);
@@ -84,7 +84,7 @@ public class GameScreen implements Screen {
                 return new MaskActor(parent);
             }
         }));
-        actorGenerators.add(agf.getInstance(5, 48, 48, null, new Pool<GenerableActor>() {
+        actorGenerators.add(agf.getInstance(5, 48, 48, 10f, new Pool<GenerableActor>() {
             @Override
             protected PaperActor newObject() {
                 return new PaperActor(parent);
