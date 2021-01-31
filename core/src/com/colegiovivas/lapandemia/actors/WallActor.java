@@ -30,8 +30,4 @@ public class WallActor extends CollisionableActor {
         texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         batch.draw(texture, getX(), getY(), 0, 0, (int)getWidth(), (int)getHeight());
     }
-
-    @Override
-    public void act(float delta) {
-    }
 }

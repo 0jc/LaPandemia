@@ -111,6 +111,7 @@ public class PlayerActor extends CollisionableActor {
 
     @Override
     public void act(float delta) {
+        super.act(delta);
         wallCollisionSeen = false;
 
         if (!isAlive()) {

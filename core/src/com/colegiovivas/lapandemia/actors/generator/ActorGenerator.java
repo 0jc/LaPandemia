@@ -18,6 +18,7 @@ public class ActorGenerator {
     private final float height;
     private final Float maxCount;
     private final Pool<GenerableActor> generableActorPool;
+    private final Float ttl;
 
     private LaPandemia game;
     private GameScreen gameScreen;
@@ -25,13 +26,14 @@ public class ActorGenerator {
     private int count;
     private float lastActorTime;
 
-    public ActorGenerator(final float tick, final float width, final float height, final Float maxCount,
+    public ActorGenerator(float tick, float width, float height, Float maxCount, Float ttl,
                           final Pool<GenerableActor> generableActorPool) {
         this.tick = tick;
         this.width = width;
         this.height = height;
         this.maxCount = maxCount;
         this.generableActorPool = generableActorPool;
+        this.ttl = ttl;
     }
 
     public Pool<GenerableActor> getPool() {
@@ -58,6 +60,7 @@ public class ActorGenerator {
                         actor.setGenerator(this);
                         actor.setPosition(rect.x, rect.y);
                         actor.setCollisionDispatcher(gameScreen.getCollisionDispatcher());
+                        actor.setTtl(ttl);
                         gameScreen.getStage().addActor(actor);
                         count++;
                     }

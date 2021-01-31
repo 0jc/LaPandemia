@@ -75,7 +75,7 @@ public class VirusActor extends GenerableActor {
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
+    public void drawNotBlinking(Batch batch, float parentAlpha) {
         if (alive) {
             animationTime += Gdx.graphics.getDeltaTime();
             batch.draw(
@@ -85,7 +85,7 @@ public class VirusActor extends GenerableActor {
     }
 
     @Override
-    public void act(float delta) {
+    public void actWithinTTL(float delta) {
         if (!alive) {
             return;
         }

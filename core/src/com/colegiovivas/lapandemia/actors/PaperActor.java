@@ -24,7 +24,7 @@ public class PaperActor extends GenerableActor {
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
+    public void drawNotBlinking(Batch batch, float parentAlpha) {
         batch.draw(texture, getX(), getY());
     }
 

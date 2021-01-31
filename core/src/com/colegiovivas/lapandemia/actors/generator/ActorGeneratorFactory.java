@@ -15,9 +15,9 @@ public class ActorGeneratorFactory {
         this.game = game;
     }
 
-    public ActorGenerator getInstance(float tick, float width, float height, Float maxCount,
+    public ActorGenerator getInstance(float tick, float width, float height, Float maxCount, Float ttl,
                                       Pool<GenerableActor> generableActorPool) {
-        ActorGenerator actorGenerator = new ActorGenerator(tick, width, height, maxCount, generableActorPool);
+        ActorGenerator actorGenerator = new ActorGenerator(tick, width, height, maxCount, ttl, generableActorPool);
         actorGenerator.setGameScreen(gameScreen);
         actorGenerator.setGame(game);
         return actorGenerator;
