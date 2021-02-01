@@ -73,30 +73,10 @@ public class GameScreen implements Screen {
 
         ActorGeneratorFactory agf = new ActorGeneratorFactory(this, parent);
         actorGenerators = new Array<>();
-        actorGenerators.add(agf.getInstance(2, 32, 64, 100f, 120f, new Pool<GenerableActor>() {
-            @Override
-            protected VirusActor newObject() {
-                return new VirusActor(parent);
-            }
-        }));
-        actorGenerators.add(agf.getInstance(10, 64, 32, 3f, 15f, new Pool<GenerableActor>() {
-            @Override
-            protected MaskActor newObject() {
-                return new MaskActor(parent);
-            }
-        }));
-        actorGenerators.add(agf.getInstance(5, 48, 48, 10f, 15f, new Pool<GenerableActor>() {
-            @Override
-            protected PaperActor newObject() {
-                return new PaperActor(parent);
-            }
-        }));
-        actorGenerators.add(agf.getInstance(60, 22, 64, 1f, 15f, new Pool<GenerableActor>() {
-            @Override
-            protected NeedleActor newObject() {
-                return new NeedleActor(parent);
-            }
-        }));
+        actorGenerators.add(agf.getInstance(VirusActor.class, 32, 64, 2, 100f, 120f));
+        actorGenerators.add(agf.getInstance(MaskActor.class, 64, 32, 10, 3f, 15f));
+        actorGenerators.add(agf.getInstance(PaperActor.class, 48, 48, 5, 10f, 15f));
+        actorGenerators.add(agf.getInstance(NeedleActor.class, 22, 64, 60, 1f, 15f));
     }
 
     public Stage getStage() {

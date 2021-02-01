@@ -43,8 +43,6 @@ public class VirusActor extends GenerableActor {
                 ((TextureAtlas)game.assetManager.get("virus.pack")).getRegions());
 
         setTouchable(Touchable.enabled);
-        setWidth(32);
-        setHeight(64);
         untraveledX = 0;
         untraveledY = 0;
     }

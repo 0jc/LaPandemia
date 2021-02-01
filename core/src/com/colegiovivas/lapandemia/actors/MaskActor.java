@@ -16,8 +16,6 @@ public class MaskActor extends GenerableActor {
         this.texture = game.assetManager.get("mask.png");
 
         setTouchable(Touchable.enabled);
-        setWidth(64);
-        setHeight(32);
     }
 
     @Override

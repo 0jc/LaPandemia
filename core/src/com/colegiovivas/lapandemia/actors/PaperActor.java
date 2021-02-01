@@ -15,7 +15,6 @@ public class PaperActor extends GenerableActor {
         this.texture = game.assetManager.get("toiletpaper.png");
 
         setTouchable(Touchable.enabled);
-        setSize(48, 48);
     }
 
     @Override

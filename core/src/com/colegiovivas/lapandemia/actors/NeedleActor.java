@@ -15,8 +15,6 @@ public class NeedleActor extends GenerableActor {
         this.texture = game.assetManager.get("needle.png");
 
         setTouchable(Touchable.enabled);
-        setWidth(22);
-        setHeight(64);
     }
 
     @Override

@@ -10,6 +10,8 @@ import com.colegiovivas.lapandemia.actors.GenerableActor;
 import com.colegiovivas.lapandemia.actors.PlayerActor;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class ActorGenerator {
     private static final float SAFE_DISTANCE = 400;
 
@@ -26,14 +28,26 @@ public class ActorGenerator {
     private int count;
     private float lastActorTime;
 
-    public ActorGenerator(float tick, float width, float height, Float maxCount, Float ttl,
-                          final Pool<GenerableActor> generableActorPool) {
+    public ActorGenerator(final Class<? extends GenerableActor> generableActorClass,
+                          float width, float height, float tick, Float maxCount, Float ttl)
+    {
         this.tick = tick;
         this.width = width;
         this.height = height;
         this.maxCount = maxCount;
-        this.generableActorPool = generableActorPool;
         this.ttl = ttl;
+        this.generableActorPool = new Pool<GenerableActor>() {
+            @Override
+            protected GenerableActor newObject() {
+                try {
+                    return generableActorClass.getDeclaredConstructor(LaPandemia.class).newInstance(game);
+                } catch (Exception e) {
+                    Gdx.app.error("LaPandemia", "ActorGenerator: " + e.getMessage());
+                }
+
+                return null;
+            }
+        };
     }
 
     public Pool<GenerableActor> getPool() {
@@ -58,7 +72,7 @@ public class ActorGenerator {
                         lastActorTime = 0;
                         GenerableActor actor = generableActorPool.obtain().init();
                         actor.setGenerator(this);
-                        actor.setPosition(rect.x, rect.y);
+                        actor.setBounds(rect.x, rect.y, rect.width, rect.height);
                         actor.setCollisionDispatcher(gameScreen.getCollisionDispatcher());
                         actor.setTtl(ttl);
                         gameScreen.getStage().addActor(actor);
