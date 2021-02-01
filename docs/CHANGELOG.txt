@@ -184,3 +184,10 @@ Cambios presentados el 2021/01/31
 Se añade un tiempo límite de vida opcional para los actores generables, configurable
 desde el generador, y se establecen valores para los tres actores de ese tipo
 actualmente existentes: virus, mascarillas y papel.
+
+
+Cambios presentados el 2021/02/01
+---------------------------------
+Se detecta cuándo el valor del zoom está muy cerca del máximo y, en tal caso, se
+ajusta automáticamente a este, corrigiendo así el problema de usabilidad descrito en
+los comentarios de GameScreen#zoom.

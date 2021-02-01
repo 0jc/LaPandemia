@@ -132,10 +132,27 @@ public class GameScreen implements Screen {
         // pueda averiguar con seguridad y sin tener que manipular el zoom unas
         // coordenadas de la cámara que centren al personaje lo máximo posible sin
         // salir de los límites del mapa.
-        if (LaPandemia.V_WIDTH * newZoom <= level.width
-                && LaPandemia.V_HEIGHT * newZoom <= level.height) {
+        if (newZoom <= maxZoom()) {
             camera.zoom = newZoom;
         }
+
+        // Si se está ampliando el zoom y tan solo quedan unos pocos píxeles de ampliación
+        // para alcanzar el valor máximo, se ajusta automáticamente el zoom al máximo. Si no
+        // hiciésemos esto, el jugador tendría que asegurarse de hacer un gesto muy preciso
+        // con los dedos para poder establecer este valor exacto y no uno muy ligeramente
+        // menor. El problema de estos valores menores es que provocan que el mapa dé un
+        // pequeño salto cada vez que el personaje cruza la mitad de la pantalla, lo que tan
+        // solo se trata del zoom persiguiéndolo pero suele resultar ser un efecto confuso y
+        // molesto.
+        if (delta > 0 && (Math.min(level.width - camera.zoom * LaPandemia.V_WIDTH,
+                                   level.height - camera.zoom * LaPandemia.V_HEIGHT) < 20))
+        {
+            camera.zoom = maxZoom();
+        }
+    }
+
+    private float maxZoom() {
+        return Math.min(level.width/LaPandemia.V_WIDTH, level.height/LaPandemia.V_HEIGHT);
     }
 
     private void adjustCamera() {
