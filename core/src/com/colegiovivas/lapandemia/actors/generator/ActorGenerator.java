@@ -75,7 +75,7 @@ public class ActorGenerator {
                         actor.setBounds(rect.x, rect.y, rect.width, rect.height);
                         actor.setCollisionDispatcher(gameScreen.getCollisionDispatcher());
                         actor.setTtl(ttl);
-                        gameScreen.getStage().addActor(actor);
+                        gameScreen.getWorldGroup().addActor(actor);
                         count++;
                     }
                 } finally {
@@ -93,7 +93,7 @@ public class ActorGenerator {
 
         Rectangle actorRect = game.rectPool.obtain();
         try {
-            for (Actor actor : gameScreen.getStage().getActors()) {
+            for (Actor actor : gameScreen.getWorldGroup().getChildren()) {
                 if (actor instanceof PlayerActor) {
                     actorRect.x = actor.getX() - SAFE_DISTANCE;
                     actorRect.y = actor.getY() - SAFE_DISTANCE;

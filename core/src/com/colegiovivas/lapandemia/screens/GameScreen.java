@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
@@ -32,6 +33,8 @@ public class GameScreen implements Screen {
     private final OrthographicCamera camera;
     private final Array<ActorGenerator> actorGenerators;
     private final CollisionDispatcher collisionDispatcher;
+    private final Group worldGroup;
+    private final Group UIGroup;
 
     public GameScreen(final LaPandemia parent, final Level level) {
         this.parent = parent;
@@ -41,7 +44,10 @@ public class GameScreen implements Screen {
         viewport = new StretchViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, camera);
         stage = new Stage(viewport);
 
-        collisionDispatcher = new CollisionDispatcher(parent, getStage());
+        worldGroup = new Group();
+        UIGroup = new Group();
+
+        collisionDispatcher = new CollisionDispatcher(parent, getWorldGroup());
         collisionDispatcher.register(ActorId.PLAYER, PlayerActor.class);
         collisionDispatcher.register(ActorId.WALL, WallActor.class);
         collisionDispatcher.register(ActorId.FAN, FanActor.class);
@@ -54,21 +60,26 @@ public class GameScreen implements Screen {
         playerActor.setPosition(level.startX, level.startY);
         playerActor.setCollisionDispatcher(collisionDispatcher);
         playerActor.setDirection(level.startXDir, level.startYDir);
-        stage.addActor(playerActor);
+        worldGroup.addActor(playerActor);
+
+        HealthActor healthActor = new HealthActor(parent);
+        playerActor.setHealthActor(healthActor);
+        healthActor.setPlayerActor(playerActor);
+        UIGroup.addActor(healthActor);
 
         for (int i = 0; i < level.fans.size; i++) {
             Fan fan = level.fans.get(i);
             FanActor fanActor = new FanActor(parent);
             fanActor.setPosition(fan.x, fan.y);
             fanActor.setCollisionDispatcher(collisionDispatcher);
-            stage.addActor(fanActor);
+            worldGroup.addActor(fanActor);
         }
         for (int i = 0; i < level.walls.size; i++) {
             Wall wall = level.walls.get(i);
             WallActor wallActor = new WallActor(parent);
             wallActor.setBounds(wall.x, wall.y, wall.w, wall.h);
             wallActor.setCollisionDispatcher(collisionDispatcher);
-            stage.addActor(wallActor);
+            worldGroup.addActor(wallActor);
         }
 
         ActorGeneratorFactory agf = new ActorGeneratorFactory(this, parent);
@@ -77,6 +88,9 @@ public class GameScreen implements Screen {
         actorGenerators.add(agf.getInstance(MaskActor.class, 64, 32, 10, 3f, 15f));
         actorGenerators.add(agf.getInstance(PaperActor.class, 48, 48, 5, 10f, 15f));
         actorGenerators.add(agf.getInstance(NeedleActor.class, 22, 64, 60, 1f, 15f));
+
+        stage.addActor(worldGroup);
+        stage.addActor(UIGroup);
     }
 
     public Stage getStage() {
@@ -89,6 +103,10 @@ public class GameScreen implements Screen {
 
     public int getWorldHeight() {
         return level.height;
+    }
+
+    public Group getWorldGroup() {
+        return worldGroup;
     }
 
     public CollisionDispatcher getCollisionDispatcher() {

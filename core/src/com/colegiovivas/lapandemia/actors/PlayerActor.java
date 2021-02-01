@@ -45,6 +45,8 @@ public class PlayerActor extends CollisionableActor {
     // Tiempo total de invencibilidad por jeringuilla.
     private static final float INVINCIBILITY_TIMESPAN = 10;
 
+    private HealthActor healthActor;
+
     // Para evitar que collidedWith gestione dos veces la colisión simultánea con
     // dos WallActors.
     private boolean wallCollisionSeen;
@@ -87,6 +89,10 @@ public class PlayerActor extends CollisionableActor {
         return speed;
     }
 
+    public void setHealthActor(HealthActor healthActor) {
+        this.healthActor = healthActor;
+    }
+
     public void setDirection(int xDir, int yDir) {
         if (xDir < -1 || xDir > 1 || yDir < -1 || yDir > 1) {
             throw new IllegalArgumentException();
@@ -118,15 +124,17 @@ public class PlayerActor extends CollisionableActor {
         wallCollisionSeen = false;
 
         if (!isAlive()) {
+            healthActor.showHealth(false);
             // Por lo de pronto tan solo se para de mover el personaje. Más adelante se
             // implementará la lógica real del fin de la partida.
             return;
         }
 
         healthTime += delta;
-        if (healthTime > HEALTH_TICK) {
+        if (healthTime > HEALTH_TICK && health < 4) {
             healthTime = 0;
-            health = Math.min(MAX_HEALTH, health + 1);
+            health++;
+            healthActor.setHealth(health);
         }
 
         if (invincibilityTimeLeft > 0) {
@@ -147,11 +155,13 @@ public class PlayerActor extends CollisionableActor {
                     setDirection(-xDir, -yDir);
                     healthTime = 0;
                     health--;
+                    healthActor.setHealth(health);
                 }
                 break;
 
             case FAN:
                 health = 0;
+                healthActor.setHealth(health);
                 break;
 
             case MASK:

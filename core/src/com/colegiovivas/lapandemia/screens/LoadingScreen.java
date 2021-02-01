@@ -44,6 +44,7 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("player-invincible.pack", TextureAtlas.class);
         parent.assetManager.load("virus.pack", TextureAtlas.class);
         parent.assetManager.load("fan.pack", TextureAtlas.class);
+        parent.assetManager.load("health.pack", TextureAtlas.class);
         parent.assetManager.load("wall.png", Texture.class);
         parent.assetManager.load("mask.png", Texture.class);
         parent.assetManager.load("needle.png", Texture.class);

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
@@ -12,12 +13,12 @@ import com.colegiovivas.lapandemia.actors.*;
 
 public class CollisionDispatcher {
     private final LaPandemia game;
-    private final Stage stage;
+    private final Group worldGroup;
     private ArrayMap<Class<? extends CollisionableActor>, ActorId> actorRegistry;
 
-    public CollisionDispatcher(LaPandemia game, Stage stage) {
+    public CollisionDispatcher(LaPandemia game, Group worldGroup) {
         this.game = game;
-        this.stage = stage;
+        this.worldGroup = worldGroup;
         actorRegistry = new ArrayMap<>();
     }
 
@@ -41,8 +42,8 @@ public class CollisionDispatcher {
         try {
             rActor.set(actor.getX() + xDisplacement, actor.getY() + yDisplacement, actor.getWidth(),
                     actor.getHeight());
-            for (Actor currActor : stage.getActors()) {
-                if (currActor != actor) {
+            for (Actor currActor : worldGroup.getChildren()) {
+                if (currActor instanceof CollisionableActor && currActor != actor) {
                     rOther.set(currActor.getX(), currActor.getY(), currActor.getWidth(), currActor.getHeight());
                     if (rActor.overlaps(rOther)) {
                         int collisionDistance = collisionDistance(actor, currActor, xDir, yDir);

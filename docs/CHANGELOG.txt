@@ -191,3 +191,14 @@ Cambios presentados el 2021/02/01
 Se detecta cuándo el valor del zoom está muy cerca del máximo y, en tal caso, se
 ajusta automáticamente a este, corrigiendo así el problema de usabilidad descrito en
 los comentarios de GameScreen#zoom.
+
+
+Cambios presentados el 2021/02/02
+---------------------------------
+Se introduce el actor HealthActor, que muestra la salud del personaje en pantalla.
+Está programado de forma que, si se alcanza la máxima, el sprite desaparezca al cabo
+de unos instantes, hasta volver a bajar, de modo que solo aparezca ocasionalmente
+para notificar al jugador de la pérdida e incremento de salud. Para que el actor no
+interfiera con los actores del mundo, se empiezan a organizar los actores en dos
+grupos: del mundo y de interfaz de usuario.
+
