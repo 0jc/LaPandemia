@@ -48,6 +48,7 @@ public class GameScreen implements Screen {
         collisionDispatcher.register(ActorId.VIRUS, VirusActor.class);
         collisionDispatcher.register(ActorId.MASK, MaskActor.class);
         collisionDispatcher.register(ActorId.PAPER, PaperActor.class);
+        collisionDispatcher.register(ActorId.NEEDLE, NeedleActor.class);
 
         playerActor = new PlayerActor(parent, this);
         playerActor.setPosition(level.startX, level.startY);
@@ -88,6 +89,12 @@ public class GameScreen implements Screen {
             @Override
             protected PaperActor newObject() {
                 return new PaperActor(parent);
+            }
+        }));
+        actorGenerators.add(agf.getInstance(60, 22, 64, 1f, 15f, new Pool<GenerableActor>() {
+            @Override
+            protected NeedleActor newObject() {
+                return new NeedleActor(parent);
             }
         }));
     }

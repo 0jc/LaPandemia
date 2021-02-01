@@ -12,9 +12,8 @@ import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 
 public class PlayerActor extends CollisionableActor {
-    private final Animation<TextureRegion> noMasksAnimation;
-    private final Animation<TextureRegion> fewMasksAnimation;
-    private final Animation<TextureRegion> manyMasksAnimation;
+    private final Animation<TextureRegion> defaultAnimation;
+    private final Animation<TextureRegion> invincibleAnimation;
     private final LaPandemia game;
     private final GameScreen gameScreen;
 
@@ -41,6 +40,11 @@ public class PlayerActor extends CollisionableActor {
     // Cantidad de rollos de papel recogidos (equivalentes a puntos).
     private int paperCount;
 
+    // Durante cuánto tiempo será invencible (0: no invencible).
+    private float invincibilityTimeLeft;
+    // Tiempo total de invencibilidad por jeringuilla.
+    private static final float INVINCIBILITY_TIMESPAN = 10;
+
     // Para evitar que collidedWith gestione dos veces la colisión simultánea con
     // dos WallActors.
     private boolean wallCollisionSeen;
@@ -55,15 +59,14 @@ public class PlayerActor extends CollisionableActor {
         speed = 400;
         health = MAX_HEALTH;
 
-        noMasksAnimation = new Animation<TextureRegion>(1f,
-                ((TextureAtlas)game.assetManager.get("player-no-masks.pack")).getRegions());
-        fewMasksAnimation = new Animation<TextureRegion>(1f,
-                ((TextureAtlas)game.assetManager.get("player-few-masks.pack")).getRegions());
-        manyMasksAnimation = new Animation<TextureRegion>(1f,
-                ((TextureAtlas)game.assetManager.get("player-many-masks.pack")).getRegions());
+        defaultAnimation = new Animation<TextureRegion>(1f,
+                ((TextureAtlas)game.assetManager.get("player-default.pack")).getRegions());
+        invincibleAnimation = new Animation<TextureRegion>(1f,
+                ((TextureAtlas)game.assetManager.get("player-invincible.pack")).getRegions());
 
         maskCount = 0;
         paperCount = 0;
+        invincibilityTimeLeft = 0;
 
         setTouchable(Touchable.enabled);
     }
@@ -101,9 +104,9 @@ public class PlayerActor extends CollisionableActor {
     public void draw(Batch batch, float parentAlpha) {
         elapsedTime += Gdx.graphics.getDeltaTime();
         Animation<TextureRegion> animation =
-                maskCount <= 0
-                        ? noMasksAnimation
-                        : (maskCount < 3) ? fewMasksAnimation : manyMasksAnimation;
+                invincibilityTimeLeft <= 0
+                        ? defaultAnimation
+                        : invincibleAnimation;
         batch.draw(
                 animation.getKeyFrame(elapsedTime, true),
                 getX(), getY());
@@ -124,6 +127,10 @@ public class PlayerActor extends CollisionableActor {
         if (healthTime > HEALTH_TICK) {
             healthTime = 0;
             health = Math.min(MAX_HEALTH, health + 1);
+        }
+
+        if (invincibilityTimeLeft > 0) {
+            invincibilityTimeLeft = Math.max(0, invincibilityTimeLeft - delta);
         }
 
         int xDisplacement = (int)Math.floor(speed*delta*xDir);
@@ -158,6 +165,9 @@ public class PlayerActor extends CollisionableActor {
             case PAPER:
                 paperCount++;
                 break;
+
+            case NEEDLE:
+                invincibilityTimeLeft += INVINCIBILITY_TIMESPAN;
         }
     }
 
@@ -169,6 +179,8 @@ public class PlayerActor extends CollisionableActor {
     }
 
     private void infected() {
-        maskCount--;
+        if (invincibilityTimeLeft == 0) {
+            maskCount--;
+        }
     }
 }

@@ -177,3 +177,10 @@ a tener que especificar los desplazamientos en cada frame en cantidades enteras.
 
 Se limita la cantidad máxima de virus y de papel higiénico que pueden estar
 presentes en el mapa simultáneamente.
+
+
+Cambios presentados el 2021/01/31
+---------------------------------
+Se añade un tiempo límite de vida opcional para los actores generables, configurable
+desde el generador, y se establecen valores para los tres actores de ese tipo
+actualmente existentes: virus, mascarillas y papel.
