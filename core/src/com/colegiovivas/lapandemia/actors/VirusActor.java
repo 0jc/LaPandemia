@@ -113,8 +113,6 @@ public class VirusActor extends GenerableActor {
     public void collidedWith(CollisionableActor actor) {
         switch (actor.getActorId()) {
             case WALL:
-            case MASK:
-            case VIRUS:
                 directionTick = 0;
                 break;
 
