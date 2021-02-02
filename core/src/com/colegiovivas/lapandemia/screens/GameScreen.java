@@ -116,7 +116,6 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(stage);
         // ZoomGestureListener debe ir antes de MovePlayerGestureListener, ya que el primero
         // decide quién de los dos debe procesar los gestos tap.
         multiplexer.addProcessor(new GestureDetector(new ZoomGestureListener(this)));
