@@ -21,7 +21,7 @@ public class LoadingScreen implements Screen {
     private final GlyphLayout loadedPercentLayout;
 
     // Espacio entre el texto "Cargando..." y el porcentaje de carga.
-    private static final float LINE_SPACING = 20;
+    private static final float LINE_SPACING = 40;
 
     public LoadingScreen(final LaPandemia parent) {
         this.parent = parent;
@@ -49,6 +49,8 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("mask.png", Texture.class);
         parent.assetManager.load("needle.png", Texture.class);
         parent.assetManager.load("toiletpaper.png", Texture.class);
+        parent.assetManager.load("ingameui/mask.png", Texture.class);
+        parent.assetManager.load("ingameui/toiletpaper.png", Texture.class);
 
         loadingTitleLayout.setText(
                 (BitmapFont)parent.assetManager.get("fonts/nice32.fnt"), "Cargando...");
@@ -77,7 +79,7 @@ public class LoadingScreen implements Screen {
                 parent.batch,
                 loadingTitleLayout,
                 -loadingTitleLayout.width / 2,
-                +(loadingTitleLayout.height + LINE_SPACING + loadedPercentLayout.height) / 2);
+                -loadingTitleLayout.height + (LINE_SPACING + loadedPercentLayout.height) / 2);
         nice32.draw(
                 parent.batch,
                 loadedPercentLayout,

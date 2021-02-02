@@ -1,7 +1,7 @@
 package com.colegiovivas.lapandemia.gestures;
 
 import com.badlogic.gdx.input.GestureDetector;
-import com.colegiovivas.lapandemia.actors.PlayerActor;
+import com.colegiovivas.lapandemia.actors.world.PlayerActor;
 
 // Reporta cambios de dirección a un PlayerActor.
 public class MovePlayerGestureListener extends GestureDetector.GestureAdapter {

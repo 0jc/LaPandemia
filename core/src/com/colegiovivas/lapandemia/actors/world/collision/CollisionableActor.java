@@ -1,8 +1,8 @@
-package com.colegiovivas.lapandemia.actors.collision;
+package com.colegiovivas.lapandemia.actors.world.collision;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.colegiovivas.lapandemia.actors.ActorId;
+import com.colegiovivas.lapandemia.actors.world.ActorId;
 
 public abstract class CollisionableActor extends Actor {
     protected CollisionDispatcher collisionDispatcher;

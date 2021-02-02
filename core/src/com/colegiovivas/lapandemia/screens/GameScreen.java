@@ -3,8 +3,11 @@ package com.colegiovivas.lapandemia.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -13,10 +16,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.actors.*;
-import com.colegiovivas.lapandemia.actors.collision.CollisionDispatcher;
-import com.colegiovivas.lapandemia.actors.generator.ActorGenerator;
-import com.colegiovivas.lapandemia.actors.generator.ActorGeneratorFactory;
+import com.colegiovivas.lapandemia.actors.ingameui.IntView;
+import com.colegiovivas.lapandemia.actors.world.*;
+import com.colegiovivas.lapandemia.actors.world.collision.CollisionDispatcher;
+import com.colegiovivas.lapandemia.actors.world.generator.ActorGenerator;
+import com.colegiovivas.lapandemia.actors.world.generator.ActorGeneratorFactory;
 import com.colegiovivas.lapandemia.gestures.MovePlayerGestureListener;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
 import com.colegiovivas.lapandemia.levels.Fan;
@@ -24,42 +28,57 @@ import com.colegiovivas.lapandemia.levels.Level;
 import com.colegiovivas.lapandemia.levels.Wall;
 
 public class GameScreen implements Screen {
-    private final Level level;
-    private final Viewport worldViewport;
-    private final Stage worldStage;
-    private final PlayerActor playerActor;
-    private final OrthographicCamera worldCamera;
-    private final Array<ActorGenerator> actorGenerators;
-    private final CollisionDispatcher collisionDispatcher;
-    private final Group worldGroup;
+    private Viewport worldViewport;
+    private Stage worldStage;
+    private Stage uiStage;
+    private OrthographicCamera worldCamera;
+    private PlayerActor playerActor;
+    private Array<ActorGenerator> actorGenerators;
+    private CollisionDispatcher collisionDispatcher;
+    private Group worldGroup;
+    private int worldWidth;
+    private int worldHeight;
+    private float maxZoom;
 
-    public GameScreen(final LaPandemia parent, final Level level) {
-        this.level = level;
+    public GameScreen(LaPandemia parent, Level level) {
+        setUpWorld(parent, level);
+        setUpUI(parent);
+    }
 
+    private void setUpWorld(LaPandemia parent, Level level) {
         worldCamera = new OrthographicCamera();
         worldViewport = new StretchViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, worldCamera);
         worldStage = new Stage(worldViewport);
 
         worldGroup = new Group();
-        Group uiGroup = new Group();
+        worldStage.addActor(worldGroup);
+
+        collisionDispatcher = new CollisionDispatcher(parent, worldGroup);
+
+        setUpMap(parent, level);
+
+        HealthActor healthActor = new HealthActor(parent);
+        playerActor.setHealthActor(healthActor);
+        healthActor.setPlayerActor(playerActor);
+        Group healthGroup = new Group();
+        healthGroup.addActor(healthActor);
+        worldStage.addActor(healthGroup);
+    }
+
+    private void setUpMap(LaPandemia parent, Level level) {
+        worldWidth = level.width;
+        worldHeight = level.height;
 
         Group powerups = new Group();
         Group worldTop = new Group();
         worldGroup.addActor(powerups);
         worldGroup.addActor(worldTop);
 
-        collisionDispatcher = new CollisionDispatcher(parent, getWorldGroup());
-
         playerActor = new PlayerActor(parent, this);
         playerActor.setPosition(level.startX, level.startY);
         playerActor.setCollisionDispatcher(collisionDispatcher);
         playerActor.setDirection(level.startXDir, level.startYDir);
         worldTop.addActor(playerActor);
-
-        HealthActor healthActor = new HealthActor(parent);
-        playerActor.setHealthActor(healthActor);
-        healthActor.setPlayerActor(playerActor);
-        uiGroup.addActor(healthActor);
 
         for (int i = 0; i < level.fans.size; i++) {
             Fan fan = level.fans.get(i);
@@ -83,8 +102,44 @@ public class GameScreen implements Screen {
         actorGenerators.add(agf.getInstance(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10, 15f));
         actorGenerators.add(agf.getInstance(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 60, 1, 15f));
 
-        worldStage.addActor(worldGroup);
-        worldStage.addActor(uiGroup);
+        maxZoom = Math.min(worldWidth/LaPandemia.V_WIDTH, worldHeight/LaPandemia.V_HEIGHT);
+    }
+
+    private void setUpUI(LaPandemia parent) {
+        Camera uiCamera = new OrthographicCamera();
+        Viewport uiViewport = new StretchViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, uiCamera);
+        uiStage = new Stage(uiViewport);
+
+        BitmapFont font = parent.assetManager.get("fonts/nice32.fnt");
+        final float separation = 20;
+        final float rightMargin = 40;
+
+        final IntView paperView = new IntView((Texture)parent.assetManager.get("ingameui/toiletpaper.png"), font);
+        paperView.setPosition(
+                LaPandemia.V_WIDTH - paperView.getWidth() - rightMargin,
+                LaPandemia.V_HEIGHT - paperView.getHeight() - separation);
+        uiStage.addActor(paperView);
+
+        final IntView masksView = new IntView((Texture)parent.assetManager.get("ingameui/mask.png"), font);
+        masksView.setPosition(
+                LaPandemia.V_WIDTH - masksView.getWidth() - rightMargin,
+                paperView.getY() - masksView.getHeight() - separation);
+        uiStage.addActor(masksView);
+
+        playerActor.setPowerupListener(new PlayerActor.PowerupListener() {
+            @Override
+            public void updateCount(ActorId powerupId, int total) {
+                switch (powerupId) {
+                    case MASK:
+                        masksView.setValue(total);
+                        break;
+
+                    case PAPER:
+                        paperView.setValue(total);
+                        break;
+                }
+            }
+        });
     }
 
     public Stage getWorldStage() {
@@ -92,11 +147,11 @@ public class GameScreen implements Screen {
     }
 
     public int getWorldWidth() {
-        return level.width;
+        return worldWidth;
     }
 
     public int getWorldHeight() {
-        return level.height;
+        return worldHeight;
     }
 
     public Group getWorldGroup() {
@@ -131,21 +186,18 @@ public class GameScreen implements Screen {
         // de playerActor se muestra notablemente menos fluido.
         adjustCamera();
         worldStage.draw();
+
+        uiStage.act();
+        uiStage.draw();
     }
 
     public void zoom(float delta) {
-        //float newZoom = MathUtils.clamp(camera.zoom + delta, 0.8f, 1.6f);
-        float newZoom = Math.max(worldCamera.zoom + delta, 0.8f);
-        // Multiplicando una distancia en unidades del mundo por el zoom obtenemos su
-        // distancia en píxeles de pantalla. Sabiendo esto, nos aseguramos de que el
-        // nuevo zoom no sea tan grande que el mapa entero se quede pequeño en alguno
-        // de los dos ejes de coordenadas. Esto es necesario para que adjustCamera()
-        // pueda averiguar con seguridad y sin tener que manipular el zoom unas
-        // coordenadas de la cámara que centren al personaje lo máximo posible sin
-        // salir de los límites del mapa.
-        if (newZoom <= maxZoom()) {
-            worldCamera.zoom = newZoom;
-        }
+        // Nos aseguramos de que el nuevo zoom no sea tan grande que el mapa entero se
+        // quede pequeño en alguno de los dos ejes de coordenadas. Esto es necesario para
+        // que adjustCamera() pueda averiguar con seguridad y sin tener que manipular el
+        // zoom unas coordenadas de la cámara que centren al personaje lo máximo posible
+        // sin mostrar aquello que hay más allá de los límites del mapa.
+        worldCamera.zoom = MathUtils.clamp(worldCamera.zoom + delta, 0.8f, maxZoom);
 
         // Si se está ampliando el zoom y tan solo quedan unos pocos píxeles de ampliación
         // para alcanzar el valor máximo, se ajusta automáticamente el zoom al máximo. Si no
@@ -155,15 +207,11 @@ public class GameScreen implements Screen {
         // pequeño salto cada vez que el personaje cruza la mitad de la pantalla, lo que tan
         // solo se trata del zoom persiguiéndolo pero suele resultar ser un efecto confuso y
         // molesto.
-        if (delta > 0 && (Math.min(level.width - worldCamera.zoom * LaPandemia.V_WIDTH,
-                                   level.height - worldCamera.zoom * LaPandemia.V_HEIGHT) < 20))
+        if (delta > 0 && (Math.min(worldWidth - worldCamera.zoom * LaPandemia.V_WIDTH,
+                                   worldHeight - worldCamera.zoom * LaPandemia.V_HEIGHT) < 20))
         {
-            worldCamera.zoom = maxZoom();
+            worldCamera.zoom = maxZoom;
         }
-    }
-
-    private float maxZoom() {
-        return Math.min(level.width/LaPandemia.V_WIDTH, level.height/LaPandemia.V_HEIGHT);
     }
 
     private void adjustCamera() {
@@ -171,9 +219,9 @@ public class GameScreen implements Screen {
         // hacer scroll más allá de los límites del mapa. Cuando el personaje no está
         // cerca de los bordes, aparece en el centro de la pantalla.
         float leftBound = worldCamera.zoom * LaPandemia.V_WIDTH / 2;
-        float rightBound = level.width - leftBound;
+        float rightBound = worldWidth - leftBound;
         float lowerBound = worldCamera.zoom * LaPandemia.V_HEIGHT / 2 + 1;
-        float upperBound = level.height - lowerBound;
+        float upperBound = worldHeight - lowerBound;
         float xToCenter = playerActor.getX() + playerActor.getWidth() / 2;
         float yToCenter = playerActor.getY() + playerActor.getHeight() / 2;
 

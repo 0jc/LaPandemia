@@ -1,4 +1,4 @@
-package com.colegiovivas.lapandemia.actors.generator;
+package com.colegiovivas.lapandemia.actors.world.generator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
@@ -8,10 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.actors.ActorId;
-import com.colegiovivas.lapandemia.actors.GenerableActor;
-import com.colegiovivas.lapandemia.actors.PlayerActor;
-import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
+import com.colegiovivas.lapandemia.actors.world.ActorId;
+import com.colegiovivas.lapandemia.actors.world.GenerableActor;
+import com.colegiovivas.lapandemia.actors.world.PlayerActor;
+import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 
 public class ActorGenerator {

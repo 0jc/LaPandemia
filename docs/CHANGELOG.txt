@@ -209,3 +209,11 @@ a los otros. Las notificaciones de colisión solo se mandan una vez, y no en cad
 renderizado. Todo esto nos permite establecer que los powerups como las mascarillas
 o los rollos de papel higiénico no interfieran con las trayectorias de los virus,
 por ejemplo.
+
+Se hace un primer intento de mostrar por pantalla las estadísticas de juego (rollos
+de papel recolectados, tiempo...). Para ello se lleva a cabo una ligera
+reorganización estructural de la clase GameScreen, que ahora trabaja con unos
+viewport, stage y cámara para el mundo del juego y otros para la interfaz de usuario
+que muestra estos datos a tiempo real. No obstante, no he logrado cambiar el color
+de fuente a uno más oscuro y es fácil confundir los iconos de la interfaz gráfica
+con los propios del mapa.

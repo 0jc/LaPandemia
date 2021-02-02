@@ -1,10 +1,10 @@
-package com.colegiovivas.lapandemia.actors;
+package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Pool;
-import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
-import com.colegiovivas.lapandemia.actors.generator.ActorGenerator;
+import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
+import com.colegiovivas.lapandemia.actors.world.generator.ActorGenerator;
 
 public abstract class GenerableActor extends CollisionableActor implements Pool.Poolable {
     private ActorGenerator generator;
@@ -48,8 +48,6 @@ public abstract class GenerableActor extends CollisionableActor implements Pool.
     public final void draw(Batch batch, float parentAlpha) {
         if (ttl == null || ttl - age > BLINK_PERIOD || Math.ceil((ttl - age)/BLINK_TICK) % 2 == 1) {
             drawNotBlinking(batch, parentAlpha);
-        } else {
-            Gdx.app.log("LaPandemia", "GenerableActor: age=" + age + ", res=" + Math.ceil((ttl - age)/BLINK_TICK));
         }
     }
 

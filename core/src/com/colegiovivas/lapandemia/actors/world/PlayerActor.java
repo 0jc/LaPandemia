@@ -1,15 +1,13 @@
-package com.colegiovivas.lapandemia.actors;
+package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
+import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 
 public class PlayerActor extends CollisionableActor {
@@ -17,6 +15,7 @@ public class PlayerActor extends CollisionableActor {
     private final Animation<TextureRegion> invincibleAnimation;
     private final LaPandemia game;
     private final GameScreen gameScreen;
+    private PowerupListener powerupListener;
 
     // Cada cuánto se incrementa el nivel de salud (segundos) y nivel máximo.
     private static final float HEALTH_TICK = 1;
@@ -94,6 +93,10 @@ public class PlayerActor extends CollisionableActor {
         this.healthActor = healthActor;
     }
 
+    public void setPowerupListener(PowerupListener powerupListener) {
+        this.powerupListener = powerupListener;
+    }
+
     public void setDirection(int xDir, int yDir) {
         if (xDir < -1 || xDir > 1 || yDir < -1 || yDir > 1) {
             throw new IllegalArgumentException();
@@ -167,6 +170,7 @@ public class PlayerActor extends CollisionableActor {
 
             case MASK:
                 maskCount++;
+                powerupListener.updateCount(ActorId.MASK, maskCount);
                 break;
 
             case VIRUS:
@@ -175,6 +179,7 @@ public class PlayerActor extends CollisionableActor {
 
             case PAPER:
                 paperCount++;
+                powerupListener.updateCount(ActorId.PAPER, paperCount);
                 break;
 
             case NEEDLE:
@@ -198,6 +203,11 @@ public class PlayerActor extends CollisionableActor {
     private void infected() {
         if (invincibilityTimeLeft == 0) {
             maskCount--;
+            powerupListener.updateCount(ActorId.MASK, maskCount);
         }
+    }
+
+    public interface PowerupListener {
+        void updateCount(ActorId powerupId, int total);
     }
 }

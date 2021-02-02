@@ -1,19 +1,19 @@
-package com.colegiovivas.lapandemia.actors;
+package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
+import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 
-public class PaperActor extends GenerableActor {
+public class NeedleActor extends GenerableActor {
     private final Texture texture;
     private final LaPandemia game;
 
-    public PaperActor(final LaPandemia game) {
+    public NeedleActor(final LaPandemia game) {
         this.game = game;
-        this.texture = game.assetManager.get("toiletpaper.png");
+        this.texture = game.assetManager.get("needle.png");
 
         setTouchable(Touchable.enabled);
     }
@@ -37,7 +37,7 @@ public class PaperActor extends GenerableActor {
 
     @Override
     public ActorId getActorId() {
-        return ActorId.PAPER;
+        return ActorId.NEEDLE;
     }
 
     @Override

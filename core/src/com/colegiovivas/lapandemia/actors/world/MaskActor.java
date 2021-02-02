@@ -1,19 +1,19 @@
-package com.colegiovivas.lapandemia.actors;
+package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
+import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 
-public class NeedleActor extends GenerableActor {
+public class MaskActor extends GenerableActor {
     private final Texture texture;
     private final LaPandemia game;
 
-    public NeedleActor(final LaPandemia game) {
+    public MaskActor(final LaPandemia game) {
         this.game = game;
-        this.texture = game.assetManager.get("needle.png");
+        this.texture = game.assetManager.get("mask.png");
 
         setTouchable(Touchable.enabled);
     }
@@ -37,15 +37,15 @@ public class NeedleActor extends GenerableActor {
 
     @Override
     public ActorId getActorId() {
-        return ActorId.NEEDLE;
+        return ActorId.MASK;
     }
 
     @Override
     public boolean checkAllowOverlap(ActorId id, Rectangle initPos) {
         switch (id) {
             case NEEDLE:
-            case MASK:
             case PAPER:
+            case MASK:
             case VIRUS:
                 return true;
         }

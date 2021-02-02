@@ -1,15 +1,11 @@
-package com.colegiovivas.lapandemia.actors.collision;
+package com.colegiovivas.lapandemia.actors.world.collision;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.actors.*;
 
 public class CollisionDispatcher {
     private final LaPandemia game;
@@ -50,12 +46,8 @@ public class CollisionDispatcher {
                     }
 
                     rOther.set(currActor.getX(), currActor.getY(), currActor.getWidth(), currActor.getHeight());
-                    if (rAfter.overlaps(rOther) && rBefore.overlaps(rOther)) {
-                        Gdx.app.log("LaPandemia", actor + " (id " + actor.hashCode() + ") overlapping with " + currActor + " (id " + currActor.hashCode() + "; " + rOther.x + ", " + rOther.y + ", " + rOther.width + ", " + rOther.height + ") after displacement (" + rAfter.x + ", " +rAfter.y + ", " + rAfter.width + ", " + rAfter.height + "), but was already doing so from before (" + rBefore.x + ", " + rBefore.y + ", " + rBefore.width + ", " + rBefore.height + ")");
-                    }
                     if (rAfter.overlaps(rOther) && !rBefore.overlaps(rOther)) {
                         if (((CollisionableActor)currActor).checkAllowOverlap(actor.getActorId(), rAfter)) {
-                            Gdx.app.log("LaPandemia", currActor + " (id " + currActor.hashCode() + ") allows overlap for " + actor + " (id " + actor.hashCode() + "); not bumping into it.");
                             continue;
                         }
 
@@ -69,10 +61,6 @@ public class CollisionDispatcher {
                         }
                     }
                 }
-            }
-
-            if (collidedActors.size > 0) {
-                Gdx.app.log("LaPandemia", "collidedActors (" + actor + ", id " + actor.hashCode() + ") : " + collidedActors);
             }
 
             // `collidingActor` chocará **simultáneamente** con todos los miembros actuales de
@@ -107,8 +95,6 @@ public class CollisionDispatcher {
                 actor.collidedWith((CollisionableActor)collidedActor);
                 ((CollisionableActor)collidedActor).collidedBy(actor);
             }
-
-            Gdx.app.log("LaPandemia", "Ultimate position for " + actor + " (id " + actor.hashCode() + "): x=" + actor.getX() + ", y=" + actor.getY());
         } finally {
             game.rectPool.free(rBefore);
             game.rectPool.free(rAfter);
