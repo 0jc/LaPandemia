@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -25,32 +24,27 @@ import com.colegiovivas.lapandemia.levels.Level;
 import com.colegiovivas.lapandemia.levels.Wall;
 
 public class GameScreen implements Screen {
-    private final LaPandemia parent;
     private final Level level;
-    private final Viewport viewport;
-    private final Stage stage;
+    private final Viewport worldViewport;
+    private final Stage worldStage;
     private final PlayerActor playerActor;
-    private final OrthographicCamera camera;
+    private final OrthographicCamera worldCamera;
     private final Array<ActorGenerator> actorGenerators;
     private final CollisionDispatcher collisionDispatcher;
     private final Group worldGroup;
-    private final Group powerups;
-    private final Group worldTop;
-    private final Group UIGroup;
 
     public GameScreen(final LaPandemia parent, final Level level) {
-        this.parent = parent;
         this.level = level;
 
-        camera = new OrthographicCamera();
-        viewport = new StretchViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, camera);
-        stage = new Stage(viewport);
+        worldCamera = new OrthographicCamera();
+        worldViewport = new StretchViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, worldCamera);
+        worldStage = new Stage(worldViewport);
 
         worldGroup = new Group();
-        UIGroup = new Group();
+        Group UIGroup = new Group();
 
-        powerups = new Group();
-        worldTop = new Group();
+        Group powerups = new Group();
+        Group worldTop = new Group();
         worldGroup.addActor(powerups);
         worldGroup.addActor(worldTop);
 
@@ -84,17 +78,17 @@ public class GameScreen implements Screen {
 
         ActorGeneratorFactory agf = new ActorGeneratorFactory(this, parent);
         actorGenerators = new Array<>();
-        actorGenerators.add(agf.getInstance(VirusActor.class, ActorId.VIRUS, worldTop, 32, 64, 2, 100f, 120f));
-        actorGenerators.add(agf.getInstance(MaskActor.class, ActorId.MASK, powerups, 64, 32, 10, 3f, 15f));
-        actorGenerators.add(agf.getInstance(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10f, 15f));
-        actorGenerators.add(agf.getInstance(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 60, 1f, 15f));
+        actorGenerators.add(agf.getInstance(VirusActor.class, ActorId.VIRUS, worldTop, 32, 64, 2, 100, 120f));
+        actorGenerators.add(agf.getInstance(MaskActor.class, ActorId.MASK, powerups, 64, 32, 10, 3, 15f));
+        actorGenerators.add(agf.getInstance(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10, 15f));
+        actorGenerators.add(agf.getInstance(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 60, 1, 15f));
 
-        stage.addActor(worldGroup);
-        stage.addActor(UIGroup);
+        worldStage.addActor(worldGroup);
+        worldStage.addActor(UIGroup);
     }
 
-    public Stage getStage() {
-        return stage;
+    public Stage getWorldStage() {
+        return worldStage;
     }
 
     public int getWorldWidth() {
@@ -132,16 +126,16 @@ public class GameScreen implements Screen {
             actorGenerators.get(i).render(delta);
         }
 
-        stage.act();
+        worldStage.act();
         // El orden de las siguientes dos líneas es importante. Si se invierten, el movimiento
         // de playerActor se muestra notablemente menos fluido.
         adjustCamera();
-        stage.draw();
+        worldStage.draw();
     }
 
     public void zoom(float delta) {
         //float newZoom = MathUtils.clamp(camera.zoom + delta, 0.8f, 1.6f);
-        float newZoom = Math.max(camera.zoom + delta, 0.8f);
+        float newZoom = Math.max(worldCamera.zoom + delta, 0.8f);
         // Multiplicando una distancia en unidades del mundo por el zoom obtenemos su
         // distancia en píxeles de pantalla. Sabiendo esto, nos aseguramos de que el
         // nuevo zoom no sea tan grande que el mapa entero se quede pequeño en alguno
@@ -150,7 +144,7 @@ public class GameScreen implements Screen {
         // coordenadas de la cámara que centren al personaje lo máximo posible sin
         // salir de los límites del mapa.
         if (newZoom <= maxZoom()) {
-            camera.zoom = newZoom;
+            worldCamera.zoom = newZoom;
         }
 
         // Si se está ampliando el zoom y tan solo quedan unos pocos píxeles de ampliación
@@ -161,10 +155,10 @@ public class GameScreen implements Screen {
         // pequeño salto cada vez que el personaje cruza la mitad de la pantalla, lo que tan
         // solo se trata del zoom persiguiéndolo pero suele resultar ser un efecto confuso y
         // molesto.
-        if (delta > 0 && (Math.min(level.width - camera.zoom * LaPandemia.V_WIDTH,
-                                   level.height - camera.zoom * LaPandemia.V_HEIGHT) < 20))
+        if (delta > 0 && (Math.min(level.width - worldCamera.zoom * LaPandemia.V_WIDTH,
+                                   level.height - worldCamera.zoom * LaPandemia.V_HEIGHT) < 20))
         {
-            camera.zoom = maxZoom();
+            worldCamera.zoom = maxZoom();
         }
     }
 
@@ -176,20 +170,20 @@ public class GameScreen implements Screen {
         // Se muestra siempre el mayor espacio posible alrededor del personaje, pero sin
         // hacer scroll más allá de los límites del mapa. Cuando el personaje no está
         // cerca de los bordes, aparece en el centro de la pantalla.
-        float leftBound = camera.zoom * LaPandemia.V_WIDTH / 2;
+        float leftBound = worldCamera.zoom * LaPandemia.V_WIDTH / 2;
         float rightBound = level.width - leftBound;
-        float lowerBound = camera.zoom * LaPandemia.V_HEIGHT / 2 + 1;
+        float lowerBound = worldCamera.zoom * LaPandemia.V_HEIGHT / 2 + 1;
         float upperBound = level.height - lowerBound;
         float xToCenter = playerActor.getX() + playerActor.getWidth() / 2;
         float yToCenter = playerActor.getY() + playerActor.getHeight() / 2;
 
-        camera.position.x = MathUtils.clamp(xToCenter, leftBound, rightBound);
-        camera.position.y = MathUtils.clamp(yToCenter, lowerBound, upperBound);
+        worldCamera.position.x = MathUtils.clamp(xToCenter, leftBound, rightBound);
+        worldCamera.position.y = MathUtils.clamp(yToCenter, lowerBound, upperBound);
     }
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height);
+        worldViewport.update(width, height);
     }
 
     @Override
@@ -209,7 +203,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
+        worldStage.dispose();
         for (ActorGenerator actorGenerator : actorGenerators) {
             actorGenerator.getPool().clear();
         }

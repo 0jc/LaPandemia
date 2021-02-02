@@ -18,7 +18,7 @@ public class ActorGeneratorFactory {
     }
 
     public ActorGenerator getInstance(Class<? extends GenerableActor> generableActorClass, ActorId actorId,
-                                      Group destGroup, float width, float height, float tick, Float maxCount, Float ttl)
+                                      Group destGroup, float width, float height, float tick, Integer maxCount, Float ttl)
 
     {
         ActorGenerator actorGenerator = new ActorGenerator(

@@ -20,7 +20,7 @@ public class ActorGenerator {
     private final float tick;
     private final float width;
     private final float height;
-    private final Float maxCount;
+    private final Integer maxCount;
     private final Pool<GenerableActor> generableActorPool;
     private final Float ttl;
     private final ActorId actorId;
@@ -33,7 +33,7 @@ public class ActorGenerator {
     private float lastActorTime;
 
     public ActorGenerator(final Class<? extends GenerableActor> generableActorClass, ActorId actorId,
-                          Group destGroup, float width, float height, float tick, Float maxCount, Float ttl)
+                          Group destGroup, float width, float height, float tick, Integer maxCount, Float ttl)
     {
         this.actorId = actorId;
         this.destGroup = destGroup;
