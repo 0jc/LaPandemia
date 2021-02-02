@@ -41,7 +41,7 @@ public class GameScreen implements Screen {
         worldStage = new Stage(worldViewport);
 
         worldGroup = new Group();
-        Group UIGroup = new Group();
+        Group uiGroup = new Group();
 
         Group powerups = new Group();
         Group worldTop = new Group();
@@ -59,7 +59,7 @@ public class GameScreen implements Screen {
         HealthActor healthActor = new HealthActor(parent);
         playerActor.setHealthActor(healthActor);
         healthActor.setPlayerActor(playerActor);
-        UIGroup.addActor(healthActor);
+        uiGroup.addActor(healthActor);
 
         for (int i = 0; i < level.fans.size; i++) {
             Fan fan = level.fans.get(i);
@@ -84,7 +84,7 @@ public class GameScreen implements Screen {
         actorGenerators.add(agf.getInstance(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 60, 1, 15f));
 
         worldStage.addActor(worldGroup);
-        worldStage.addActor(UIGroup);
+        worldStage.addActor(uiGroup);
     }
 
     public Stage getWorldStage() {
