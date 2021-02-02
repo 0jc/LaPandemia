@@ -179,6 +179,7 @@ public class PlayerActor extends CollisionableActor {
 
             case NEEDLE:
                 invincibilityTimeLeft += INVINCIBILITY_TIMESPAN;
+                break;
         }
     }
 
