@@ -34,6 +34,8 @@ public class GameScreen implements Screen {
     private final Array<ActorGenerator> actorGenerators;
     private final CollisionDispatcher collisionDispatcher;
     private final Group worldGroup;
+    private final Group powerups;
+    private final Group worldTop;
     private final Group UIGroup;
 
     public GameScreen(final LaPandemia parent, final Level level) {
@@ -47,20 +49,18 @@ public class GameScreen implements Screen {
         worldGroup = new Group();
         UIGroup = new Group();
 
+        powerups = new Group();
+        worldTop = new Group();
+        worldGroup.addActor(powerups);
+        worldGroup.addActor(worldTop);
+
         collisionDispatcher = new CollisionDispatcher(parent, getWorldGroup());
-        collisionDispatcher.register(ActorId.PLAYER, PlayerActor.class);
-        collisionDispatcher.register(ActorId.WALL, WallActor.class);
-        collisionDispatcher.register(ActorId.FAN, FanActor.class);
-        collisionDispatcher.register(ActorId.VIRUS, VirusActor.class);
-        collisionDispatcher.register(ActorId.MASK, MaskActor.class);
-        collisionDispatcher.register(ActorId.PAPER, PaperActor.class);
-        collisionDispatcher.register(ActorId.NEEDLE, NeedleActor.class);
 
         playerActor = new PlayerActor(parent, this);
         playerActor.setPosition(level.startX, level.startY);
         playerActor.setCollisionDispatcher(collisionDispatcher);
         playerActor.setDirection(level.startXDir, level.startYDir);
-        worldGroup.addActor(playerActor);
+        worldTop.addActor(playerActor);
 
         HealthActor healthActor = new HealthActor(parent);
         playerActor.setHealthActor(healthActor);
@@ -72,22 +72,22 @@ public class GameScreen implements Screen {
             FanActor fanActor = new FanActor(parent);
             fanActor.setPosition(fan.x, fan.y);
             fanActor.setCollisionDispatcher(collisionDispatcher);
-            worldGroup.addActor(fanActor);
+            worldTop.addActor(fanActor);
         }
         for (int i = 0; i < level.walls.size; i++) {
             Wall wall = level.walls.get(i);
             WallActor wallActor = new WallActor(parent);
             wallActor.setBounds(wall.x, wall.y, wall.w, wall.h);
             wallActor.setCollisionDispatcher(collisionDispatcher);
-            worldGroup.addActor(wallActor);
+            worldTop.addActor(wallActor);
         }
 
         ActorGeneratorFactory agf = new ActorGeneratorFactory(this, parent);
         actorGenerators = new Array<>();
-        actorGenerators.add(agf.getInstance(VirusActor.class, 32, 64, 2, 100f, 120f));
-        actorGenerators.add(agf.getInstance(MaskActor.class, 64, 32, 10, 3f, 15f));
-        actorGenerators.add(agf.getInstance(PaperActor.class, 48, 48, 5, 10f, 15f));
-        actorGenerators.add(agf.getInstance(NeedleActor.class, 22, 64, 60, 1f, 15f));
+        actorGenerators.add(agf.getInstance(VirusActor.class, ActorId.VIRUS, worldTop, 32, 64, 2, 100f, 120f));
+        actorGenerators.add(agf.getInstance(MaskActor.class, ActorId.MASK, powerups, 64, 32, 10, 3f, 15f));
+        actorGenerators.add(agf.getInstance(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10f, 15f));
+        actorGenerators.add(agf.getInstance(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 60, 1f, 15f));
 
         stage.addActor(worldGroup);
         stage.addActor(UIGroup);

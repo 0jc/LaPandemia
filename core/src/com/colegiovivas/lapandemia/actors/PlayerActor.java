@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -147,8 +148,8 @@ public class PlayerActor extends CollisionableActor {
     }
 
     @Override
-    public void collidedWith(CollisionableActor actor, ActorId id, int srcX, int srcY) {
-        switch (id) {
+    public void collidedWith(CollisionableActor actor) {
+        switch (actor.getActorId()) {
             case WALL:
                 if (!wallCollisionSeen) {
                     wallCollisionSeen = true;
@@ -182,8 +183,13 @@ public class PlayerActor extends CollisionableActor {
     }
 
     @Override
-    public void collidedBy(CollisionableActor actor, ActorId id, int srcX, int srcY) {
-        if (id == ActorId.VIRUS) {
+    public ActorId getActorId() {
+        return ActorId.PLAYER;
+    }
+
+    @Override
+    public void collidedBy(CollisionableActor actor) {
+        if (actor.getActorId() == ActorId.VIRUS) {
             infected();
         }
     }

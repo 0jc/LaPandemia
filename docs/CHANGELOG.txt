@@ -202,3 +202,10 @@ para notificar al jugador de la pérdida e incremento de salud. Para que el acto
 interfiera con los actores del mundo, se empiezan a organizar los actores en dos
 grupos: del mundo y de interfaz de usuario.
 
+El sistema de detección y gestión de colisiones se hace ahora también más complejo,
+ya que se ha introducido la capacidad de permitir, en función de lo que los actores
+decidan individualmente entre ellos como aceptable, que los unos puedan superponerse
+a los otros. Las notificaciones de colisión solo se mandan una vez, y no en cada
+renderizado. Todo esto nos permite establecer que los powerups como las mascarillas
+o los rollos de papel higiénico no interfieran con las trayectorias de los virus,
+por ejemplo.

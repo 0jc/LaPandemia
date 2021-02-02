@@ -1,7 +1,9 @@
 package com.colegiovivas.lapandemia.actors.generator;
 
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.actors.ActorId;
 import com.colegiovivas.lapandemia.actors.GenerableActor;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 
@@ -15,11 +17,12 @@ public class ActorGeneratorFactory {
         this.game = game;
     }
 
-    public ActorGenerator getInstance(Class<? extends GenerableActor> generableActorClass,
-                                      float width, float height, float tick, Float maxCount, Float ttl)
+    public ActorGenerator getInstance(Class<? extends GenerableActor> generableActorClass, ActorId actorId,
+                                      Group destGroup, float width, float height, float tick, Float maxCount, Float ttl)
 
     {
-        ActorGenerator actorGenerator = new ActorGenerator(generableActorClass, width, height, tick, maxCount, ttl);
+        ActorGenerator actorGenerator = new ActorGenerator(
+                generableActorClass, actorId, destGroup, width, height, tick, maxCount, ttl);
         actorGenerator.setGameScreen(gameScreen);
         actorGenerator.setGame(game);
         return actorGenerator;

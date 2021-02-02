@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.collision.CollisionableActor;
@@ -109,8 +110,8 @@ public class VirusActor extends GenerableActor {
     }
 
     @Override
-    public void collidedWith(CollisionableActor actor, ActorId id, int srcX, int srcY) {
-        switch (id) {
+    public void collidedWith(CollisionableActor actor) {
+        switch (actor.getActorId()) {
             case WALL:
             case MASK:
             case VIRUS:
@@ -128,13 +129,30 @@ public class VirusActor extends GenerableActor {
     }
 
     @Override
-    public void collidedBy(CollisionableActor actor, ActorId id, int srcX, int srcY) {
-        if (id == ActorId.PLAYER) {
+    public ActorId getActorId() {
+        return ActorId.VIRUS;
+    }
+
+    @Override
+    public void collidedBy(CollisionableActor actor) {
+        if (actor.getActorId() == ActorId.PLAYER) {
             caughtPlayer();
         }
     }
 
     private void caughtPlayer() {
         remove();
+    }
+
+    @Override
+    public boolean checkAllowOverlap(ActorId id, Rectangle initPos) {
+        switch (id) {
+            case NEEDLE:
+            case MASK:
+            case PAPER:
+                return true;
+        }
+
+        return false;
     }
 }

@@ -36,4 +36,9 @@ public class FanActor extends CollisionableActor {
                 animation.getKeyFrame(elapsedTime, true),
                 getX(), getY());
     }
+
+    @Override
+    public ActorId getActorId() {
+        return ActorId.FAN;
+    }
 }

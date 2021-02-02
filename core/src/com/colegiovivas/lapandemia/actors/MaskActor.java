@@ -2,6 +2,7 @@ package com.colegiovivas.lapandemia.actors;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.collision.CollisionDispatcher;
@@ -29,9 +30,27 @@ public class MaskActor extends GenerableActor {
     }
 
     @Override
-    public void collidedBy(CollisionableActor actor, ActorId id, int srcX, int srcY) {
-        if (id == ActorId.PLAYER) {
+    public void collidedBy(CollisionableActor actor) {
+        if (actor.getActorId() == ActorId.PLAYER) {
             remove();
         }
+    }
+
+    @Override
+    public ActorId getActorId() {
+        return ActorId.MASK;
+    }
+
+    @Override
+    public boolean checkAllowOverlap(ActorId id, Rectangle initPos) {
+        switch (id) {
+            case NEEDLE:
+            case PAPER:
+            case MASK:
+            case VIRUS:
+                return true;
+        }
+
+        return false;
     }
 }

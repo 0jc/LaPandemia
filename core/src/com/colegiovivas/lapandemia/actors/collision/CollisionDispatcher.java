@@ -14,16 +14,10 @@ import com.colegiovivas.lapandemia.actors.*;
 public class CollisionDispatcher {
     private final LaPandemia game;
     private final Group worldGroup;
-    private ArrayMap<Class<? extends CollisionableActor>, ActorId> actorRegistry;
 
     public CollisionDispatcher(LaPandemia game, Group worldGroup) {
         this.game = game;
         this.worldGroup = worldGroup;
-        actorRegistry = new ArrayMap<>();
-    }
-
-    public void register(ActorId id, Class<? extends CollisionableActor> actorClass) {
-        actorRegistry.put(actorClass, id);
     }
 
     public void tryMove(CollisionableActor actor, int xDisplacement, int yDisplacement) {
@@ -33,23 +27,42 @@ public class CollisionDispatcher {
         int yDir = yDisplacement == 0 ? 0 : yDisplacement < 0 ? -1 : 1;
 
         // Rectángulo del PlayerActor tras moverse a la siguiente posición.
-        Rectangle rActor = game.rectPool.obtain();
-        // Rectángulo de otro actor para comprobar si hay colisión con rActor.
+        Rectangle rBefore = game.rectPool.obtain();
+        // Rectángulo del PlayerActor tras moverse a la siguiente posición.
+        Rectangle rAfter = game.rectPool.obtain();
+        // Rectángulo de otro actor para comprobar si hay colisión con rAfter.
         Rectangle rOther = game.rectPool.obtain();
 
         Array<Actor> collidedActors = game.actorArrayPool.obtain();
-        Integer minCollisionDistance = null;
+        Integer minBumpDistance = null;
         try {
-            rActor.set(actor.getX() + xDisplacement, actor.getY() + yDisplacement, actor.getWidth(),
+            rBefore.set(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
+            rAfter.set(actor.getX() + xDisplacement, actor.getY() + yDisplacement, actor.getWidth(),
                     actor.getHeight());
-            for (Actor currActor : worldGroup.getChildren()) {
-                if (currActor instanceof CollisionableActor && currActor != actor) {
+            for (Actor currGroup : worldGroup.getChildren()) {
+                if ( !(currGroup instanceof Group) ) {
+                    continue;
+                }
+
+                for (Actor currActor : ((Group)currGroup).getChildren()) {
+                    if ( !(currActor instanceof CollisionableActor && currActor != actor) ) {
+                        continue;
+                    }
+
                     rOther.set(currActor.getX(), currActor.getY(), currActor.getWidth(), currActor.getHeight());
-                    if (rActor.overlaps(rOther)) {
+                    if (rAfter.overlaps(rOther) && rBefore.overlaps(rOther)) {
+                        Gdx.app.log("LaPandemia", actor + " (id " + actor.hashCode() + ") overlapping with " + currActor + " (id " + currActor.hashCode() + "; " + rOther.x + ", " + rOther.y + ", " + rOther.width + ", " + rOther.height + ") after displacement (" + rAfter.x + ", " +rAfter.y + ", " + rAfter.width + ", " + rAfter.height + "), but was already doing so from before (" + rBefore.x + ", " + rBefore.y + ", " + rBefore.width + ", " + rBefore.height + ")");
+                    }
+                    if (rAfter.overlaps(rOther) && !rBefore.overlaps(rOther)) {
+                        if (((CollisionableActor)currActor).checkAllowOverlap(actor.getActorId(), rAfter)) {
+                            Gdx.app.log("LaPandemia", currActor + " (id " + currActor.hashCode() + ") allows overlap for " + actor + " (id " + actor.hashCode() + "); not bumping into it.");
+                            continue;
+                        }
+
                         int collisionDistance = collisionDistance(actor, currActor, xDir, yDir);
-                        if (minCollisionDistance == null || minCollisionDistance >= collisionDistance) {
-                            if (minCollisionDistance == null || minCollisionDistance > collisionDistance) {
-                                minCollisionDistance = collisionDistance;
+                        if (minBumpDistance == null || minBumpDistance >= collisionDistance) {
+                            if (minBumpDistance == null || minBumpDistance > collisionDistance) {
+                                minBumpDistance = collisionDistance;
                                 collidedActors.clear();
                             }
                             collidedActors.add(currActor);
@@ -58,21 +71,47 @@ public class CollisionDispatcher {
                 }
             }
 
-            int effectiveDx = minCollisionDistance == null ? xDisplacement : xDir*minCollisionDistance;
-            int effectiveDy = minCollisionDistance == null ? yDisplacement : yDir*minCollisionDistance;
+            if (collidedActors.size > 0) {
+                Gdx.app.log("LaPandemia", "collidedActors (" + actor + ", id " + actor.hashCode() + ") : " + collidedActors);
+            }
+
+            // `collidingActor` chocará **simultáneamente** con todos los miembros actuales de
+            // `collidedActors`, sin llegar a superponerse sobre ellos.
+            int effectiveDx = minBumpDistance == null ? xDisplacement : xDir*minBumpDistance;
+            int effectiveDy = minBumpDistance == null ? yDisplacement : yDir*minBumpDistance;
             actor.setPosition(srcX + effectiveDx, srcY + effectiveDy);
 
-            // `collidingActor` chocará **simultáneamente** con todos los miembros de collidedActors.
-            // Es decir, no se da la situación de que algunos de estos actores estén físicamente
-            // antepuestos a otros.
-            ActorId collidingActorId = actorRegistry.get(actor.getClass());
-            for (Actor collidedActor : collidedActors) {
-                ActorId collidedActorId = actorRegistry.get(((CollisionableActor)collidedActor).getClass());
-                actor.collidedWith((CollisionableActor)collidedActor, collidedActorId, srcX, srcY);
-                ((CollisionableActor)collidedActor).collidedBy(actor, collidingActorId, srcX, srcY);
+            // Ahora añadiremos también aquellos actores sobre los que nos estaremos superponiendo
+            // al haber realizado este movimiento. Se trata también de colisiones, pero no producen
+            // "efecto choque". Un ejemplo puede ser un powerup siendo `actor` un virus, o simplemente
+            // actores que formen parte del decorado. Todos estos actores son traspasables.
+            rAfter.set(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
+            for (Actor currGroup : worldGroup.getChildren()) {
+                if ( !(currGroup instanceof Group) ) {
+                    continue;
+                }
+
+                for (Actor currActor : ((Group)currGroup).getChildren()) {
+                    if ( !(currActor instanceof CollisionableActor && currActor != actor) ) {
+                        continue;
+                    }
+
+                    rOther.set(currActor.getX(), currActor.getY(), currActor.getWidth(), currActor.getHeight());
+                    if (rAfter.overlaps(rOther) && !rBefore.overlaps(rOther)) {
+                        collidedActors.add(currActor);
+                    }
+                }
             }
+
+            for (Actor collidedActor : collidedActors) {
+                actor.collidedWith((CollisionableActor)collidedActor);
+                ((CollisionableActor)collidedActor).collidedBy(actor);
+            }
+
+            Gdx.app.log("LaPandemia", "Ultimate position for " + actor + " (id " + actor.hashCode() + "): x=" + actor.getX() + ", y=" + actor.getY());
         } finally {
-            game.rectPool.free(rActor);
+            game.rectPool.free(rBefore);
+            game.rectPool.free(rAfter);
             game.rectPool.free(rOther);
             game.actorArrayPool.free(collidedActors);
         }
