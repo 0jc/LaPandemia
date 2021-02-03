@@ -1,6 +1,7 @@
 package com.colegiovivas.lapandemia.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
@@ -28,10 +29,8 @@ import com.colegiovivas.lapandemia.levels.Level;
 import com.colegiovivas.lapandemia.levels.Wall;
 
 public class GameScreen implements Screen {
-    private Viewport worldViewport;
     private Stage worldStage;
     private Stage uiStage;
-    private OrthographicCamera worldCamera;
     private PlayerActor playerActor;
     private Array<ActorGenerator> actorGenerators;
     private CollisionDispatcher collisionDispatcher;
@@ -40,14 +39,18 @@ public class GameScreen implements Screen {
     private int worldHeight;
     private float maxZoom;
 
+    private GameStage gameStage;
+
     public GameScreen(LaPandemia parent, Level level) {
         setUpWorld(parent, level);
         setUpUI(parent);
+
+        gameStage = new CountdownGameStage();
     }
 
     private void setUpWorld(LaPandemia parent, Level level) {
-        worldCamera = new OrthographicCamera();
-        worldViewport = new StretchViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, worldCamera);
+        OrthographicCamera worldCamera = new OrthographicCamera();
+        Viewport worldViewport = new StretchViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, worldCamera);
         worldStage = new Stage(worldViewport);
 
         worldGroup = new Group();
@@ -164,12 +167,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        // ZoomGestureListener debe ir antes de MovePlayerGestureListener, ya que el primero
-        // decide quién de los dos debe procesar los gestos tap.
-        multiplexer.addProcessor(new GestureDetector(new ZoomGestureListener(this)));
-        multiplexer.addProcessor(new GestureDetector(new MovePlayerGestureListener(playerActor)));
-        Gdx.input.setInputProcessor(multiplexer);
+        gameStage.show();
     }
 
     @Override
@@ -177,11 +175,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        for (int i = 0; i < actorGenerators.size; i++) {
-            actorGenerators.get(i).render(delta);
-        }
+        gameStage.render(delta);
 
-        worldStage.act();
         // El orden de las siguientes dos líneas es importante. Si se invierten, el movimiento
         // de playerActor se muestra notablemente menos fluido.
         adjustCamera();
@@ -191,47 +186,10 @@ public class GameScreen implements Screen {
         uiStage.draw();
     }
 
-    public void zoom(float delta) {
-        // Nos aseguramos de que el nuevo zoom no sea tan grande que el mapa entero se
-        // quede pequeño en alguno de los dos ejes de coordenadas. Esto es necesario para
-        // que adjustCamera() pueda averiguar con seguridad y sin tener que manipular el
-        // zoom unas coordenadas de la cámara que centren al personaje lo máximo posible
-        // sin mostrar aquello que hay más allá de los límites del mapa.
-        worldCamera.zoom = MathUtils.clamp(worldCamera.zoom + delta, 0.8f, maxZoom);
-
-        // Si se está ampliando el zoom y tan solo quedan unos pocos píxeles de ampliación
-        // para alcanzar el valor máximo, se ajusta automáticamente el zoom al máximo. Si no
-        // hiciésemos esto, el jugador tendría que asegurarse de hacer un gesto muy preciso
-        // con los dedos para poder establecer este valor exacto y no uno muy ligeramente
-        // menor. El problema de estos valores menores es que provocan que el mapa dé un
-        // pequeño salto cada vez que el personaje cruza la mitad de la pantalla, lo que tan
-        // solo se trata del zoom persiguiéndolo pero suele resultar ser un efecto confuso y
-        // molesto.
-        if (delta > 0 && (Math.min(worldWidth - worldCamera.zoom * LaPandemia.V_WIDTH,
-                                   worldHeight - worldCamera.zoom * LaPandemia.V_HEIGHT) < 20))
-        {
-            worldCamera.zoom = maxZoom;
-        }
-    }
-
-    private void adjustCamera() {
-        // Se muestra siempre el mayor espacio posible alrededor del personaje, pero sin
-        // hacer scroll más allá de los límites del mapa. Cuando el personaje no está
-        // cerca de los bordes, aparece en el centro de la pantalla.
-        float leftBound = worldCamera.zoom * LaPandemia.V_WIDTH / 2;
-        float rightBound = worldWidth - leftBound;
-        float lowerBound = worldCamera.zoom * LaPandemia.V_HEIGHT / 2 + 1;
-        float upperBound = worldHeight - lowerBound;
-        float xToCenter = playerActor.getX() + playerActor.getWidth() / 2;
-        float yToCenter = playerActor.getY() + playerActor.getHeight() / 2;
-
-        worldCamera.position.x = MathUtils.clamp(xToCenter, leftBound, rightBound);
-        worldCamera.position.y = MathUtils.clamp(yToCenter, lowerBound, upperBound);
-    }
-
     @Override
     public void resize(int width, int height) {
-        worldViewport.update(width, height);
+        worldStage.getViewport().update(width, height);
+        uiStage.getViewport().update(width, height);
     }
 
     @Override
@@ -257,4 +215,126 @@ public class GameScreen implements Screen {
         }
     }
 
+    private void nextGameStage(GameStage current) {
+        if (current instanceof CountdownGameStage) {
+            gameStage = new PlayingGameStage();
+        } else if (current instanceof PlayingGameStage) {
+            gameStage = new EndingGameStage();
+        }
+
+        show();
+    }
+
+    private void adjustCamera() {
+        // Se muestra siempre el mayor espacio posible alrededor del personaje, pero sin
+        // hacer scroll más allá de los límites del mapa. Cuando el personaje no está
+        // cerca de los bordes, aparece en el centro de la pantalla.
+        OrthographicCamera worldCamera = (OrthographicCamera)worldStage.getCamera();
+        float leftBound = worldCamera.zoom * LaPandemia.V_WIDTH / 2;
+        float rightBound = worldWidth - leftBound;
+        float lowerBound = worldCamera.zoom * LaPandemia.V_HEIGHT / 2 + 1;
+        float upperBound = worldHeight - lowerBound;
+        float xToCenter = playerActor.getX() + playerActor.getWidth() / 2;
+        float yToCenter = playerActor.getY() + playerActor.getHeight() / 2;
+
+        worldCamera.position.x = MathUtils.clamp(xToCenter, leftBound, rightBound);
+        worldCamera.position.y = MathUtils.clamp(yToCenter, lowerBound, upperBound);
+    }
+
+    private abstract class GameStage {
+        void show() {
+            Gdx.input.setInputProcessor(new InputAdapter());
+        }
+
+        abstract void render(float delta);
+    }
+
+    private class PlayingGameStage extends GameStage implements ZoomGestureListener.ZoomListener {
+        @Override
+        public void show() {
+            InputMultiplexer multiplexer = new InputMultiplexer();
+            // ZoomGestureListener debe ir antes de MovePlayerGestureListener, ya que el primero
+            // decide quién de los dos debe procesar los gestos tap.
+            multiplexer.addProcessor(new GestureDetector(new ZoomGestureListener(this)));
+            multiplexer.addProcessor(new GestureDetector(new MovePlayerGestureListener(playerActor)));
+            Gdx.input.setInputProcessor(multiplexer);
+        }
+
+        @Override
+        public void zoom(float delta) {
+            // Nos aseguramos de que el nuevo zoom no sea tan grande que el mapa entero se
+            // quede pequeño en alguno de los dos ejes de coordenadas. Esto es necesario para
+            // que adjustCamera() pueda averiguar con seguridad y sin tener que manipular el
+            // zoom unas coordenadas de la cámara que centren al personaje lo máximo posible
+            // sin mostrar aquello que hay más allá de los límites del mapa.
+            OrthographicCamera worldCamera = (OrthographicCamera)worldStage.getCamera();
+            worldCamera.zoom = MathUtils.clamp(worldCamera.zoom + delta, 0.8f, maxZoom);
+
+            // Si se está ampliando el zoom y tan solo quedan unos pocos píxeles de ampliación
+            // para alcanzar el valor máximo, se ajusta automáticamente el zoom al máximo. Si no
+            // hiciésemos esto, el jugador tendría que asegurarse de hacer un gesto muy preciso
+            // con los dedos para poder establecer este valor exacto y no uno muy ligeramente
+            // menor. El problema de estos valores menores es que provocan que el mapa dé un
+            // pequeño salto cada vez que el personaje cruza la mitad de la pantalla, lo que tan
+            // solo se trata del zoom persiguiéndolo pero suele resultar ser un efecto confuso y
+            // molesto.
+            if (delta > 0 && (Math.min(worldWidth - worldCamera.zoom * LaPandemia.V_WIDTH,
+                    worldHeight - worldCamera.zoom * LaPandemia.V_HEIGHT) < 20))
+            {
+                worldCamera.zoom = maxZoom;
+            }
+        }
+
+        @Override
+        public void render(float delta) {
+            if (playerActor.isAlive()) {
+                for (int i = 0; i < actorGenerators.size; i++) {
+                    actorGenerators.get(i).render(delta);
+                }
+
+                worldStage.act();
+            } else {
+                nextGameStage(this);
+            }
+        }
+    }
+
+    private class CountdownGameStage extends GameStage {
+        private static final float ZOOM_PRE_WAIT = 1;
+        private static final float ZOOM_POST_WAIT = 0.5f;
+        private static final float ZOOM_IN_SPEED = 2.5f;
+
+        private float zoomPreWaitTime;
+        private float zoomPostWaitTime;
+
+        public CountdownGameStage() {
+            zoomPreWaitTime = 0;
+            zoomPostWaitTime = 0;
+        }
+
+        @Override
+        public void render(float delta) {
+            OrthographicCamera camera = (OrthographicCamera)getWorldStage().getCamera();
+            if (zoomPreWaitTime < ZOOM_PRE_WAIT) {
+                if (zoomPreWaitTime == 0) {
+                    camera.zoom = maxZoom;
+                }
+
+                zoomPreWaitTime = Math.min(zoomPreWaitTime + delta, ZOOM_PRE_WAIT);
+            } else if (camera.zoom > 1) {
+                camera.zoom = Math.max(camera.zoom - delta*ZOOM_IN_SPEED, 1f);
+            } else if (zoomPostWaitTime < ZOOM_POST_WAIT) {
+                zoomPostWaitTime += delta;
+            } else {
+                nextGameStage(this);
+            }
+        }
+    }
+
+    private class EndingGameStage extends GameStage {
+        @Override
+        public void render(float delta) {
+            Gdx.app.log("LaPandemia", "EndingGameStage rendering...");
+        }
+    }
 }

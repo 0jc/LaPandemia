@@ -10,7 +10,7 @@ public class ZoomGestureListener extends GestureDetector.GestureAdapter {
     // zoom sea más brusco.
     private static final float ZOOM_DISTANCE_RATIO = 0.1f / 50f;
 
-    private final GameScreen gameScreen;
+    private final ZoomListener zoomListener;
 
     // Si se está realizando el gesto pinch.
     private boolean pinching = false;
@@ -25,8 +25,8 @@ public class ZoomGestureListener extends GestureDetector.GestureAdapter {
     // dentro del contexto de un mismo gesto pinch*.
     private float lastDistance;
 
-    public ZoomGestureListener(GameScreen gameScreen) {
-        this.gameScreen = gameScreen;
+    public ZoomGestureListener(ZoomListener zoomListener) {
+        this.zoomListener = zoomListener;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ZoomGestureListener extends GestureDetector.GestureAdapter {
         }
         float distance = pointer2.dst(pointer1);
         float delta = distance - lastDistance;
-        gameScreen.zoom(-delta * ZOOM_DISTANCE_RATIO);
+        zoomListener.zoom(-delta * ZOOM_DISTANCE_RATIO);
         lastDistance = distance;
         return true;
     }
@@ -61,5 +61,9 @@ public class ZoomGestureListener extends GestureDetector.GestureAdapter {
             return true;
         }
         return false;
+    }
+
+    public static interface ZoomListener {
+        void zoom(float delta);
     }
 }
