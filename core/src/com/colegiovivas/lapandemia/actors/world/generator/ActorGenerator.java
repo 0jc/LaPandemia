@@ -13,6 +13,7 @@ import com.colegiovivas.lapandemia.actors.world.GenerableActor;
 import com.colegiovivas.lapandemia.actors.world.PlayerActor;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.screens.GameScreen;
+import com.colegiovivas.lapandemia.screens.WorldSubscreen;
 
 public class ActorGenerator {
     private static final float SAFE_DISTANCE = 400;
@@ -27,7 +28,7 @@ public class ActorGenerator {
     private final Group destGroup;
 
     private LaPandemia game;
-    private GameScreen gameScreen;
+    private WorldSubscreen worldSubscreen;
 
     private int count;
     private float lastActorTime;
@@ -80,7 +81,7 @@ public class ActorGenerator {
                         GenerableActor actor = generableActorPool.obtain().init();
                         actor.setGenerator(this);
                         actor.setBounds(rect.x, rect.y, rect.width, rect.height);
-                        actor.setCollisionDispatcher(gameScreen.getCollisionDispatcher());
+                        actor.setCollisionDispatcher(worldSubscreen.getCollisionDispatcher());
                         actor.setTtl(ttl);
                         destGroup.addActor(actor);
                         count++;
@@ -100,12 +101,12 @@ public class ActorGenerator {
     private boolean tryAssignCoords(Rectangle outCoords, Array<Actor> overlappedActors) {
         // No generamos coordenadas demasiado cerca de los bordes del mapa, donde de
         // todos modos es improbable que no haya muros en cualquier nivel.
-        outCoords.x = MathUtils.random(32, (int)gameScreen.getWorldWidth() - 32 - 64);
-        outCoords.y = MathUtils.random(32, (int)gameScreen.getWorldHeight() - 32 - 64);
+        outCoords.x = MathUtils.random(32, (int)worldSubscreen.getWorldWidth() - 32 - 64);
+        outCoords.y = MathUtils.random(32, (int)worldSubscreen.getWorldHeight() - 32 - 64);
 
         Rectangle actorRect = game.rectPool.obtain();
         try {
-            for (Actor currGroup : gameScreen.getWorldGroup().getChildren()) {
+            for (Actor currGroup : worldSubscreen.getWorldGroup().getChildren()) {
                 if (currGroup instanceof Group) {
                     for (Actor actor : ((Group)currGroup).getChildren()) {
                         if (actor instanceof CollisionableActor) {
@@ -144,7 +145,7 @@ public class ActorGenerator {
         this.game = game;
     }
 
-    public void setGameScreen(GameScreen gameScreen) {
-        this.gameScreen = gameScreen;
+    public void setWorldSubscreen(WorldSubscreen worldSubscreen) {
+        this.worldSubscreen = worldSubscreen;
     }
 }

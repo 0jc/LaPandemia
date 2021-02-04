@@ -14,7 +14,6 @@ public class PlayerActor extends CollisionableActor {
     private final Animation<TextureRegion> defaultAnimation;
     private final Animation<TextureRegion> invincibleAnimation;
     private final LaPandemia game;
-    private final GameScreen gameScreen;
     private PowerupListener powerupListener;
 
     // Cada cuánto se incrementa el nivel de salud (segundos) y nivel máximo.
@@ -51,9 +50,8 @@ public class PlayerActor extends CollisionableActor {
     // dos WallActors.
     private boolean wallCollisionSeen;
 
-    public PlayerActor(final LaPandemia game, final GameScreen gameScreen) {
+    public PlayerActor(final LaPandemia game) {
         this.game = game;
-        this.gameScreen = gameScreen;
         setSize(64, 64);
         setDirection(0, 0);
         elapsedTime = 0;

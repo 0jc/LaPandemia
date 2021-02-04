@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -27,7 +29,7 @@ public class LoadingScreen implements Screen {
         this.parent = parent;
 
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, camera);
+        viewport = new ExtendViewport(800, 480, camera);
         loadingTitleLayout = new GlyphLayout();
         loadedPercentLayout = new GlyphLayout();
     }
@@ -51,6 +53,7 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("toiletpaper.png", Texture.class);
         parent.assetManager.load("ingameui/mask.png", Texture.class);
         parent.assetManager.load("ingameui/toiletpaper.png", Texture.class);
+        parent.assetManager.load("ingameui/whitepixel.png", Texture.class);
 
         loadingTitleLayout.setText(
                 (BitmapFont)parent.assetManager.get("fonts/nice32.fnt"), "Cargando...");

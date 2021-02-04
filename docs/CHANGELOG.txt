@@ -225,3 +225,18 @@ Se divide estructuralmente la renderización de GameScreen en tres fases (GameSt
 la cuenta atrás, la partida y el fin. Se implementa una primera versión de la cuenta
 atrás, en la que se muestra todo el mapa y se da tiempo al jugador a prepararse antes
 de empezar la partida.
+
+
+Cambios presentados el 2021/02/04
+---------------------------------
+Se introduce un sistema básico de "subpantallas" para reducir la complejidad que
+GameScreen estaba alcanzando al pasar de tener que mostrar únicamente el mundo a
+tener que gestionar también la vista de las estadísticas y las distintas fases del
+juego (introducción, partida y final). De este modo, ahora GameScreen se encarga
+únicamente de delegar en la fase de juego apropiada para cada momento, y estas
+fases disponen de acceso a dichas subpantallas, que son independientes entre sí.
+
+En el futuro se añadirán más subpantallas para mostrar una cuenta atrás antes de
+empezar la partida y el menú del final de la partida una vez el jugador pierda.
+Ambas subpantallas se mostrarán por encima de la pantalla del mundo, lo que es
+una característica soportada por este nuevo sistema.

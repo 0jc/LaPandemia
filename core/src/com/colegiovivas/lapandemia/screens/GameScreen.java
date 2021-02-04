@@ -4,165 +4,46 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.actors.ingameui.IntView;
-import com.colegiovivas.lapandemia.actors.world.*;
-import com.colegiovivas.lapandemia.actors.world.collision.CollisionDispatcher;
-import com.colegiovivas.lapandemia.actors.world.generator.ActorGenerator;
-import com.colegiovivas.lapandemia.actors.world.generator.ActorGeneratorFactory;
+import com.colegiovivas.lapandemia.actors.world.ActorId;
+import com.colegiovivas.lapandemia.actors.world.PlayerActor;
 import com.colegiovivas.lapandemia.gestures.MovePlayerGestureListener;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
-import com.colegiovivas.lapandemia.levels.Fan;
 import com.colegiovivas.lapandemia.levels.Level;
-import com.colegiovivas.lapandemia.levels.Wall;
 
 public class GameScreen implements Screen {
-    private Stage worldStage;
-    private Stage uiStage;
-    private PlayerActor playerActor;
-    private Array<ActorGenerator> actorGenerators;
-    private CollisionDispatcher collisionDispatcher;
-    private Group worldGroup;
-    private int worldWidth;
-    private int worldHeight;
-    private float maxZoom;
+    private static final int STATS_H = 75;
 
     private GameStage gameStage;
+    private final StatsSubscreen statsSubscreen;
+    private final WorldSubscreen worldSubscreen;
 
     public GameScreen(LaPandemia parent, Level level) {
-        setUpWorld(parent, level);
-        setUpUI(parent);
+        statsSubscreen = new StatsSubscreen(parent);
+        statsSubscreen.setScreenBounds(
+                0, Gdx.graphics.getHeight() - STATS_H, Gdx.graphics.getWidth(), STATS_H);
+        worldSubscreen = new WorldSubscreen(parent, level);
+        worldSubscreen.setScreenBounds(
+                0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - STATS_H);
 
-        gameStage = new CountdownGameStage();
-    }
-
-    private void setUpWorld(LaPandemia parent, Level level) {
-        OrthographicCamera worldCamera = new OrthographicCamera();
-        Viewport worldViewport = new StretchViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, worldCamera);
-        worldStage = new Stage(worldViewport);
-
-        worldGroup = new Group();
-        worldStage.addActor(worldGroup);
-
-        collisionDispatcher = new CollisionDispatcher(parent, worldGroup);
-
-        setUpMap(parent, level);
-
-        HealthActor healthActor = new HealthActor(parent);
-        playerActor.setHealthActor(healthActor);
-        healthActor.setPlayerActor(playerActor);
-        Group healthGroup = new Group();
-        healthGroup.addActor(healthActor);
-        worldStage.addActor(healthGroup);
-    }
-
-    private void setUpMap(LaPandemia parent, Level level) {
-        worldWidth = level.width;
-        worldHeight = level.height;
-
-        Group powerups = new Group();
-        Group worldTop = new Group();
-        worldGroup.addActor(powerups);
-        worldGroup.addActor(worldTop);
-
-        playerActor = new PlayerActor(parent, this);
-        playerActor.setPosition(level.startX, level.startY);
-        playerActor.setCollisionDispatcher(collisionDispatcher);
-        playerActor.setDirection(level.startXDir, level.startYDir);
-        worldTop.addActor(playerActor);
-
-        for (int i = 0; i < level.fans.size; i++) {
-            Fan fan = level.fans.get(i);
-            FanActor fanActor = new FanActor(parent);
-            fanActor.setPosition(fan.x, fan.y);
-            fanActor.setCollisionDispatcher(collisionDispatcher);
-            worldTop.addActor(fanActor);
-        }
-        for (int i = 0; i < level.walls.size; i++) {
-            Wall wall = level.walls.get(i);
-            WallActor wallActor = new WallActor(parent);
-            wallActor.setBounds(wall.x, wall.y, wall.w, wall.h);
-            wallActor.setCollisionDispatcher(collisionDispatcher);
-            worldTop.addActor(wallActor);
-        }
-
-        ActorGeneratorFactory agf = new ActorGeneratorFactory(this, parent);
-        actorGenerators = new Array<>();
-        actorGenerators.add(agf.getInstance(VirusActor.class, ActorId.VIRUS, worldTop, 32, 64, 2, 100, 120f));
-        actorGenerators.add(agf.getInstance(MaskActor.class, ActorId.MASK, powerups, 64, 32, 10, 3, 15f));
-        actorGenerators.add(agf.getInstance(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10, 15f));
-        actorGenerators.add(agf.getInstance(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 60, 1, 15f));
-
-        maxZoom = Math.min(worldWidth/LaPandemia.V_WIDTH, worldHeight/LaPandemia.V_HEIGHT);
-    }
-
-    private void setUpUI(LaPandemia parent) {
-        Camera uiCamera = new OrthographicCamera();
-        Viewport uiViewport = new StretchViewport(LaPandemia.V_WIDTH, LaPandemia.V_HEIGHT, uiCamera);
-        uiStage = new Stage(uiViewport);
-
-        BitmapFont font = parent.assetManager.get("fonts/nice32.fnt");
-        final float separation = 20;
-        final float rightMargin = 40;
-
-        final IntView paperView = new IntView((Texture)parent.assetManager.get("ingameui/toiletpaper.png"), font);
-        paperView.setPosition(
-                LaPandemia.V_WIDTH - paperView.getWidth() - rightMargin,
-                LaPandemia.V_HEIGHT - paperView.getHeight() - separation);
-        uiStage.addActor(paperView);
-
-        final IntView masksView = new IntView((Texture)parent.assetManager.get("ingameui/mask.png"), font);
-        masksView.setPosition(
-                LaPandemia.V_WIDTH - masksView.getWidth() - rightMargin,
-                paperView.getY() - masksView.getHeight() - separation);
-        uiStage.addActor(masksView);
-
-        playerActor.setPowerupListener(new PlayerActor.PowerupListener() {
+        worldSubscreen.getPlayerActor().setPowerupListener(new PlayerActor.PowerupListener() {
             @Override
             public void updateCount(ActorId powerupId, int total) {
                 switch (powerupId) {
                     case MASK:
-                        masksView.setValue(total);
+                        statsSubscreen.setMaskCount(total);
                         break;
 
                     case PAPER:
-                        paperView.setValue(total);
+                        statsSubscreen.setPaperCount(total);
                         break;
                 }
             }
         });
-    }
 
-    public Stage getWorldStage() {
-        return worldStage;
-    }
-
-    public int getWorldWidth() {
-        return worldWidth;
-    }
-
-    public int getWorldHeight() {
-        return worldHeight;
-    }
-
-    public Group getWorldGroup() {
-        return worldGroup;
-    }
-
-    public CollisionDispatcher getCollisionDispatcher() {
-        return collisionDispatcher;
+        gameStage = new CountdownGameStage();
     }
 
     @Override
@@ -172,24 +53,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         gameStage.render(delta);
-
-        // El orden de las siguientes dos líneas es importante. Si se invierten, el movimiento
-        // de playerActor se muestra notablemente menos fluido.
-        adjustCamera();
-        worldStage.draw();
-
-        uiStage.act();
-        uiStage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        worldStage.getViewport().update(width, height);
-        uiStage.getViewport().update(width, height);
+        statsSubscreen.resize(width, height);
+        worldSubscreen.resize(width, height);
     }
 
     @Override
@@ -209,10 +79,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        worldStage.dispose();
-        for (ActorGenerator actorGenerator : actorGenerators) {
-            actorGenerator.getPool().clear();
-        }
+        statsSubscreen.dispose();
+        worldSubscreen.dispose();
     }
 
     private void nextGameStage(GameStage current) {
@@ -225,23 +93,7 @@ public class GameScreen implements Screen {
         show();
     }
 
-    private void adjustCamera() {
-        // Se muestra siempre el mayor espacio posible alrededor del personaje, pero sin
-        // hacer scroll más allá de los límites del mapa. Cuando el personaje no está
-        // cerca de los bordes, aparece en el centro de la pantalla.
-        OrthographicCamera worldCamera = (OrthographicCamera)worldStage.getCamera();
-        float leftBound = worldCamera.zoom * LaPandemia.V_WIDTH / 2;
-        float rightBound = worldWidth - leftBound;
-        float lowerBound = worldCamera.zoom * LaPandemia.V_HEIGHT / 2 + 1;
-        float upperBound = worldHeight - lowerBound;
-        float xToCenter = playerActor.getX() + playerActor.getWidth() / 2;
-        float yToCenter = playerActor.getY() + playerActor.getHeight() / 2;
-
-        worldCamera.position.x = MathUtils.clamp(xToCenter, leftBound, rightBound);
-        worldCamera.position.y = MathUtils.clamp(yToCenter, lowerBound, upperBound);
-    }
-
-    private abstract class GameStage {
+    private abstract static class GameStage {
         void show() {
             Gdx.input.setInputProcessor(new InputAdapter());
         }
@@ -249,51 +101,33 @@ public class GameScreen implements Screen {
         abstract void render(float delta);
     }
 
-    private class PlayingGameStage extends GameStage implements ZoomGestureListener.ZoomListener {
+    private class PlayingGameStage extends GameStage {
         @Override
         public void show() {
             InputMultiplexer multiplexer = new InputMultiplexer();
             // ZoomGestureListener debe ir antes de MovePlayerGestureListener, ya que el primero
             // decide quién de los dos debe procesar los gestos tap.
-            multiplexer.addProcessor(new GestureDetector(new ZoomGestureListener(this)));
-            multiplexer.addProcessor(new GestureDetector(new MovePlayerGestureListener(playerActor)));
+            multiplexer.addProcessor(new GestureDetector(new ZoomGestureListener(worldSubscreen)));
+            multiplexer.addProcessor(new GestureDetector(new MovePlayerGestureListener(
+                    worldSubscreen.getPlayerActor())));
             Gdx.input.setInputProcessor(multiplexer);
         }
 
         @Override
-        public void zoom(float delta) {
-            // Nos aseguramos de que el nuevo zoom no sea tan grande que el mapa entero se
-            // quede pequeño en alguno de los dos ejes de coordenadas. Esto es necesario para
-            // que adjustCamera() pueda averiguar con seguridad y sin tener que manipular el
-            // zoom unas coordenadas de la cámara que centren al personaje lo máximo posible
-            // sin mostrar aquello que hay más allá de los límites del mapa.
-            OrthographicCamera worldCamera = (OrthographicCamera)worldStage.getCamera();
-            worldCamera.zoom = MathUtils.clamp(worldCamera.zoom + delta, 0.8f, maxZoom);
-
-            // Si se está ampliando el zoom y tan solo quedan unos pocos píxeles de ampliación
-            // para alcanzar el valor máximo, se ajusta automáticamente el zoom al máximo. Si no
-            // hiciésemos esto, el jugador tendría que asegurarse de hacer un gesto muy preciso
-            // con los dedos para poder establecer este valor exacto y no uno muy ligeramente
-            // menor. El problema de estos valores menores es que provocan que el mapa dé un
-            // pequeño salto cada vez que el personaje cruza la mitad de la pantalla, lo que tan
-            // solo se trata del zoom persiguiéndolo pero suele resultar ser un efecto confuso y
-            // molesto.
-            if (delta > 0 && (Math.min(worldWidth - worldCamera.zoom * LaPandemia.V_WIDTH,
-                    worldHeight - worldCamera.zoom * LaPandemia.V_HEIGHT) < 20))
-            {
-                worldCamera.zoom = maxZoom;
-            }
-        }
-
-        @Override
         public void render(float delta) {
-            if (playerActor.isAlive()) {
-                for (int i = 0; i < actorGenerators.size; i++) {
-                    actorGenerators.get(i).render(delta);
-                }
+            Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-                worldStage.act();
-            } else {
+            boolean finish = true;
+            if (worldSubscreen.getPlayerActor().isAlive()) {
+                finish = false;
+                worldSubscreen.act(delta);
+            }
+
+            statsSubscreen.draw(delta);
+            worldSubscreen.draw(delta);
+
+            if (finish) {
                 nextGameStage(this);
             }
         }
@@ -314,10 +148,14 @@ public class GameScreen implements Screen {
 
         @Override
         public void render(float delta) {
-            OrthographicCamera camera = (OrthographicCamera)getWorldStage().getCamera();
+            Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            boolean finish = false;
+            OrthographicCamera camera = (OrthographicCamera)worldSubscreen.getWorldStage().getCamera();
             if (zoomPreWaitTime < ZOOM_PRE_WAIT) {
                 if (zoomPreWaitTime == 0) {
-                    camera.zoom = maxZoom;
+                    camera.zoom = worldSubscreen.getMaxZoom();
                 }
 
                 zoomPreWaitTime = Math.min(zoomPreWaitTime + delta, ZOOM_PRE_WAIT);
@@ -326,6 +164,13 @@ public class GameScreen implements Screen {
             } else if (zoomPostWaitTime < ZOOM_POST_WAIT) {
                 zoomPostWaitTime += delta;
             } else {
+                finish = true;
+            }
+
+            statsSubscreen.draw(delta);
+            worldSubscreen.draw(delta);
+
+            if (finish) {
                 nextGameStage(this);
             }
         }
@@ -334,7 +179,11 @@ public class GameScreen implements Screen {
     private class EndingGameStage extends GameStage {
         @Override
         public void render(float delta) {
-            Gdx.app.log("LaPandemia", "EndingGameStage rendering...");
+            Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            statsSubscreen.draw(delta);
+            worldSubscreen.draw(delta);
         }
     }
 }
