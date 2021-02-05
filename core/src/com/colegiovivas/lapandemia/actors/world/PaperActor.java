@@ -2,18 +2,19 @@ package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 
 public class PaperActor extends GenerableActor {
-    private final Texture texture;
+    private final TextureAtlas.AtlasRegion texture;
     private final LaPandemia game;
 
     public PaperActor(final LaPandemia game) {
         this.game = game;
-        this.texture = game.assetManager.get("toiletpaper.png");
+        this.texture = ((TextureAtlas)game.assetManager.get("images.pack")).findRegion("toiletpaper");
 
         setTouchable(Touchable.enabled);
     }

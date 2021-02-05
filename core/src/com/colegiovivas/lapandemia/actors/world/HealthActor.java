@@ -4,10 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
 import com.colegiovivas.lapandemia.LaPandemia;
 
 public class HealthActor extends Actor {
-    private final TextureAtlas atlas;
+    private final Array<TextureAtlas.AtlasRegion> textures;
     private final LaPandemia game;
     private PlayerActor playerActor;
     private int health;
@@ -18,7 +19,7 @@ public class HealthActor extends Actor {
 
     public HealthActor(final LaPandemia game) {
         this.game = game;
-        this.atlas = ((TextureAtlas)game.assetManager.get("health.pack"));
+        this.textures = ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("health");
         health = 4;
         showMaxFor = 0;
         show = true;
@@ -46,7 +47,7 @@ public class HealthActor extends Actor {
         }
 
         if (show && 0 < health && (health < 4 || showMaxFor > 0)) {
-            TextureAtlas.AtlasRegion region = atlas.getRegions().get(health - 1);
+            TextureAtlas.AtlasRegion region = textures.get(health - 1);
             batch.draw(region,
                     playerActor.getX() + playerActor.getWidth() - region.getRegionWidth()/2f,
                     playerActor.getY() + playerActor.getHeight() - region.getRegionHeight()/2f);

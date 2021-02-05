@@ -246,3 +246,6 @@ Cambios presentados el 2021/02/05
 ---------------------------------
 Se implementa una subpantalla para mostrar la cuenta atrás antes de empezar la
 partida.
+
+Se agrupan todas las imágenes en un solo TextureAtlas, logrando un rendimiento más
+óptimo del juego.

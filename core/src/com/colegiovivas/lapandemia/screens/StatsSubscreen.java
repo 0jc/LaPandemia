@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -31,17 +32,18 @@ public class StatsSubscreen extends Subscreen {
         masksLabel = new Label("0", labelStyle);
         paperLabel = new Label("0", labelStyle);
 
+        final TextureAtlas atlas = parent.assetManager.get("images.pack");
         Table table = new Table();
-        table.add(new Image((Texture)parent.assetManager.get("ingameui/mask.png")));
+        table.add(new Image(atlas.findRegion("ui-mask")));
         table.add(masksLabel).center().padLeft(10).padRight(30);
-        table.add(new Image((Texture)parent.assetManager.get("ingameui/toiletpaper.png")));
+        table.add(new Image(atlas.findRegion("ui-toiletpaper")));
         table.add(paperLabel).center().padLeft(10);
         table.right();
         table.setFillParent(true);
         table.padRight(20);
         table.setBackground(new BaseDrawable() {
             private final Color savedBatchColor = new Color();
-            private final Texture whitePixel = parent.assetManager.get("ingameui/whitepixel.png");
+            private final TextureAtlas.AtlasRegion whitePixel = atlas.findRegion("ui-whitepixel");
 
             @Override
             public void draw(Batch batch, float x, float y, float width, float height) {

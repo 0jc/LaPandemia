@@ -42,6 +42,7 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("fonts/nice32.fnt", BitmapFont.class);
         parent.assetManager.finishLoading();
 
+        /*
         parent.assetManager.load("player-default.pack", TextureAtlas.class);
         parent.assetManager.load("player-invincible.pack", TextureAtlas.class);
         parent.assetManager.load("virus.pack", TextureAtlas.class);
@@ -58,6 +59,9 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("countdown/2.png", Texture.class);
         parent.assetManager.load("countdown/1.png", Texture.class);
         parent.assetManager.load("countdown/0.png", Texture.class);
+         */
+
+        parent.assetManager.load("images.pack", TextureAtlas.class);
 
         loadingTitleLayout.setText(
                 (BitmapFont)parent.assetManager.get("fonts/nice32.fnt"), "Cargando...");

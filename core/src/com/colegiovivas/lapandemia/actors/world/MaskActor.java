@@ -2,18 +2,19 @@ package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 
 public class MaskActor extends GenerableActor {
-    private final Texture texture;
+    private final TextureAtlas.AtlasRegion texture;
     private final LaPandemia game;
 
     public MaskActor(final LaPandemia game) {
         this.game = game;
-        this.texture = game.assetManager.get("mask.png");
+        this.texture = ((TextureAtlas)game.assetManager.get("images.pack")).findRegion("mask");
 
         setTouchable(Touchable.enabled);
     }

@@ -3,9 +3,12 @@ package com.colegiovivas.lapandemia.screens;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -28,8 +31,10 @@ public class CountdownSubscreen extends Subscreen {
         uiCamera.position.y = 0;
 
         images = new Image[4];
+        Array<TextureAtlas.AtlasRegion> regions
+                = ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("countdown");
         for (int i = 0; i <= 3; i++) {
-            images[i] = new Image((Texture)game.assetManager.get("countdown/" + i + ".png"));
+            images[i] = new Image(regions.get(i));
             images[i].setPosition(-images[i].getWidth()/2, -images[i].getHeight()/2);
             images[i].setVisible(false);
             stage.addActor(images[i]);

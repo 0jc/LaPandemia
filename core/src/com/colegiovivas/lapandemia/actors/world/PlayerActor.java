@@ -60,9 +60,9 @@ public class PlayerActor extends CollisionableActor {
         health = MAX_HEALTH;
 
         defaultAnimation = new Animation<TextureRegion>(1f,
-                ((TextureAtlas)game.assetManager.get("player-default.pack")).getRegions());
+                ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("player-default"));
         invincibleAnimation = new Animation<TextureRegion>(1f,
-                ((TextureAtlas)game.assetManager.get("player-invincible.pack")).getRegions());
+                ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("player-invincible"));
 
         maskCount = 0;
         paperCount = 0;
