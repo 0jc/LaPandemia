@@ -19,6 +19,7 @@ public class GameScreen implements Screen {
     private GameStage gameStage;
     private final StatsSubscreen statsSubscreen;
     private final WorldSubscreen worldSubscreen;
+    private final CountdownSubscreen countdownSubscreen;
 
     public GameScreen(LaPandemia parent, Level level) {
         statsSubscreen = new StatsSubscreen(parent);
@@ -27,6 +28,8 @@ public class GameScreen implements Screen {
         worldSubscreen = new WorldSubscreen(parent, level);
         worldSubscreen.setScreenBounds(
                 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - STATS_H);
+        countdownSubscreen = new CountdownSubscreen(parent);
+        countdownSubscreen.setScreenBounds(worldSubscreen.getScreenBounds());
 
         worldSubscreen.getPlayerActor().setPowerupListener(new PlayerActor.PowerupListener() {
             @Override
@@ -60,6 +63,7 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
         statsSubscreen.resize(width, height);
         worldSubscreen.resize(width, height);
+        countdownSubscreen.resize(width, height);
     }
 
     @Override
@@ -81,6 +85,7 @@ public class GameScreen implements Screen {
     public void dispose() {
         statsSubscreen.dispose();
         worldSubscreen.dispose();
+        countdownSubscreen.dispose();
     }
 
     private void nextGameStage(GameStage current) {
@@ -124,8 +129,11 @@ public class GameScreen implements Screen {
                 worldSubscreen.act(delta);
             }
 
+            countdownSubscreen.act(delta);
+
             statsSubscreen.draw(delta);
             worldSubscreen.draw(delta);
+            countdownSubscreen.draw(delta);
 
             if (finish) {
                 nextGameStage(this);
@@ -135,7 +143,7 @@ public class GameScreen implements Screen {
 
     private class CountdownGameStage extends GameStage {
         private static final float ZOOM_PRE_WAIT = 1;
-        private static final float ZOOM_POST_WAIT = 0.5f;
+        private static final float ZOOM_POST_WAIT = 1;
         private static final float ZOOM_IN_SPEED = 2.5f;
 
         private float zoomPreWaitTime;
@@ -162,13 +170,19 @@ public class GameScreen implements Screen {
             } else if (camera.zoom > 1) {
                 camera.zoom = Math.max(camera.zoom - delta*ZOOM_IN_SPEED, 1f);
             } else if (zoomPostWaitTime < ZOOM_POST_WAIT) {
-                zoomPostWaitTime += delta;
-            } else {
+                zoomPostWaitTime = Math.min(zoomPostWaitTime + delta, ZOOM_POST_WAIT);
+                if (zoomPostWaitTime == ZOOM_POST_WAIT) {
+                    countdownSubscreen.startCountdown();
+                }
+            } else if (!countdownSubscreen.isCountingDown()){
                 finish = true;
             }
 
+            countdownSubscreen.act(delta);
+
             statsSubscreen.draw(delta);
             worldSubscreen.draw(delta);
+            countdownSubscreen.draw(delta);
 
             if (finish) {
                 nextGameStage(this);

@@ -240,3 +240,9 @@ En el futuro se añadirán más subpantallas para mostrar una cuenta atrás ante
 empezar la partida y el menú del final de la partida una vez el jugador pierda.
 Ambas subpantallas se mostrarán por encima de la pantalla del mundo, lo que es
 una característica soportada por este nuevo sistema.
+
+
+Cambios presentados el 2021/02/05
+---------------------------------
+Se implementa una subpantalla para mostrar la cuenta atrás antes de empezar la
+partida.

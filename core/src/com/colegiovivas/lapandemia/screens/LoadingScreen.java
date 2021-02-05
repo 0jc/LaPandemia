@@ -54,6 +54,10 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("ingameui/mask.png", Texture.class);
         parent.assetManager.load("ingameui/toiletpaper.png", Texture.class);
         parent.assetManager.load("ingameui/whitepixel.png", Texture.class);
+        parent.assetManager.load("countdown/3.png", Texture.class);
+        parent.assetManager.load("countdown/2.png", Texture.class);
+        parent.assetManager.load("countdown/1.png", Texture.class);
+        parent.assetManager.load("countdown/0.png", Texture.class);
 
         loadingTitleLayout.setText(
                 (BitmapFont)parent.assetManager.get("fonts/nice32.fnt"), "Cargando...");
