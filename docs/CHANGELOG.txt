@@ -253,8 +253,10 @@ Se agrupan todas las imágenes en un solo TextureAtlas, logrando un rendimiento 
 
 Cambios presentados el 2021/02/06
 ---------------------------------
-Se cambian algunos sprites del juego, incluyendo los tamaños de sus actores, y
-se cambia cómo el juego responde a la pérdida de la salud del personaje: ahora
-tan solo se decrementa en uno el número de mascarillas, mientras que antes se
-consideraba la partida por perdida automáticamente. Considero que es más justo
-así para el jugador.
+Se cambian algunos sprites del juego, incluyendo los tamaños de sus actores.
+
+También se relaja el modo en el que el juego responde a algunos fallos del jugador:
+Si se pierde toda la salud o choca contra un ventilador, tan solo se decrementa en
+uno el contador de mascarillas, en vez de hacer que el jugador pierda de inmediato.
+Considero que así es más justo, ya que estos peligros estaban demasiado
+desproporcionados con respecto al que suponía chocar con un virus.
