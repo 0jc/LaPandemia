@@ -75,133 +75,147 @@ mask
   index: -1
 virus
   rotate: false
-  xy: 943, 882
-  size: 32, 64
-  orig: 32, 64
+  xy: 943, 898
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 12
+virus
+  rotate: false
+  xy: 199, 221
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: 1
 virus
-  rotate: false
-  xy: 199, 205
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: 9
-virus
-  rotate: false
-  xy: 265, 271
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: 8
-ui-mask
   rotate: false
   xy: 303, 493
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
-  index: -1
+  index: 9
 virus
   rotate: false
-  xy: 369, 543
-  size: 32, 64
-  orig: 32, 64
+  xy: 369, 559
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
-  index: 5
-virus
+  index: 8
+ui-mask
   rotate: false
-  xy: 435, 609
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: 6
-virus
-  rotate: false
-  xy: 943, 816
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: 7
-virus
-  rotate: false
-  xy: 199, 139
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: 3
-virus
-  rotate: false
-  xy: 233, 205
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: 2
-toiletpaper
-  rotate: false
-  xy: 733, 680
+  xy: 435, 625
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 virus
   rotate: false
-  xy: 303, 427
-  size: 32, 64
-  orig: 32, 64
+  xy: 733, 680
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 5
+virus
+  rotate: false
+  xy: 943, 848
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 6
+virus
+  rotate: false
+  xy: 199, 171
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 7
+virus
+  rotate: false
+  xy: 303, 443
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 11
+virus
+  rotate: false
+  xy: 485, 625
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+virus
+  rotate: false
+  xy: 783, 680
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+toiletpaper
+  rotate: false
+  xy: 943, 798
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+virus
+  rotate: false
+  xy: 199, 121
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: 10
 virus
   rotate: false
-  xy: 403, 543
-  size: 32, 64
-  orig: 32, 64
+  xy: 303, 393
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: 4
 needle
   rotate: false
-  xy: 977, 882
+  xy: 265, 271
   size: 22, 64
   orig: 22, 64
   offset: 0, 0
   index: -1
 health
   rotate: false
-  xy: 353, 509
+  xy: 249, 237
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
 wall
   rotate: false
-  xy: 469, 641
+  xy: 535, 641
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 health
   rotate: false
-  xy: 943, 782
+  xy: 833, 696
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 health
   rotate: false
-  xy: 199, 105
+  xy: 943, 764
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 health
   rotate: false
-  xy: 233, 171
+  xy: 199, 87
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 3
 ui-toiletpaper
   rotate: false
-  xy: 783, 696
+  xy: 303, 359
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

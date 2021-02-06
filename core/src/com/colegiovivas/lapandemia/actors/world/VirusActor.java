@@ -39,7 +39,7 @@ public class VirusActor extends GenerableActor {
     public VirusActor(final LaPandemia game) {
         this.game = game;
 
-        animation = new Animation<TextureRegion>(1f,
+        animation = new Animation<TextureRegion>(0.2f,
                 ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("virus"));
 
         setTouchable(Touchable.enabled);
