@@ -249,3 +249,12 @@ partida.
 
 Se agrupan todas las imágenes en un solo TextureAtlas, logrando un rendimiento más
 óptimo del juego.
+
+
+Cambios presentados el 2021/02/06
+---------------------------------
+Se cambian algunos sprites del juego, incluyendo los tamaños de sus actores, y
+se cambia cómo el juego responde a la pérdida de la salud del personaje: ahora
+tan solo se decrementa en uno el número de mascarillas, mientras que antes se
+consideraba la partida por perdida automáticamente. Considero que es más justo
+así para el jugador.

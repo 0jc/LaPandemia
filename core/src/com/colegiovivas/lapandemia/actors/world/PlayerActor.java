@@ -157,6 +157,11 @@ public class PlayerActor extends CollisionableActor {
                     setDirection(-xDir, -yDir);
                     healthTime = 0;
                     health--;
+                    if (health == 0 && maskCount > 0) {
+                        maskCount--;
+                        powerupListener.updateCount(ActorId.MASK, maskCount);
+                        health = MAX_HEALTH;
+                    }
                     healthActor.setHealth(health);
                 }
                 break;
