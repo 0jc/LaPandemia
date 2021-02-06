@@ -68,9 +68,9 @@ fan
   index: 2
 mask
   rotate: false
-  xy: 683, 696
-  size: 64, 32
-  orig: 64, 32
+  xy: 683, 680
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: -1
 virus
@@ -94,58 +94,65 @@ virus
   orig: 32, 64
   offset: 0, 0
   index: 8
-virus
+ui-mask
   rotate: false
-  xy: 303, 477
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: 5
-virus
-  rotate: false
-  xy: 369, 543
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: 6
-virus
-  rotate: false
-  xy: 435, 609
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: 7
-virus
-  rotate: false
-  xy: 943, 816
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: 3
-virus
-  rotate: false
-  xy: 199, 139
-  size: 32, 64
-  orig: 32, 64
-  offset: 0, 0
-  index: 2
-toiletpaper
-  rotate: false
-  xy: 233, 221
+  xy: 303, 493
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 virus
   rotate: false
-  xy: 303, 411
+  xy: 369, 543
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: 5
+virus
+  rotate: false
+  xy: 435, 609
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: 6
+virus
+  rotate: false
+  xy: 943, 816
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: 7
+virus
+  rotate: false
+  xy: 199, 139
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: 3
+virus
+  rotate: false
+  xy: 233, 205
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: 2
+toiletpaper
+  rotate: false
+  xy: 733, 680
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+virus
+  rotate: false
+  xy: 303, 427
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
   index: 10
 virus
   rotate: false
-  xy: 337, 477
+  xy: 403, 543
   size: 32, 64
   orig: 32, 64
   offset: 0, 0
@@ -159,18 +166,11 @@ needle
   index: -1
 health
   rotate: false
-  xy: 749, 696
+  xy: 353, 509
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
-ui-mask
-  rotate: false
-  xy: 403, 575
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
 wall
   rotate: false
   xy: 469, 641
@@ -194,14 +194,14 @@ health
   index: 2
 health
   rotate: false
-  xy: 233, 187
+  xy: 233, 171
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 3
 ui-toiletpaper
   rotate: false
-  xy: 303, 377
+  xy: 783, 696
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

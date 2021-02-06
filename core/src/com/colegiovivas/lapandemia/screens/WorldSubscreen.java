@@ -80,7 +80,7 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         ActorGeneratorFactory agf = new ActorGeneratorFactory(this, parent);
         actorGenerators = new Array<>();
         actorGenerators.add(agf.getInstance(VirusActor.class, ActorId.VIRUS, worldTop, 32, 64, 2, 100, 120f));
-        actorGenerators.add(agf.getInstance(MaskActor.class, ActorId.MASK, powerups, 64, 32, 10, 3, 15f));
+        actorGenerators.add(agf.getInstance(MaskActor.class, ActorId.MASK, powerups, 48, 48, 10, 3, 15f));
         actorGenerators.add(agf.getInstance(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10, 15f));
         actorGenerators.add(agf.getInstance(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 60, 1, 15f));
 
