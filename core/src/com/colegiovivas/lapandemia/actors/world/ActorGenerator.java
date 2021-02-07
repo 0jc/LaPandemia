@@ -1,4 +1,4 @@
-package com.colegiovivas.lapandemia.actors.world.generator;
+package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
@@ -15,6 +15,8 @@ import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 import com.colegiovivas.lapandemia.screens.WorldSubscreen;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class ActorGenerator {
     private static final float SAFE_DISTANCE = 400;
 
@@ -27,14 +29,15 @@ public class ActorGenerator {
     private final ActorId actorId;
     private final Group destGroup;
 
-    private LaPandemia game;
-    private WorldSubscreen worldSubscreen;
+    private final LaPandemia game;
+    private final WorldSubscreen worldSubscreen;
 
     private int count;
     private float lastActorTime;
 
     public ActorGenerator(final Class<? extends GenerableActor> generableActorClass, ActorId actorId,
-                          Group destGroup, float width, float height, float tick, Integer maxCount, Float ttl)
+                          Group destGroup, float width, float height, float tick, int maxCount, Float ttl,
+                          final LaPandemia game, final WorldSubscreen worldSubscreen)
     {
         this.actorId = actorId;
         this.destGroup = destGroup;
@@ -43,6 +46,8 @@ public class ActorGenerator {
         this.height = height;
         this.maxCount = maxCount;
         this.ttl = ttl;
+        this.game = game;
+        this.worldSubscreen = worldSubscreen;
         this.generableActorPool = new Pool<GenerableActor>() {
             @Override
             protected GenerableActor newObject() {
@@ -55,6 +60,7 @@ public class ActorGenerator {
                 return null;
             }
         };
+        generableActorPool.fill(maxCount);
     }
 
     public Pool<GenerableActor> getPool() {
@@ -139,13 +145,5 @@ public class ActorGenerator {
             game.rectPool.free(actorRect);
         }
         return true;
-    }
-
-    public void setGame(LaPandemia game) {
-        this.game = game;
-    }
-
-    public void setWorldSubscreen(WorldSubscreen worldSubscreen) {
-        this.worldSubscreen = worldSubscreen;
     }
 }

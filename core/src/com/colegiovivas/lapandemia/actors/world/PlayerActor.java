@@ -46,9 +46,10 @@ public class PlayerActor extends CollisionableActor {
 
     private HealthActor healthActor;
 
-    // Para evitar que collidedWith gestione dos veces la colisión simultánea con
-    // dos WallActors.
+    // Para evitar que se gestione dos veces la colisión simultánea con
+    // dos WallActors o FanActors.
     private boolean wallCollisionSeen;
+    private boolean fanCollisionSeen;
 
     public PlayerActor(final LaPandemia game) {
         this.game = game;
@@ -124,6 +125,7 @@ public class PlayerActor extends CollisionableActor {
     public void act(float delta) {
         super.act(delta);
         wallCollisionSeen = false;
+        fanCollisionSeen = false;
 
         if (!isAlive()) {
             healthActor.showHealth(false);
@@ -154,7 +156,7 @@ public class PlayerActor extends CollisionableActor {
             case WALL:
                 if (!wallCollisionSeen) {
                     wallCollisionSeen = true;
-                    setDirection(-xDir, -yDir);
+                    if (!fanCollisionSeen) setDirection(-xDir, -yDir);
                     healthTime = 0;
                     health--;
                     if (health == 0 && maskCount > 0) {
@@ -167,8 +169,12 @@ public class PlayerActor extends CollisionableActor {
                 break;
 
             case FAN:
-                health = 0;
-                healthActor.setHealth(health);
+                if (!fanCollisionSeen) {
+                    fanCollisionSeen = true;
+                    if (!wallCollisionSeen) setDirection(-xDir, -yDir);
+                    maskCount--;
+                    powerupListener.updateCount(ActorId.MASK, maskCount);
+                }
                 break;
 
             case MASK:

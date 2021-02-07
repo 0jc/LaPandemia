@@ -10,8 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.*;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionDispatcher;
-import com.colegiovivas.lapandemia.actors.world.generator.ActorGenerator;
-import com.colegiovivas.lapandemia.actors.world.generator.ActorGeneratorFactory;
+import com.colegiovivas.lapandemia.actors.world.ActorGenerator;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
 import com.colegiovivas.lapandemia.levels.Fan;
 import com.colegiovivas.lapandemia.levels.Level;
@@ -77,12 +76,11 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
             worldTop.addActor(wallActor);
         }
 
-        ActorGeneratorFactory agf = new ActorGeneratorFactory(this, parent);
         actorGenerators = new Array<>();
-        actorGenerators.add(agf.getInstance(VirusActor.class, ActorId.VIRUS, worldTop, 48, 48, 2, 100, 120f));
-        actorGenerators.add(agf.getInstance(MaskActor.class, ActorId.MASK, powerups, 48, 48, 10, 3, 15f));
-        actorGenerators.add(agf.getInstance(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10, 15f));
-        actorGenerators.add(agf.getInstance(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 60, 1, 15f));
+        actorGenerators.add(new ActorGenerator(VirusActor.class, ActorId.VIRUS, worldTop, 48, 48, 1.25f, 1000, 120f, parent, this));
+        actorGenerators.add(new ActorGenerator(MaskActor.class, ActorId.MASK, powerups, 48, 48, 10, 3, 30f, parent, this));
+        actorGenerators.add(new ActorGenerator(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10, 30f, parent, this));
+        actorGenerators.add(new ActorGenerator(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 30, 1, 30f, parent, this));
 
         maxZoom = Math.min(worldWidth/stage.getViewport().getWorldWidth(),
                            worldHeight/stage.getViewport().getWorldHeight());
