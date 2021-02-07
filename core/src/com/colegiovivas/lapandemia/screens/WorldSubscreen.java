@@ -114,6 +114,10 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         return maxZoom;
     }
 
+    public boolean gameIsOver() {
+        return !playerActor.isAlive();
+    }
+
     private void adjustWorldCamera() {
         // Se muestra siempre el mayor espacio posible alrededor del personaje, pero sin
         // hacer scroll más allá de los límites del mapa. Cuando el personaje no está

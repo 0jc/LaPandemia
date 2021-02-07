@@ -94,13 +94,8 @@ public class GameScreen implements Screen {
         startTransition.dispose();
     }
 
-    private void nextGameStage(GameStage current) {
-        if (current instanceof CountdownGameStage) {
-            gameStage = new PlayingGameStage();
-        } else if (current instanceof PlayingGameStage) {
-            gameStage = new EndingGameStage();
-        }
-
+    private void setGameStage(GameStage gameStage) {
+        this.gameStage = gameStage;
         show();
     }
 
@@ -129,20 +124,15 @@ public class GameScreen implements Screen {
             Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            boolean finish = true;
-            if (worldSubscreen.getPlayerActor().isAlive()) {
-                finish = false;
-                worldSubscreen.act(delta);
-            }
-
+            worldSubscreen.act(delta);
             countdownSubscreen.act(delta);
 
             statsSubscreen.draw(delta);
             worldSubscreen.draw(delta);
             countdownSubscreen.draw(delta);
 
-            if (finish) {
-                nextGameStage(this);
+            if (worldSubscreen.gameIsOver()) {
+                setGameStage(new EndingGameStage());
             }
         }
     }
@@ -196,7 +186,7 @@ public class GameScreen implements Screen {
             startTransition.draw(delta);
 
             if (allTasksDone) {
-                nextGameStage(this);
+                setGameStage(new PlayingGameStage());
             }
         }
     }
