@@ -178,18 +178,18 @@ needle
   orig: 22, 64
   offset: 0, 0
   index: -1
-health
+timer
   rotate: false
-  xy: 249, 237
-  size: 32, 32
-  orig: 32, 32
+  xy: 249, 236
+  size: 33, 33
+  orig: 33, 33
   offset: 0, 0
-  index: 0
-wall
+  index: -1
+invincibility-timer
   rotate: false
-  xy: 535, 641
-  size: 32, 32
-  orig: 32, 32
+  xy: 535, 640
+  size: 33, 33
+  orig: 33, 33
   offset: 0, 0
   index: -1
 health
@@ -198,24 +198,38 @@ health
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
-  index: 1
-health
+  index: 0
+wall
   rotate: false
   xy: 943, 764
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
-  index: 2
+  index: -1
 health
   rotate: false
   xy: 199, 87
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
+  index: 1
+health
+  rotate: false
+  xy: 303, 359
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+health
+  rotate: false
+  xy: 249, 202
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
   index: 3
 ui-toiletpaper
   rotate: false
-  xy: 303, 359
+  xy: 570, 641
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

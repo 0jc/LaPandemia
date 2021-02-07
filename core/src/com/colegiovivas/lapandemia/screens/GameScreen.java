@@ -54,6 +54,12 @@ public class GameScreen implements Screen {
                 }
             }
         });
+        worldSubscreen.getPlayerActor().setInvincibilityListener(new PlayerActor.InvincibilityListener() {
+            @Override
+            public void updateTimer(float total) {
+                statsSubscreen.setInvincibilityTime(total);
+            }
+        });
 
         gameStage = new CountdownGameStage();
     }
@@ -132,6 +138,7 @@ public class GameScreen implements Screen {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             worldSubscreen.act(delta);
+            statsSubscreen.act(delta);
             countdownSubscreen.act(delta);
 
             statsSubscreen.draw(delta);

@@ -15,6 +15,7 @@ public class PlayerActor extends CollisionableActor {
     private final Animation<TextureRegion> invincibleAnimation;
     private final LaPandemia game;
     private PowerupListener powerupListener;
+    private InvincibilityListener invincibilityListener;
 
     // Cada cuánto se incrementa el nivel de salud (segundos) y nivel máximo.
     private static final float HEALTH_TICK = 1;
@@ -98,6 +99,10 @@ public class PlayerActor extends CollisionableActor {
 
     public void setPowerupListener(PowerupListener powerupListener) {
         this.powerupListener = powerupListener;
+    }
+
+    public void setInvincibilityListener(InvincibilityListener invincibilityListener) {
+        this.invincibilityListener = invincibilityListener;
     }
 
     public void setDirection(int xDir, int yDir) {
@@ -197,6 +202,7 @@ public class PlayerActor extends CollisionableActor {
 
             case NEEDLE:
                 invincibilityTimeLeft += INVINCIBILITY_TIMESPAN;
+                invincibilityListener.updateTimer(invincibilityTimeLeft);
                 break;
         }
     }
@@ -222,5 +228,9 @@ public class PlayerActor extends CollisionableActor {
 
     public interface PowerupListener {
         void updateCount(ActorId powerupId, int total);
+    }
+
+    public interface InvincibilityListener {
+        void updateTimer(float total);
     }
 }

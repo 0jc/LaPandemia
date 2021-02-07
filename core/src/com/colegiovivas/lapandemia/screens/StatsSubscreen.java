@@ -1,9 +1,9 @@
 package com.colegiovivas.lapandemia.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,11 +14,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.actors.ingameui.GameTimerLabel;
+import com.colegiovivas.lapandemia.actors.ingameui.InvincibilityTimerLabel;
 
 public class StatsSubscreen extends Subscreen {
     private final Stage stage;
     private final Label masksLabel;
     private final Label paperLabel;
+    private final GameTimerLabel runningTimeLabel;
+    private final InvincibilityTimerLabel invincibilityTimerLabel;
 
     public StatsSubscreen(final LaPandemia parent) {
         Camera uiCamera = new OrthographicCamera();
@@ -29,18 +33,27 @@ public class StatsSubscreen extends Subscreen {
         labelStyle.fontColor = Color.WHITE;
         labelStyle.font = parent.assetManager.get("fonts/nice32.fnt");
 
+        final TextureAtlas atlas = parent.assetManager.get("images.pack");
+        Image maskIcon = new Image(atlas.findRegion("ui-mask"));
+        Image paperIcon = new Image(atlas.findRegion("ui-toiletpaper"));
+        Image runningTimeIcon = new Image(atlas.findRegion("timer"));
+        final Image invincibilityTimeIcon = new Image(atlas.findRegion("invincibility-timer"));
+
         masksLabel = new Label("0", labelStyle);
         paperLabel = new Label("0", labelStyle);
+        runningTimeLabel = new GameTimerLabel(labelStyle);
+        invincibilityTimerLabel = new InvincibilityTimerLabel(labelStyle, new InvincibilityTimerLabel.InvincibilityTimerListener() {
+            @Override
+            public void newValueSet(int value) {
+                invincibilityTimeIcon.setVisible(value > 0);
+            }
+        });
 
-        final TextureAtlas atlas = parent.assetManager.get("images.pack");
         Table table = new Table();
-        table.add(new Image(atlas.findRegion("ui-mask")));
-        table.add(masksLabel).center().padLeft(10).padRight(30);
-        table.add(new Image(atlas.findRegion("ui-toiletpaper")));
-        table.add(paperLabel).center().padLeft(10);
-        table.right();
+        table.left();
         table.setFillParent(true);
         table.padRight(20);
+        table.padLeft(20);
         table.setBackground(new BaseDrawable() {
             private final Color savedBatchColor = new Color();
             private final TextureAtlas.AtlasRegion whitePixel = atlas.findRegion("ui-whitepixel");
@@ -53,6 +66,19 @@ public class StatsSubscreen extends Subscreen {
                 batch.setColor(savedBatchColor);
             }
         });
+
+        table.add(runningTimeIcon);
+        table.add(runningTimeLabel).padLeft(10).padRight(30);
+        table.add(invincibilityTimeIcon);
+        table.add(invincibilityTimerLabel).padLeft(10);
+
+        Table rightElements = new Table();
+        rightElements.add(maskIcon);
+        rightElements.add(masksLabel).padLeft(10).padRight(30);
+        rightElements.add(paperIcon);
+        rightElements.add(paperLabel).padLeft(10);
+        table.add(rightElements).right().expandX();
+
         stage.addActor(table);
     }
 
@@ -64,6 +90,10 @@ public class StatsSubscreen extends Subscreen {
         paperLabel.setText(Math.max(total, 0));
     }
 
+    public void setInvincibilityTime(float totalTime) {
+        invincibilityTimerLabel.setTimeLeft(totalTime);
+    }
+
     @Override
     protected void drawWithinBounds(float delta) {
         stage.draw();
@@ -71,6 +101,8 @@ public class StatsSubscreen extends Subscreen {
 
     @Override
     public void act(float delta) {
+        runningTimeLabel.act(delta);
+        invincibilityTimerLabel.act(delta);
     }
 
     @Override
