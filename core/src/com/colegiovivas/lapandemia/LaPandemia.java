@@ -2,6 +2,7 @@ package com.colegiovivas.lapandemia;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -20,8 +21,7 @@ public class LaPandemia extends Game {
     public Pool<Rectangle> rectPool;
     public Pool<Array<Actor>> actorArrayPool;
 
-    private LoadingScreen loadingScreen = null;
-    private GameScreen gameScreen = null;
+    private Screen nextScreen = null;
 
     @Override
     public void create() {
@@ -55,28 +55,42 @@ public class LaPandemia extends Game {
             }
         };
 
-        loadingScreen = new LoadingScreen(this);
-        setScreen(loadingScreen);
+        setScreen(new LoadingScreen(this));
     }
 
-    // Por lo de pronto solo utilizamos este método como transición de
-    // la pantalla de carga a la del juego. Más adelante se ampliará
-    // el sistema de carga de recursos para iniciar el proceso también
-    // tras eventos como el pause/resume (que puede ocurrir al pulsar
-    // el botón home y volver a entrar), pudiendo restaurar otras pantallas.
-    public void resourcesLoaded() {
-        gameScreen = new GameScreen(this, getDemoLevel());
-        setScreen(gameScreen);
+    @Override
+    public void pause() {
+        super.pause();
+        nextScreen = getScreen();
+    }
 
+    @Override
+    public void resume() {
+        super.resume();
+        setScreen(new LoadingScreen(this));
+    }
+
+    public void resourcesLoaded(LoadingScreen loadingScreen) {
         loadingScreen.dispose();
-        loadingScreen = null;
+
+        if (nextScreen != null) {
+            setScreen(nextScreen);
+            nextScreen = null;
+        } else {
+            setScreen(new GameScreen(this, getDemoLevel()));
+        }
+    }
+
+    public void gameOver(GameScreen gameScreen, int paperCount, float runningTime) {
+        Gdx.app.log("LaPandemia", "Game results: paperCount=" + paperCount + ", runningTime=" + runningTime);
+        gameScreen.dispose();
+        Gdx.app.exit();
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        if (loadingScreen != null) loadingScreen.dispose();
-        if (gameScreen != null) gameScreen.dispose();
+        if (getScreen() != null) getScreen().dispose();
         batch.dispose();
         assetManager.dispose();
         rectPool.clear();

@@ -18,12 +18,15 @@ public class GameScreen implements Screen {
     private static final int STATS_H = 75;
 
     private GameStage gameStage;
+    private final LaPandemia parent;
     private final StatsSubscreen statsSubscreen;
     private final WorldSubscreen worldSubscreen;
     private final CountdownSubscreen countdownSubscreen;
     private final RectanglesGrowingApartTransition startTransition;
+    private final RectanglesGrowingApartTransition endTransition;
 
     public GameScreen(LaPandemia parent, Level level) {
+        this.parent = parent;
         statsSubscreen = new StatsSubscreen(parent);
         statsSubscreen.setScreenBounds(
                 0, Gdx.graphics.getHeight() - STATS_H, Gdx.graphics.getWidth(), STATS_H);
@@ -34,6 +37,8 @@ public class GameScreen implements Screen {
         countdownSubscreen.setScreenBounds(worldSubscreen.getScreenBounds());
         startTransition = new RectanglesGrowingApartTransition(400, Dir.OUT, false, 600);
         startTransition.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        endTransition = new RectanglesGrowingApartTransition(240, Dir.IN, true, 300);
+        endTransition.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         worldSubscreen.getPlayerActor().setPowerupListener(new PlayerActor.PowerupListener() {
             @Override
@@ -69,6 +74,7 @@ public class GameScreen implements Screen {
         worldSubscreen.resize(width, height);
         countdownSubscreen.resize(width, height);
         startTransition.resize(width, height);
+        endTransition.resize(width, height);
     }
 
     @Override
@@ -92,6 +98,7 @@ public class GameScreen implements Screen {
         worldSubscreen.dispose();
         countdownSubscreen.dispose();
         startTransition.dispose();
+        endTransition.dispose();
     }
 
     private void setGameStage(GameStage gameStage) {
@@ -199,6 +206,24 @@ public class GameScreen implements Screen {
 
             statsSubscreen.draw(delta);
             worldSubscreen.draw(delta);
+
+            // Se entrará aquí más adelante cuando termine de reproducirse la música
+            // del fin de la partida.
+            if (true) {
+                if (!endTransition.isPlaying()) {
+                    endTransition.start();
+                }
+
+                endTransition.act(delta);
+                endTransition.draw(delta);
+
+                if (!endTransition.isPlaying()) {
+                    parent.gameOver(
+                            GameScreen.this,
+                            worldSubscreen.getPaperCount(),
+                            worldSubscreen.getRunningTime());
+                }
+            }
         }
     }
 }

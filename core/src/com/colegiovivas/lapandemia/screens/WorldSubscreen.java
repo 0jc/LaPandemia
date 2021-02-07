@@ -25,6 +25,7 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
     private int worldWidth;
     private int worldHeight;
     private float maxZoom;
+    private float runningTime;
 
     public WorldSubscreen(LaPandemia parent, Level level) {
         OrthographicCamera worldCamera = new OrthographicCamera();
@@ -114,6 +115,14 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         return maxZoom;
     }
 
+    public int getPaperCount() {
+        return playerActor.getPaperCount();
+    }
+
+    public float getRunningTime() {
+        return runningTime;
+    }
+
     public boolean gameIsOver() {
         return !playerActor.isAlive();
     }
@@ -144,6 +153,8 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
 
     @Override
     public void act(float delta) {
+        runningTime += delta;
+
         for (int i = 0; i < actorGenerators.size; i++) {
             actorGenerators.get(i).render(delta);
         }

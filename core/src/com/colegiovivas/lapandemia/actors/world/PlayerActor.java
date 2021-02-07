@@ -88,6 +88,10 @@ public class PlayerActor extends CollisionableActor {
         return speed;
     }
 
+    public int getPaperCount() {
+        return paperCount;
+    }
+
     public void setHealthActor(HealthActor healthActor) {
         this.healthActor = healthActor;
     }

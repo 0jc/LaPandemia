@@ -70,7 +70,7 @@ public class LoadingScreen implements Screen {
     @Override
     public void render(float delta) {
         if (parent.assetManager.update()) {
-            parent.resourcesLoaded();
+            parent.resourcesLoaded(this);
             return;
         }
 
