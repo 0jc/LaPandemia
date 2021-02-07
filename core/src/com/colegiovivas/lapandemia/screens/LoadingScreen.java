@@ -42,25 +42,6 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("fonts/nice32.fnt", BitmapFont.class);
         parent.assetManager.finishLoading();
 
-        /*
-        parent.assetManager.load("player-default.pack", TextureAtlas.class);
-        parent.assetManager.load("player-invincible.pack", TextureAtlas.class);
-        parent.assetManager.load("virus.pack", TextureAtlas.class);
-        parent.assetManager.load("fan.pack", TextureAtlas.class);
-        parent.assetManager.load("health.pack", TextureAtlas.class);
-        parent.assetManager.load("wall.png", Texture.class);
-        parent.assetManager.load("mask.png", Texture.class);
-        parent.assetManager.load("needle.png", Texture.class);
-        parent.assetManager.load("toiletpaper.png", Texture.class);
-        parent.assetManager.load("ingameui/mask.png", Texture.class);
-        parent.assetManager.load("ingameui/toiletpaper.png", Texture.class);
-        parent.assetManager.load("ingameui/whitepixel.png", Texture.class);
-        parent.assetManager.load("countdown/3.png", Texture.class);
-        parent.assetManager.load("countdown/2.png", Texture.class);
-        parent.assetManager.load("countdown/1.png", Texture.class);
-        parent.assetManager.load("countdown/0.png", Texture.class);
-         */
-
         parent.assetManager.load("images.pack", TextureAtlas.class);
 
         loadingTitleLayout.setText(
