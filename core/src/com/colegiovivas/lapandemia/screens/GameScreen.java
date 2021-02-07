@@ -12,7 +12,7 @@ import com.colegiovivas.lapandemia.actors.world.PlayerActor;
 import com.colegiovivas.lapandemia.gestures.MovePlayerGestureListener;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
 import com.colegiovivas.lapandemia.levels.Level;
-import static com.colegiovivas.lapandemia.screens.RectanglesGrowingApartTransition.Dir;
+import static com.colegiovivas.lapandemia.screens.RectanglesTransition.Dir;
 
 public class GameScreen implements Screen {
     private static final int STATS_H = 75;
@@ -22,8 +22,8 @@ public class GameScreen implements Screen {
     private final StatsSubscreen statsSubscreen;
     private final WorldSubscreen worldSubscreen;
     private final CountdownSubscreen countdownSubscreen;
-    private final RectanglesGrowingApartTransition startTransition;
-    private final RectanglesGrowingApartTransition endTransition;
+    private final RectanglesTransition startTransition;
+    private final RectanglesTransition endTransition;
 
     public GameScreen(LaPandemia parent, Level level) {
         this.parent = parent;
@@ -35,9 +35,9 @@ public class GameScreen implements Screen {
                 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - STATS_H);
         countdownSubscreen = new CountdownSubscreen(parent);
         countdownSubscreen.setScreenBounds(worldSubscreen.getScreenBounds());
-        startTransition = new RectanglesGrowingApartTransition(400, Dir.OUT, false, 600);
+        startTransition = new RectanglesTransition(400, Dir.OUT, false, 600);
         startTransition.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        endTransition = new RectanglesGrowingApartTransition(240, Dir.IN, true, 300);
+        endTransition = new RectanglesTransition(240, Dir.IN, true, 300);
         endTransition.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         worldSubscreen.getPlayerActor().setPowerupListener(new PlayerActor.PowerupListener() {

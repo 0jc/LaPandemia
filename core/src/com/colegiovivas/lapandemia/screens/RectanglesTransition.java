@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class RectanglesGrowingApartTransition extends Subscreen {
+public class RectanglesTransition extends Subscreen {
     private final OrthographicCamera camera;
     private final Viewport viewport;
     private final ShapeRenderer shapeRenderer;
@@ -18,7 +18,7 @@ public class RectanglesGrowingApartTransition extends Subscreen {
 
     private float progress;
 
-    public RectanglesGrowingApartTransition(float baseLine, Dir dir, boolean vertical, float speed){
+    public RectanglesTransition(float baseLine, Dir dir, boolean vertical, float speed){
         this.baseLine = baseLine;
         this.dir = dir;
         this.speed = speed;
