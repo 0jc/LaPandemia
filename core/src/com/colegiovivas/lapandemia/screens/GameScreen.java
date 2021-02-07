@@ -12,6 +12,7 @@ import com.colegiovivas.lapandemia.actors.world.PlayerActor;
 import com.colegiovivas.lapandemia.gestures.MovePlayerGestureListener;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
 import com.colegiovivas.lapandemia.levels.Level;
+import static com.colegiovivas.lapandemia.screens.RectanglesGrowingApartTransition.Dir;
 
 public class GameScreen implements Screen {
     private static final int STATS_H = 75;
@@ -20,6 +21,7 @@ public class GameScreen implements Screen {
     private final StatsSubscreen statsSubscreen;
     private final WorldSubscreen worldSubscreen;
     private final CountdownSubscreen countdownSubscreen;
+    private final RectanglesGrowingApartTransition startTransition;
 
     public GameScreen(LaPandemia parent, Level level) {
         statsSubscreen = new StatsSubscreen(parent);
@@ -30,6 +32,8 @@ public class GameScreen implements Screen {
                 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - STATS_H);
         countdownSubscreen = new CountdownSubscreen(parent);
         countdownSubscreen.setScreenBounds(worldSubscreen.getScreenBounds());
+        startTransition = new RectanglesGrowingApartTransition(400, Dir.OUT, false, 600);
+        startTransition.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         worldSubscreen.getPlayerActor().setPowerupListener(new PlayerActor.PowerupListener() {
             @Override
@@ -64,6 +68,7 @@ public class GameScreen implements Screen {
         statsSubscreen.resize(width, height);
         worldSubscreen.resize(width, height);
         countdownSubscreen.resize(width, height);
+        startTransition.resize(width, height);
     }
 
     @Override
@@ -86,6 +91,7 @@ public class GameScreen implements Screen {
         statsSubscreen.dispose();
         worldSubscreen.dispose();
         countdownSubscreen.dispose();
+        startTransition.dispose();
     }
 
     private void nextGameStage(GameStage current) {
@@ -148,6 +154,9 @@ public class GameScreen implements Screen {
 
         private float zoomPreWaitTime;
         private float zoomPostWaitTime;
+        private boolean firstFrame = true;
+        private boolean countdownStarted = false;
+        private boolean allTasksDone = false;
 
         public CountdownGameStage() {
             zoomPreWaitTime = 0;
@@ -159,32 +168,34 @@ public class GameScreen implements Screen {
             Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            boolean finish = false;
             OrthographicCamera camera = (OrthographicCamera)worldSubscreen.getWorldStage().getCamera();
-            if (zoomPreWaitTime < ZOOM_PRE_WAIT) {
-                if (zoomPreWaitTime == 0) {
-                    camera.zoom = worldSubscreen.getMaxZoom();
-                }
-
+            if (firstFrame) {
+                firstFrame = false;
+                camera.zoom = worldSubscreen.getMaxZoom();
+                startTransition.start();
+            } else if (startTransition.isPlaying()) {
+                startTransition.act(delta);
+            } else if (zoomPreWaitTime < ZOOM_PRE_WAIT) {
                 zoomPreWaitTime = Math.min(zoomPreWaitTime + delta, ZOOM_PRE_WAIT);
             } else if (camera.zoom > 1) {
                 camera.zoom = Math.max(camera.zoom - delta*ZOOM_IN_SPEED, 1f);
             } else if (zoomPostWaitTime < ZOOM_POST_WAIT) {
                 zoomPostWaitTime = Math.min(zoomPostWaitTime + delta, ZOOM_POST_WAIT);
-                if (zoomPostWaitTime == ZOOM_POST_WAIT) {
-                    countdownSubscreen.startCountdown();
-                }
-            } else if (!countdownSubscreen.isCountingDown()){
-                finish = true;
+            } else if (!countdownStarted) {
+                countdownStarted = true;
+                countdownSubscreen.startCountdown();
+            } else if (countdownSubscreen.isCountingDown()) {
+                countdownSubscreen.act(delta);
+            } else {
+                allTasksDone = true;
             }
-
-            countdownSubscreen.act(delta);
 
             statsSubscreen.draw(delta);
             worldSubscreen.draw(delta);
             countdownSubscreen.draw(delta);
+            startTransition.draw(delta);
 
-            if (finish) {
+            if (allTasksDone) {
                 nextGameStage(this);
             }
         }

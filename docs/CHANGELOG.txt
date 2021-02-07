@@ -260,3 +260,10 @@ Si se pierde toda la salud o choca contra un ventilador, tan solo se decrementa 
 uno el contador de mascarillas, en vez de hacer que el jugador pierda de inmediato.
 Considero que así es más justo, ya que estos peligros estaban demasiado
 desproporcionados con respecto al que suponía chocar con un virus.
+
+
+Cambios presentados el 2021/02/07
+---------------------------------
+Se añade la posibilidad de añadir transiciones a las pantallas del juego, mediante
+una simple clase de subpantalla, y se incorpora una al principio de la fase de la
+cuenta atrás.
