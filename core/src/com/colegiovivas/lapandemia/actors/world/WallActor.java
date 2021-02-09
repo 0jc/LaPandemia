@@ -15,9 +15,9 @@ public class WallActor extends CollisionableActor {
     private final LaPandemia game;
     private float elapsedTime;
 
-    public WallActor(final LaPandemia game) {
+    public WallActor(final LaPandemia game, String regionName) {
         this.game = game;
-        this.texture = ((TextureAtlas)game.assetManager.get("images.pack")).findRegion("wall");
+        this.texture = ((TextureAtlas)game.assetManager.get("images.pack")).findRegion(regionName);
 
         elapsedTime = 0;
 

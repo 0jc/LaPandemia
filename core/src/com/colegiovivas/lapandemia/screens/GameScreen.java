@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.input.GestureDetector;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -11,13 +12,13 @@ import com.colegiovivas.lapandemia.actors.world.ActorId;
 import com.colegiovivas.lapandemia.actors.world.PlayerActor;
 import com.colegiovivas.lapandemia.gestures.MovePlayerGestureListener;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
-import com.colegiovivas.lapandemia.levels.Level;
 import static com.colegiovivas.lapandemia.screens.RectanglesTransition.Dir;
 
 public class GameScreen implements Screen {
     private static final int STATS_H = 75;
 
     private GameStage gameStage;
+    private final int levelId;
     private final LaPandemia parent;
     private final StatsSubscreen statsSubscreen;
     private final WorldSubscreen worldSubscreen;
@@ -25,12 +26,13 @@ public class GameScreen implements Screen {
     private final RectanglesTransition startTransition;
     private final RectanglesTransition endTransition;
 
-    public GameScreen(LaPandemia parent, Level level) {
+    public GameScreen(LaPandemia parent, int levelId, FileHandle levelFile) {
         this.parent = parent;
+        this.levelId = levelId;
         statsSubscreen = new StatsSubscreen(parent);
         statsSubscreen.setScreenBounds(
                 0, Gdx.graphics.getHeight() - STATS_H, Gdx.graphics.getWidth(), STATS_H);
-        worldSubscreen = new WorldSubscreen(parent, level);
+        worldSubscreen = new WorldSubscreen(parent, levelFile);
         worldSubscreen.setScreenBounds(
                 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - STATS_H);
         countdownSubscreen = new CountdownSubscreen(parent);
@@ -227,6 +229,7 @@ public class GameScreen implements Screen {
                 if (!endTransition.isPlaying()) {
                     parent.gameOver(
                             GameScreen.this,
+                            levelId,
                             worldSubscreen.getPaperCount(),
                             worldSubscreen.getRunningTime());
                 }

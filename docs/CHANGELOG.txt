@@ -270,3 +270,9 @@ cuenta atrás.
 
 También se añaden los contadores de tiempo a la interfaz que se muestra encima de
 la partida.
+
+
+Cambios presentados el 2021/02/09
+---------------------------------
+Se remplazan getDemoLevel() y el package levels por un sistema de cargado de niveles
+desde archivos JSON, y se redefine el nivel de demostración en este nuevo formato.

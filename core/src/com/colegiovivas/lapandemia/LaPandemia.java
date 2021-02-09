@@ -9,9 +9,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import com.colegiovivas.lapandemia.levels.Fan;
-import com.colegiovivas.lapandemia.levels.Level;
-import com.colegiovivas.lapandemia.levels.Wall;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
 
@@ -77,12 +74,12 @@ public class LaPandemia extends Game {
             setScreen(nextScreen);
             nextScreen = null;
         } else {
-            setScreen(new GameScreen(this, getDemoLevel()));
+            setScreen(new GameScreen(this, 1, Gdx.files.internal("levels/test.json")));
         }
     }
 
-    public void gameOver(GameScreen gameScreen, int paperCount, float runningTime) {
-        Gdx.app.log("LaPandemia", "Game results: paperCount=" + paperCount + ", runningTime=" + runningTime);
+    public void gameOver(GameScreen gameScreen, int levelId, int paperCount, float runningTime) {
+        Gdx.app.log("LaPandemia", "Game results: levelId=" + levelId + ", paperCount=" + paperCount + ", runningTime=" + runningTime);
         gameScreen.dispose();
         Gdx.app.exit();
     }
@@ -95,40 +92,5 @@ public class LaPandemia extends Game {
         assetManager.dispose();
         rectPool.clear();
         actorArrayPool.clear();
-    }
-
-    private Level getDemoLevel() {
-        Level level = new Level();
-        level.width = 32*47;
-        level.height = 32*39;
-        level.startX = 106;
-        level.startY = 32;
-        level.startXDir = 1;
-        level.startYDir = 0;
-
-        level.walls.add(new Wall(7, 7, 15, 1, 32));
-        level.walls.add(new Wall(25, 7, 15, 1, 32));
-        level.walls.add(new Wall(7, 8, 1, 15, 32));
-        level.walls.add(new Wall(39, 8, 1, 15, 32));
-        level.walls.add(new Wall(8, 22, 11, 1, 32));
-        level.walls.add(new Wall(28, 22, 11, 1, 32));
-        level.walls.add(new Wall(23, 19, 1, 12, 32));
-        level.walls.add(new Wall(7, 31, 33, 1, 32));
-
-        level.fans.add(new Fan(32 + 10, 32 + 10));
-        level.fans.add(new Fan(32*44 - 10, 32 + 10));
-        level.fans.add(new Fan(32*(1 + 6 + 1) + 10, 32*(1 + 6 + 1) + 10));
-        level.fans.add(new Fan(32*(1 + 6 + 15 + 3 + 12) - 10, 32*(1 + 6 + 1) + 10));
-        level.fans.add(new Fan(32 + 10, 32*36 - 10));
-        level.fans.add(new Fan(32*44 - 10, 32*36 - 10));
-        level.fans.add(new Fan(32*(1 + 6 + 15 + 2) + 10, 32*(1 + 6 + 1 + 21) - 10));
-        level.fans.add(new Fan(32*(1 + 6 + 14) - 10, 32*(1 + 6 + 1 + 21) - 10));
-
-        level.walls.add(new Wall(0, 0, level.width, 32));
-        level.walls.add(new Wall(0, 32, 32, level.height - 32));
-        level.walls.add(new Wall(32, level.height - 32, level.width - 32, 32));
-        level.walls.add(new Wall(level.width - 32, 32, 32, level.height - 64));
-
-        return level;
     }
 }

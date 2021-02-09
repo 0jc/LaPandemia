@@ -1,0 +1,111 @@
+{
+    "size": [1504, 1248],
+    "playerState": {
+        "pos": [106, 32],
+        "dir": [1, 0]
+    },
+    "walls": [
+        {
+            "sprite": "wall",
+            "pos": [0, 0],
+            "size": [1504, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [0, 32],
+            "size": [32, 1216]
+        },
+        {
+            "sprite": "wall",
+            "pos": [32, 1216],
+            "size": [1472, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [1472, 32],
+            "size": [32, 1184]
+        },
+        {
+            "sprite": "wall",
+            "pos": [224, 224],
+            "size": [480, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [800, 224],
+            "size": [480, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [224, 256],
+            "size": [32, 480]
+        },
+        {
+            "sprite": "wall",
+            "pos": [1248, 256],
+            "size": [32, 480]
+        },
+        {
+            "sprite": "wall",
+            "pos": [256, 704],
+            "size": [352, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [896, 704],
+            "size": [352, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [736, 608],
+            "size": [32, 384]
+        },
+        {
+            "sprite": "wall",
+            "pos": [224, 992],
+            "size": [1056, 32]
+        }
+    ],
+    "fans": [
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [42, 42]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [1398, 42]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [266, 266]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [1174, 266]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [42, 1142]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [1398, 1142]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [778, 918]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [662, 918]
+        }
+    ]
+}

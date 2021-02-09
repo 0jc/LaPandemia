@@ -1,10 +1,14 @@
 package com.colegiovivas.lapandemia.screens;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -12,9 +16,9 @@ import com.colegiovivas.lapandemia.actors.world.*;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionDispatcher;
 import com.colegiovivas.lapandemia.actors.world.ActorGenerator;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
-import com.colegiovivas.lapandemia.levels.Fan;
-import com.colegiovivas.lapandemia.levels.Level;
-import com.colegiovivas.lapandemia.levels.Wall;
+import com.colegiovivas.lapandemia.level.Level;
+import com.colegiovivas.lapandemia.level.LevelFanActor;
+import com.colegiovivas.lapandemia.level.LevelWallActor;
 
 public class WorldSubscreen extends Subscreen implements ZoomGestureListener.ZoomListener {
     private final Stage stage;
@@ -27,7 +31,7 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
     private float maxZoom;
     private float runningTime;
 
-    public WorldSubscreen(LaPandemia parent, Level level) {
+    public WorldSubscreen(LaPandemia parent, FileHandle levelFile) {
         OrthographicCamera worldCamera = new OrthographicCamera();
         Viewport worldViewport = new StretchViewport(800, 480, worldCamera);
         stage = new Stage(worldViewport);
@@ -37,7 +41,7 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
 
         collisionDispatcher = new CollisionDispatcher(parent, worldGroup);
 
-        setUpMap(parent, level);
+        setUpMap(parent, levelFile);
 
         HealthActor healthActor = new HealthActor(parent);
         playerActor.setHealthActor(healthActor);
@@ -47,9 +51,17 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         stage.addActor(healthGroup);
     }
 
-    private void setUpMap(LaPandemia parent, Level level) {
-        worldWidth = level.width;
-        worldHeight = level.height;
+    private void setUpMap(LaPandemia parent, FileHandle levelFile) {
+        Json json = new Json();
+        json.setTypeName(null);
+        json.setUsePrototypes(false);
+        json.setIgnoreUnknownFields(false);
+        json.setOutputType(JsonWriter.OutputType.json);
+
+        Level level = json.fromJson(Level.class, levelFile);
+
+        worldWidth = level.size[0];
+        worldHeight = level.size[1];
 
         Group powerups = new Group();
         Group worldTop = new Group();
@@ -57,22 +69,21 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         worldGroup.addActor(worldTop);
 
         playerActor = new PlayerActor(parent);
-        playerActor.setPosition(level.startX, level.startY);
+        playerActor.setPosition(level.playerState.pos[0], level.playerState.pos[1]);
         playerActor.setCollisionDispatcher(collisionDispatcher);
-        playerActor.setDirection(level.startXDir, level.startYDir);
+        playerActor.setDirection(level.playerState.dir[0], level.playerState.dir[1]);
         worldTop.addActor(playerActor);
 
-        for (int i = 0; i < level.fans.size; i++) {
-            Fan fan = level.fans.get(i);
-            FanActor fanActor = new FanActor(parent);
-            fanActor.setPosition(fan.x, fan.y);
+        for (LevelFanActor levelFanActor : level.fans) {
+            FanActor fanActor = new FanActor(parent, levelFanActor.sprite, levelFanActor.frameDuration);
+            fanActor.setPosition(levelFanActor.pos[0], levelFanActor.pos[1]);
             fanActor.setCollisionDispatcher(collisionDispatcher);
             worldTop.addActor(fanActor);
         }
-        for (int i = 0; i < level.walls.size; i++) {
-            Wall wall = level.walls.get(i);
-            WallActor wallActor = new WallActor(parent);
-            wallActor.setBounds(wall.x, wall.y, wall.w, wall.h);
+        for (LevelWallActor levelWallActor : level.walls) {
+            WallActor wallActor = new WallActor(parent, levelWallActor.sprite);
+            wallActor.setPosition(levelWallActor.pos[0], levelWallActor.pos[1]);
+            wallActor.setSize(levelWallActor.size[0], levelWallActor.size[1]);
             wallActor.setCollisionDispatcher(collisionDispatcher);
             worldTop.addActor(wallActor);
         }

@@ -14,10 +14,10 @@ public class FanActor extends CollisionableActor {
     private final LaPandemia game;
     private float elapsedTime;
 
-    public FanActor(final LaPandemia game) {
+    public FanActor(final LaPandemia game, String regionName, float frameDuration) {
         this.game = game;
-        this.animation = new Animation<TextureRegion>(1f / 5f,
-                ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("fan"));
+        this.animation = new Animation<TextureRegion>(frameDuration,
+                ((TextureAtlas)game.assetManager.get("images.pack")).findRegions(regionName));
 
         setWidth(64);
         setHeight(64);
