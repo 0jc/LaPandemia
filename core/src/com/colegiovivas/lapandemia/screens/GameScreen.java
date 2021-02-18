@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.input.GestureDetector;
@@ -123,6 +124,12 @@ public class GameScreen implements Screen {
     }
 
     private class PlayingGameStage extends GameStage {
+        private final Music music;
+
+        public PlayingGameStage() {
+            music = parent.assetManager.get("audio/map.wav");
+        }
+
         @Override
         public void show() {
             InputMultiplexer multiplexer = new InputMultiplexer();
@@ -139,6 +146,11 @@ public class GameScreen implements Screen {
             Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+            if (!music.isPlaying()) {
+                music.setLooping(true);
+                music.play();
+            }
+
             worldSubscreen.act(delta);
             statsSubscreen.act(delta);
             countdownSubscreen.act(delta);
@@ -148,6 +160,7 @@ public class GameScreen implements Screen {
             countdownSubscreen.draw(delta);
 
             if (worldSubscreen.gameIsOver()) {
+                music.stop();
                 setGameStage(new EndingGameStage());
             }
         }

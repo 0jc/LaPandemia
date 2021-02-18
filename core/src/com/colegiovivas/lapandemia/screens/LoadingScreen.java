@@ -3,6 +3,9 @@ package com.colegiovivas.lapandemia.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.MusicLoader;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -43,6 +46,10 @@ public class LoadingScreen implements Screen {
         parent.assetManager.finishLoading();
 
         parent.assetManager.load("images.pack", TextureAtlas.class);
+        parent.assetManager.load("audio/countdown-beep-number.wav", Sound.class);
+        parent.assetManager.load("audio/countdown-beep-go.wav", Sound.class);
+        parent.assetManager.load("audio/direction-turn.wav", Music.class);
+        parent.assetManager.load("audio/map.wav", Music.class);
 
         loadingTitleLayout.setText(
                 (BitmapFont)parent.assetManager.get("fonts/nice32.fnt"), "Cargando...");

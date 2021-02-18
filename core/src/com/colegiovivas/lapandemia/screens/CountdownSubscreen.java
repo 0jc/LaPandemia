@@ -1,10 +1,10 @@
 package com.colegiovivas.lapandemia.screens;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -19,6 +19,8 @@ public class CountdownSubscreen extends Subscreen {
 
     private final Stage stage;
     private final Image[] images;
+    private final Sound numberBeep;
+    private final Sound goBeep;
     private int countdownNum = -1;
     private float waitedTime = 0;
 
@@ -39,6 +41,9 @@ public class CountdownSubscreen extends Subscreen {
             images[i].setVisible(false);
             stage.addActor(images[i]);
         }
+
+        numberBeep = game.assetManager.get("audio/countdown-beep-number.wav");
+        goBeep = game.assetManager.get("audio/countdown-beep-go.wav");
     }
 
     @Override
@@ -51,6 +56,11 @@ public class CountdownSubscreen extends Subscreen {
         if (countdownNum != -1) {
             float currentAlpha = images[countdownNum].getColor().a;
             if (currentAlpha == 1) {
+                if (countdownNum > 0) {
+                    numberBeep.play();
+                } else {
+                    goBeep.play();
+                }
                 setNum(countdownNum);
             } else if (currentAlpha == 0) {
                 waitedTime += delta;

@@ -19,7 +19,7 @@ public class MovePlayerGestureListener extends GestureDetector.GestureAdapter {
             boolean horizontal = Math.abs(deltaX) > Math.abs(deltaY);
             int xDir = !horizontal ? 0 : (deltaX > 0 ? 1 : -1);
             int yDir = horizontal ? 0 : (deltaY > 0 ? -1 : 1);
-            playerActor.setDirection(xDir, yDir);
+            playerActor.turn(xDir, yDir);
         }
         return true;
     }

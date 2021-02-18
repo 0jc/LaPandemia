@@ -1,6 +1,8 @@
 package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -8,12 +10,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
-import com.colegiovivas.lapandemia.screens.GameScreen;
 
 public class PlayerActor extends CollisionableActor {
     private final Animation<TextureRegion> defaultAnimation;
     private final Animation<TextureRegion> invincibleAnimation;
     private final LaPandemia game;
+    private final Music turnSound;
     private PowerupListener powerupListener;
     private InvincibilityListener invincibilityListener;
 
@@ -71,6 +73,8 @@ public class PlayerActor extends CollisionableActor {
         invincibilityTimeLeft = 0;
 
         setTouchable(Touchable.enabled);
+
+        turnSound = game.assetManager.get("audio/direction-turn.wav");
     }
 
     public void setMaskCount(int maskCount) {
@@ -112,6 +116,13 @@ public class PlayerActor extends CollisionableActor {
 
         this.xDir = xDir;
         this.yDir = yDir;
+    }
+
+    public void turn(int xDir, int yDir) {
+        if (xDir != this.xDir || yDir != this.yDir) {
+            //turnSound.play();
+            setDirection(xDir, yDir);
+        }
     }
 
     public boolean isAlive() {
