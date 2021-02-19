@@ -15,10 +15,9 @@ import com.colegiovivas.lapandemia.gestures.MovePlayerGestureListener;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
 import static com.colegiovivas.lapandemia.screens.RectanglesTransition.Dir;
 
-public class GameScreen implements Screen {
+public class GameScreen extends StagedScreen {
     private static final int STATS_H = 75;
 
-    private GameStage gameStage;
     private final int levelId;
     private final LaPandemia parent;
     private final StatsSubscreen statsSubscreen;
@@ -28,20 +27,32 @@ public class GameScreen implements Screen {
     private final RectanglesTransition endTransition;
 
     public GameScreen(LaPandemia parent, int levelId, FileHandle levelFile) {
+        super();
+
         this.parent = parent;
         this.levelId = levelId;
+
         statsSubscreen = new StatsSubscreen(parent);
         statsSubscreen.setScreenBounds(
                 0, Gdx.graphics.getHeight() - STATS_H, Gdx.graphics.getWidth(), STATS_H);
+        addSubscreen(statsSubscreen);
+
         worldSubscreen = new WorldSubscreen(parent, levelFile);
         worldSubscreen.setScreenBounds(
                 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - STATS_H);
+        addSubscreen(worldSubscreen);
+
         countdownSubscreen = new CountdownSubscreen(parent);
         countdownSubscreen.setScreenBounds(worldSubscreen.getScreenBounds());
+        addSubscreen(countdownSubscreen);
+
         startTransition = new RectanglesTransition(400, Dir.OUT, false, 600);
         startTransition.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        addSubscreen(startTransition);
+
         endTransition = new RectanglesTransition(240, Dir.IN, true, 300);
         endTransition.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        addSubscreen(endTransition);
 
         worldSubscreen.getPlayerActor().setPowerupListener(new PlayerActor.PowerupListener() {
             @Override
@@ -64,63 +75,7 @@ public class GameScreen implements Screen {
             }
         });
 
-        gameStage = new CountdownGameStage();
-    }
-
-    @Override
-    public void show() {
-        gameStage.show();
-    }
-
-    @Override
-    public void render(float delta) {
-        gameStage.render(delta);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        statsSubscreen.resize(width, height);
-        worldSubscreen.resize(width, height);
-        countdownSubscreen.resize(width, height);
-        startTransition.resize(width, height);
-        endTransition.resize(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        statsSubscreen.dispose();
-        worldSubscreen.dispose();
-        countdownSubscreen.dispose();
-        startTransition.dispose();
-        endTransition.dispose();
-    }
-
-    private void setGameStage(GameStage gameStage) {
-        this.gameStage = gameStage;
-        show();
-    }
-
-    private abstract static class GameStage {
-        void show() {
-            Gdx.input.setInputProcessor(new InputAdapter());
-        }
-
-        abstract void render(float delta);
+        setGameStage(new CountdownGameStage());
     }
 
     private class PlayingGameStage extends GameStage {

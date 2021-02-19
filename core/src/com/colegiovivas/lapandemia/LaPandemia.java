@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.screens.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
+import com.colegiovivas.lapandemia.screens.ResultsScreen;
 
 public class LaPandemia extends Game {
     public SpriteBatch batch;
@@ -79,9 +80,7 @@ public class LaPandemia extends Game {
     }
 
     public void gameOver(GameScreen gameScreen, int levelId, int paperCount, float runningTime) {
-        Gdx.app.log("LaPandemia", "Game results: levelId=" + levelId + ", paperCount=" + paperCount + ", runningTime=" + runningTime);
-        gameScreen.dispose();
-        Gdx.app.exit();
+        //setScreen(new ResultsScreen(this, levelId, paperCount, runningTime));
     }
 
     @Override

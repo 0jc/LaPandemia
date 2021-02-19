@@ -276,3 +276,11 @@ Cambios presentados el 2021/02/09
 ---------------------------------
 Se remplazan getDemoLevel() y el package levels por un sistema de cargado de niveles
 desde archivos JSON, y se redefine el nivel de demostración en este nuevo formato.
+
+
+Cambios presentados el 2021/02/19
+---------------------------------
+Se añaden algunas músicas y efectos sonoros, aunque todavía son una minoría.
+
+Se implementa StagedScreen para hacer más fácil implementar pantallas con varias
+fases, del mismo modo que ya lo estaba haciendo GameScreen.
