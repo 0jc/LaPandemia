@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -80,7 +81,16 @@ public class LaPandemia extends Game {
     }
 
     public void gameOver(GameScreen gameScreen, int levelId, int paperCount, float runningTime) {
-        //setScreen(new ResultsScreen(this, levelId, paperCount, runningTime));
+        gameScreen.dispose();
+
+        setScreen(new ResultsScreen(this, levelId, paperCount, runningTime));
+    }
+
+    public void resultsAccepted(ResultsScreen resultsScreen) {
+        resultsScreen.dispose();
+
+        setScreen(null);
+        Gdx.app.exit();
     }
 
     @Override

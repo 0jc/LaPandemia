@@ -284,3 +284,6 @@ Se añaden algunas músicas y efectos sonoros, aunque todavía son una minoría.
 
 Se implementa StagedScreen para hacer más fácil implementar pantallas con varias
 fases, del mismo modo que ya lo estaba haciendo GameScreen.
+
+Se añade una primera versión de la pantalla que muestra los resultados de la
+partida.
