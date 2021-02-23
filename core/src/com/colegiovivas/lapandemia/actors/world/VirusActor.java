@@ -75,7 +75,7 @@ public class VirusActor extends GenerableActor {
     @Override
     public void drawNotBlinking(Batch batch, float parentAlpha) {
         if (alive) {
-            animationTime += Gdx.graphics.getDeltaTime();
+            animationTime += getWorldSubscreen().getPaused() ? 0 : Gdx.graphics.getDeltaTime();
             batch.draw(
                     animation.getKeyFrame(animationTime, true),
                     getX(), getY());

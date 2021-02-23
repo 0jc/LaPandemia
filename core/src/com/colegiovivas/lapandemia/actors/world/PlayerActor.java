@@ -131,7 +131,7 @@ public class PlayerActor extends CollisionableActor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        elapsedTime += Gdx.graphics.getDeltaTime();
+        elapsedTime += getWorldSubscreen().getPaused() ? 0 : Gdx.graphics.getDeltaTime();
         Animation<TextureRegion> animation =
                 invincibilityTimeLeft <= 0
                         ? defaultAnimation

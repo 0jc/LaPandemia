@@ -54,7 +54,7 @@ public abstract class GenerableActor extends CollisionableActor implements Pool.
 
     @Override
     public boolean remove() {
-        generator.remove(this);
+        if (generator != null) generator.remove(this);
         return super.remove();
     }
 }

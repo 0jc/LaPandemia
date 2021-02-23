@@ -6,8 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.actors.WorldActor;
 
-public class HealthActor extends Actor {
+public class HealthActor extends WorldActor {
     private final Array<TextureAtlas.AtlasRegion> textures;
     private final LaPandemia game;
     private PlayerActor playerActor;

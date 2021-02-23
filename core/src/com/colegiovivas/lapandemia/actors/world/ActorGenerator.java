@@ -86,6 +86,7 @@ public class ActorGenerator {
                         lastActorTime = 0;
                         GenerableActor actor = generableActorPool.obtain().init();
                         actor.setGenerator(this);
+                        actor.setWorldSubscreen(worldSubscreen);
                         actor.setBounds(rect.x, rect.y, rect.width, rect.height);
                         actor.setCollisionDispatcher(worldSubscreen.getCollisionDispatcher());
                         actor.setTtl(ttl);

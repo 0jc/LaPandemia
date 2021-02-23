@@ -13,6 +13,7 @@ public class AndroidLauncher extends AndroidApplication {
 
 		config.useAccelerometer = false;
 		config.useCompass = false;
+		config.useGyroscope = true;
 
 		initialize(new LaPandemia(), config);
 	}

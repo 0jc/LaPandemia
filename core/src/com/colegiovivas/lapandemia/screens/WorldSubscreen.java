@@ -1,5 +1,6 @@
 package com.colegiovivas.lapandemia.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
@@ -31,6 +32,8 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
     private float maxZoom;
     private float runningTime;
 
+    private boolean paused = false;
+
     public WorldSubscreen(LaPandemia parent, FileHandle levelFile) {
         OrthographicCamera worldCamera = new OrthographicCamera();
         Viewport worldViewport = new StretchViewport(800, 480, worldCamera);
@@ -44,6 +47,7 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         setUpMap(parent, levelFile);
 
         HealthActor healthActor = new HealthActor(parent);
+        healthActor.setWorldSubscreen(this);
         playerActor.setHealthActor(healthActor);
         healthActor.setPlayerActor(playerActor);
         Group healthGroup = new Group();
@@ -69,6 +73,7 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         worldGroup.addActor(worldTop);
 
         playerActor = new PlayerActor(parent);
+        playerActor.setWorldSubscreen(this);
         playerActor.setPosition(level.playerState.pos[0], level.playerState.pos[1]);
         playerActor.setCollisionDispatcher(collisionDispatcher);
         playerActor.setDirection(level.playerState.dir[0], level.playerState.dir[1]);
@@ -76,12 +81,14 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
 
         for (LevelFanActor levelFanActor : level.fans) {
             FanActor fanActor = new FanActor(parent, levelFanActor.sprite, levelFanActor.frameDuration);
+            fanActor.setWorldSubscreen(this);
             fanActor.setPosition(levelFanActor.pos[0], levelFanActor.pos[1]);
             fanActor.setCollisionDispatcher(collisionDispatcher);
             worldTop.addActor(fanActor);
         }
         for (LevelWallActor levelWallActor : level.walls) {
             WallActor wallActor = new WallActor(parent, levelWallActor.sprite);
+            wallActor.setWorldSubscreen(this);
             wallActor.setPosition(levelWallActor.pos[0], levelWallActor.pos[1]);
             wallActor.setSize(levelWallActor.size[0], levelWallActor.size[1]);
             wallActor.setCollisionDispatcher(collisionDispatcher);
@@ -96,6 +103,14 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
 
         maxZoom = Math.min(worldWidth/stage.getViewport().getWorldWidth(),
                            worldHeight/stage.getViewport().getWorldHeight());
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    public boolean getPaused() {
+        return paused;
     }
 
     public Stage getWorldStage() {

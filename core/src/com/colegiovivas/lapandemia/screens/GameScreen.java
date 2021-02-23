@@ -7,7 +7,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.ActorId;
 import com.colegiovivas.lapandemia.actors.world.PlayerActor;
@@ -17,12 +19,14 @@ import static com.colegiovivas.lapandemia.screens.RectanglesTransition.Dir;
 
 public class GameScreen extends StagedScreen {
     private static final int STATS_H = 75;
+    private static final float Y_GYROSCOPE_PAUSE_TRESHOLD = -6;
 
     private final int levelId;
     private final LaPandemia parent;
     private final StatsSubscreen statsSubscreen;
     private final WorldSubscreen worldSubscreen;
     private final CountdownSubscreen countdownSubscreen;
+    private final PauseSubscreen pauseSubscreen;
     private final RectanglesTransition startTransition;
     private final RectanglesTransition endTransition;
 
@@ -41,6 +45,10 @@ public class GameScreen extends StagedScreen {
         worldSubscreen.setScreenBounds(
                 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - STATS_H);
         addSubscreen(worldSubscreen);
+
+        pauseSubscreen = new PauseSubscreen(parent);
+        pauseSubscreen.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        addSubscreen(pauseSubscreen);
 
         countdownSubscreen = new CountdownSubscreen(parent);
         countdownSubscreen.setScreenBounds(worldSubscreen.getScreenBounds());
@@ -94,6 +102,7 @@ public class GameScreen extends StagedScreen {
             multiplexer.addProcessor(new GestureDetector(new MovePlayerGestureListener(
                     worldSubscreen.getPlayerActor())));
             Gdx.input.setInputProcessor(multiplexer);
+            worldSubscreen.setPaused(false);
         }
 
         @Override
@@ -117,9 +126,51 @@ public class GameScreen extends StagedScreen {
             if (worldSubscreen.gameIsOver()) {
                 music.stop();
                 setGameStage(new EndingGameStage());
+            } else if (Gdx.input.getGyroscopeY() < Y_GYROSCOPE_PAUSE_TRESHOLD) {
+                setGameStage(new PauseGameStage(
+                        this,
+                        ScreenUtils.getFrameBufferPixmap(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())));
             }
         }
     }
+
+    private class PauseGameStage extends GameStage {
+        private final GameStage resumeStage;
+        private boolean resume;
+        private boolean pausing;
+
+        public PauseGameStage(GameStage resumeStage, Pixmap screenshot) {
+            this.resumeStage = resumeStage;
+            pausing = true;
+            resume = false;
+            worldSubscreen.setPaused(true);
+        }
+
+        @Override
+        void render(float delta) {
+            Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            pauseSubscreen.act(delta);
+
+            worldSubscreen.draw(delta);
+            statsSubscreen.draw(delta);
+            pauseSubscreen.draw(delta);
+
+            if (pausing) {
+                if (Gdx.input.getGyroscopeY() >= Y_GYROSCOPE_PAUSE_TRESHOLD) {
+                    pausing = false;
+                }
+            } else if (!resume){
+                if (Gdx.input.getGyroscopeY() < Y_GYROSCOPE_PAUSE_TRESHOLD) {
+                    resume = true;
+                }
+            } else if (Gdx.input.getGyroscopeY() >= Y_GYROSCOPE_PAUSE_TRESHOLD) {
+                setGameStage(resumeStage);
+            }
+        }
+    }
+
 
     private class CountdownGameStage extends GameStage {
         private static final float ZOOM_PRE_WAIT = 1;
