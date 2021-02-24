@@ -1,13 +1,10 @@
 package com.colegiovivas.lapandemia.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -29,6 +26,10 @@ public class GameScreen extends StagedScreen {
     private final PauseSubscreen pauseSubscreen;
     private final RectanglesTransition startTransition;
     private final RectanglesTransition endTransition;
+
+    private final Music mapMusic;
+    private final Music gameOverMusic;
+    private final Music zoomInMusic;
 
     public GameScreen(LaPandemia parent, int levelId, FileHandle levelFile) {
         super();
@@ -84,15 +85,13 @@ public class GameScreen extends StagedScreen {
         });
 
         setGameStage(new CountdownGameStage());
+
+        mapMusic = parent.assetManager.get("audio/map.wav");
+        gameOverMusic = parent.assetManager.get("audio/game-over.wav");
+        zoomInMusic = parent.assetManager.get("audio/zoom-in.wav");
     }
 
     private class PlayingGameStage extends GameStage {
-        private final Music music;
-
-        public PlayingGameStage() {
-            music = parent.assetManager.get("audio/map.wav");
-        }
-
         @Override
         public void show() {
             InputMultiplexer multiplexer = new InputMultiplexer();
@@ -110,9 +109,9 @@ public class GameScreen extends StagedScreen {
             Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            if (!music.isPlaying()) {
-                music.setLooping(true);
-                music.play();
+            if (!mapMusic.isPlaying()) {
+                mapMusic.setLooping(true);
+                mapMusic.play();
             }
 
             worldSubscreen.act(delta);
@@ -124,7 +123,7 @@ public class GameScreen extends StagedScreen {
             countdownSubscreen.draw(delta);
 
             if (worldSubscreen.gameIsOver()) {
-                music.stop();
+                mapMusic.stop();
                 setGameStage(new EndingGameStage());
             } else if (Gdx.input.getGyroscopeY() < Y_GYROSCOPE_PAUSE_TRESHOLD) {
                 setGameStage(new PauseGameStage(
@@ -202,8 +201,14 @@ public class GameScreen extends StagedScreen {
                 startTransition.act(delta);
             } else if (zoomPreWaitTime < ZOOM_PRE_WAIT) {
                 zoomPreWaitTime = Math.min(zoomPreWaitTime + delta, ZOOM_PRE_WAIT);
+                if (zoomPreWaitTime == ZOOM_PRE_WAIT) {
+                    zoomInMusic.setLooping(false);
+                    zoomInMusic.play();
+                }
             } else if (camera.zoom > 1) {
-                camera.zoom = Math.max(camera.zoom - delta*ZOOM_IN_SPEED, 1f);
+                camera.zoom = Math.max(camera.zoom - delta * ZOOM_IN_SPEED, 1f);
+            } else if (zoomInMusic.isPlaying()) {
+                // Esperamos a que termine de reproducirse la música.
             } else if (zoomPostWaitTime < ZOOM_POST_WAIT) {
                 zoomPostWaitTime = Math.min(zoomPostWaitTime + delta, ZOOM_POST_WAIT);
             } else if (!countdownStarted) {
@@ -227,6 +232,8 @@ public class GameScreen extends StagedScreen {
     }
 
     private class EndingGameStage extends GameStage {
+        private boolean musicStarted = false;
+
         @Override
         public void render(float delta) {
             Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
@@ -235,9 +242,11 @@ public class GameScreen extends StagedScreen {
             statsSubscreen.draw(delta);
             worldSubscreen.draw(delta);
 
-            // Se entrará aquí más adelante cuando termine de reproducirse la música
-            // del fin de la partida.
-            if (true) {
+            if (!musicStarted) {
+                musicStarted = true;
+                gameOverMusic.setLooping(false);
+                gameOverMusic.play();
+            } else if (!gameOverMusic.isPlaying()) {
                 if (!endTransition.isPlaying()) {
                     endTransition.start();
                 }

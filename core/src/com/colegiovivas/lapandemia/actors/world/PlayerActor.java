@@ -16,6 +16,11 @@ public class PlayerActor extends CollisionableActor {
     private final Animation<TextureRegion> invincibleAnimation;
     private final LaPandemia game;
     private final Music turnSound;
+    private final Sound wallHitSound;
+    private final Sound fanHitSound;
+    private final Sound infectionSound;
+    private final Sound maskSound;
+    private final Sound paperSound;
     private PowerupListener powerupListener;
     private InvincibilityListener invincibilityListener;
 
@@ -65,7 +70,7 @@ public class PlayerActor extends CollisionableActor {
 
         defaultAnimation = new Animation<TextureRegion>(1f,
                 ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("player-default"));
-        invincibleAnimation = new Animation<TextureRegion>(1f,
+        invincibleAnimation = new Animation<TextureRegion>(0.2f,
                 ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("player-invincible"));
 
         maskCount = 0;
@@ -75,6 +80,11 @@ public class PlayerActor extends CollisionableActor {
         setTouchable(Touchable.enabled);
 
         turnSound = game.assetManager.get("audio/direction-turn.wav");
+        wallHitSound = game.assetManager.get("audio/hit-wall.wav");
+        fanHitSound = game.assetManager.get("audio/hit-fan.wav");
+        infectionSound = game.assetManager.get("audio/infected.wav");
+        maskSound = game.assetManager.get("audio/mask-collected.wav");
+        paperSound = game.assetManager.get("audio/toilet-paper-collected.wav");
     }
 
     public void setMaskCount(int maskCount) {
@@ -175,6 +185,7 @@ public class PlayerActor extends CollisionableActor {
         switch (actor.getActorId()) {
             case WALL:
                 if (!wallCollisionSeen) {
+                    wallHitSound.play();
                     wallCollisionSeen = true;
                     if (!fanCollisionSeen) setDirection(-xDir, -yDir);
                     healthTime = 0;
@@ -190,6 +201,7 @@ public class PlayerActor extends CollisionableActor {
 
             case FAN:
                 if (!fanCollisionSeen) {
+                    fanHitSound.play();
                     fanCollisionSeen = true;
                     if (!wallCollisionSeen) setDirection(-xDir, -yDir);
                     maskCount--;
@@ -198,6 +210,7 @@ public class PlayerActor extends CollisionableActor {
                 break;
 
             case MASK:
+                maskSound.play();
                 maskCount++;
                 powerupListener.updateCount(ActorId.MASK, maskCount);
                 break;
@@ -207,6 +220,7 @@ public class PlayerActor extends CollisionableActor {
                 break;
 
             case PAPER:
+                paperSound.play();
                 paperCount++;
                 powerupListener.updateCount(ActorId.PAPER, paperCount);
                 break;
@@ -232,6 +246,7 @@ public class PlayerActor extends CollisionableActor {
 
     private void infected() {
         if (invincibilityTimeLeft == 0) {
+            infectionSound.play();
             maskCount--;
             powerupListener.updateCount(ActorId.MASK, maskCount);
         }

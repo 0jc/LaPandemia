@@ -293,3 +293,5 @@ Cambios presentados el 2021/02/23
 ---------------------------------
 Se añade el modo de pausa del juego, activado mediante un gesto físico con el móvil
 que se detecta con el giroscopio.
+
+También se añaden algunas músicas y sonidos.

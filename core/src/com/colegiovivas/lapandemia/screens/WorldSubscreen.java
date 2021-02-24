@@ -99,7 +99,7 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         actorGenerators.add(new ActorGenerator(VirusActor.class, ActorId.VIRUS, worldTop, 48, 48, 1.25f, 1000, 120f, parent, this));
         actorGenerators.add(new ActorGenerator(MaskActor.class, ActorId.MASK, powerups, 48, 48, 10, 3, 30f, parent, this));
         actorGenerators.add(new ActorGenerator(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10, 30f, parent, this));
-        actorGenerators.add(new ActorGenerator(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 90, 1, 30f, parent, this));
+        actorGenerators.add(new ActorGenerator(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 1+0*90, 1, 30f, parent, this));
 
         maxZoom = Math.min(worldWidth/stage.getViewport().getWorldWidth(),
                            worldHeight/stage.getViewport().getWorldHeight());

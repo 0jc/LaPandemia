@@ -1,6 +1,7 @@
 package com.colegiovivas.lapandemia.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
 
@@ -14,6 +15,7 @@ public class ResultsScreen extends StagedScreen {
     private final ResultsSubscreen resultsSubscreen;
     private final RectanglesTransition startTransition;
     private final RectanglesTransition endTransition;
+    private final Music backgroundMusic;
 
     public ResultsScreen(LaPandemia parent, int levelId, int paperCount, float runningTime) {
         super();
@@ -37,6 +39,8 @@ public class ResultsScreen extends StagedScreen {
         addSubscreen(endTransition);
 
         setGameStage(new IntroductionGameStage());
+
+        backgroundMusic = parent.assetManager.get("audio/results.wav");
     }
 
     private class IntroductionGameStage extends GameStage {
@@ -63,12 +67,11 @@ public class ResultsScreen extends StagedScreen {
     private class ShowStats extends GameStage {
         private CounterAnimator timeCounter;
         private CounterAnimator paperCounter;
-        private float waitedTime;
+        private float waitedTime = 0;
 
         public ShowStats() {
             timeCounter = new CounterAnimator(0.3f, 0, runningTime);
             paperCounter = new CounterAnimator(0.3f, 0, paperCount);
-            waitedTime = 0;
         }
 
         @Override
@@ -95,6 +98,9 @@ public class ResultsScreen extends StagedScreen {
                 waitedTime += delta;
             } else if (!resultsSubscreen.showingContinueButton()) {
                 resultsSubscreen.showContinueButton();
+            } else if (!backgroundMusic.isPlaying()) {
+                backgroundMusic.setLooping(true);
+                backgroundMusic.play();
             }
 
             resultsSubscreen.draw(delta);
@@ -123,6 +129,7 @@ public class ResultsScreen extends StagedScreen {
             if (!endTransition.isPlaying()) {
                 Gdx.gl.glClearColor(0, 0, 0, 1);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                backgroundMusic.stop();
                 parent.resultsAccepted(ResultsScreen.this);
             }
         }

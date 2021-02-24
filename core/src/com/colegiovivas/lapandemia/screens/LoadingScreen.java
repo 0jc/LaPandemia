@@ -48,8 +48,16 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("images.pack", TextureAtlas.class);
         parent.assetManager.load("audio/countdown-beep-number.wav", Sound.class);
         parent.assetManager.load("audio/countdown-beep-go.wav", Sound.class);
+        parent.assetManager.load("audio/hit-fan.wav", Sound.class);
+        parent.assetManager.load("audio/hit-wall.wav", Sound.class);
+        parent.assetManager.load("audio/infected.wav", Sound.class);
+        parent.assetManager.load("audio/mask-collected.wav", Sound.class);
+        parent.assetManager.load("audio/toilet-paper-collected.wav", Sound.class);
+        parent.assetManager.load("audio/zoom-in.wav", Music.class);
         parent.assetManager.load("audio/direction-turn.wav", Music.class);
         parent.assetManager.load("audio/map.wav", Music.class);
+        parent.assetManager.load("audio/game-over.wav", Music.class);
+        parent.assetManager.load("audio/results.wav", Music.class);
 
         loadingTitleLayout.setText(
                 (BitmapFont)parent.assetManager.get("fonts/nice32.fnt"), "Cargando...");
