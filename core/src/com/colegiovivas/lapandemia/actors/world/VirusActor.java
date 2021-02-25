@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
+import com.colegiovivas.lapandemia.actors.world.generator.GenerableActor;
 
 public class VirusActor extends GenerableActor {
     private final LaPandemia game;

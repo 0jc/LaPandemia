@@ -1,4 +1,4 @@
-package com.colegiovivas.lapandemia.actors.world;
+package com.colegiovivas.lapandemia.actors.world.generator;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Pool;

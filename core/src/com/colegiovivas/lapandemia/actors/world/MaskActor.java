@@ -1,12 +1,12 @@
 package com.colegiovivas.lapandemia.actors.world;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
+import com.colegiovivas.lapandemia.actors.world.generator.GenerableActor;
 
 public class MaskActor extends GenerableActor {
     private final TextureAtlas.AtlasRegion texture;

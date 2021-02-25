@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.*;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionDispatcher;
+import com.colegiovivas.lapandemia.actors.world.generator.ActorGenerator;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
 import com.colegiovivas.lapandemia.level.Level;
 import com.colegiovivas.lapandemia.level.LevelFanActor;
