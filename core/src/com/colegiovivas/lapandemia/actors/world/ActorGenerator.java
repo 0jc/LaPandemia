@@ -8,14 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.actors.world.ActorId;
-import com.colegiovivas.lapandemia.actors.world.GenerableActor;
-import com.colegiovivas.lapandemia.actors.world.PlayerActor;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
-import com.colegiovivas.lapandemia.screens.GameScreen;
-import com.colegiovivas.lapandemia.screens.WorldSubscreen;
-
-import java.lang.reflect.InvocationTargetException;
+import com.colegiovivas.lapandemia.screens.game.World;
 
 public class ActorGenerator {
     private static final float SAFE_DISTANCE = 400;
@@ -30,14 +24,14 @@ public class ActorGenerator {
     private final Group destGroup;
 
     private final LaPandemia game;
-    private final WorldSubscreen worldSubscreen;
+    private final World world;
 
     private int count;
     private float lastActorTime;
 
     public ActorGenerator(final Class<? extends GenerableActor> generableActorClass, ActorId actorId,
                           Group destGroup, float width, float height, float tick, int maxCount, Float ttl,
-                          final LaPandemia game, final WorldSubscreen worldSubscreen)
+                          final LaPandemia game, final World world)
     {
         this.actorId = actorId;
         this.destGroup = destGroup;
@@ -47,7 +41,7 @@ public class ActorGenerator {
         this.maxCount = maxCount;
         this.ttl = ttl;
         this.game = game;
-        this.worldSubscreen = worldSubscreen;
+        this.world = world;
         this.generableActorPool = new Pool<GenerableActor>() {
             @Override
             protected GenerableActor newObject() {
@@ -86,9 +80,9 @@ public class ActorGenerator {
                         lastActorTime = 0;
                         GenerableActor actor = generableActorPool.obtain().init();
                         actor.setGenerator(this);
-                        actor.setWorldSubscreen(worldSubscreen);
+                        actor.setWorld(world);
                         actor.setBounds(rect.x, rect.y, rect.width, rect.height);
-                        actor.setCollisionDispatcher(worldSubscreen.getCollisionDispatcher());
+                        actor.setCollisionDispatcher(world.getCollisionDispatcher());
                         actor.setTtl(ttl);
                         destGroup.addActor(actor);
                         count++;
@@ -108,12 +102,12 @@ public class ActorGenerator {
     private boolean tryAssignCoords(Rectangle outCoords, Array<Actor> overlappedActors) {
         // No generamos coordenadas demasiado cerca de los bordes del mapa, donde de
         // todos modos es improbable que no haya muros en cualquier nivel.
-        outCoords.x = MathUtils.random(32, (int)worldSubscreen.getWorldWidth() - 32 - 64);
-        outCoords.y = MathUtils.random(32, (int)worldSubscreen.getWorldHeight() - 32 - 64);
+        outCoords.x = MathUtils.random(32, (int)world.getWidth() - 32 - 64);
+        outCoords.y = MathUtils.random(32, (int)world.getHeight() - 32 - 64);
 
         Rectangle actorRect = game.rectPool.obtain();
         try {
-            for (Actor currGroup : worldSubscreen.getWorldGroup().getChildren()) {
+            for (Actor currGroup : world.getRootGroup().getChildren()) {
                 if (currGroup instanceof Group) {
                     for (Actor actor : ((Group)currGroup).getChildren()) {
                         if (actor instanceof CollisionableActor) {

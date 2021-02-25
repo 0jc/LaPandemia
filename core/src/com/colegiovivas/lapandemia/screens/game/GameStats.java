@@ -1,6 +1,5 @@
-package com.colegiovivas.lapandemia.screens;
+package com.colegiovivas.lapandemia.screens.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,23 +16,25 @@ import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.ingameui.GameTimerLabel;
 import com.colegiovivas.lapandemia.actors.ingameui.InvincibilityTimerLabel;
 
-public class StatsSubscreen extends Subscreen {
+public class GameStats {
     private final Stage stage;
     private final Label masksLabel;
     private final Label paperLabel;
     private final GameTimerLabel runningTimeLabel;
     private final InvincibilityTimerLabel invincibilityTimerLabel;
 
-    public StatsSubscreen(final LaPandemia parent) {
-        Camera uiCamera = new OrthographicCamera();
-        Viewport uiViewport = new StretchViewport(800, 40, uiCamera);
-        stage = new Stage(uiViewport);
+    private boolean paused = false;
+
+    public GameStats(final LaPandemia main) {
+        Camera camera = new OrthographicCamera();
+        Viewport viewport = new StretchViewport(800, 40, camera);
+        stage = new Stage(viewport);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.fontColor = Color.WHITE;
-        labelStyle.font = parent.assetManager.get("fonts/nice32.fnt");
+        labelStyle.font = main.assetManager.get("fonts/nice32.fnt");
 
-        final TextureAtlas atlas = parent.assetManager.get("images.pack");
+        final TextureAtlas atlas = main.assetManager.get("images.pack");
         Image maskIcon = new Image(atlas.findRegion("ui-mask"));
         Image paperIcon = new Image(atlas.findRegion("ui-toiletpaper"));
         Image runningTimeIcon = new Image(atlas.findRegion("timer"));
@@ -94,24 +95,22 @@ public class StatsSubscreen extends Subscreen {
         invincibilityTimerLabel.setTimeLeft(totalTime);
     }
 
-    @Override
-    protected void drawWithinBounds(float delta) {
-        stage.draw();
+    public Stage getStage() {
+        return stage;
     }
 
-    @Override
-    public void act(float delta) {
-        runningTimeLabel.act(delta);
-        invincibilityTimerLabel.act(delta);
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 
-    @Override
-    public void dispose() {
-        stage.dispose();
+    public boolean isPaused() {
+        return paused;
     }
 
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height);
+    public void render(float delta) {
+        if (!isPaused()) {
+            runningTimeLabel.act(delta);
+            invincibilityTimerLabel.act(delta);
+        }
     }
 }

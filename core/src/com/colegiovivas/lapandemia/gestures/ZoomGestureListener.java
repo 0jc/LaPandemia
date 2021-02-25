@@ -2,7 +2,6 @@ package com.colegiovivas.lapandemia.gestures;
 
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
-import com.colegiovivas.lapandemia.screens.GameScreen;
 
 public class ZoomGestureListener extends GestureDetector.GestureAdapter {
     // Razón que indica cuánto se modifica el zoom en función de cuántos píxeles se

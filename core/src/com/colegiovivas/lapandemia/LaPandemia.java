@@ -4,15 +4,14 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import com.colegiovivas.lapandemia.screens.GameScreen;
+import com.colegiovivas.lapandemia.screens.results.ResultsScreen;
+import com.colegiovivas.lapandemia.screens.game.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
-import com.colegiovivas.lapandemia.screens.ResultsScreen;
 
 public class LaPandemia extends Game {
     public SpriteBatch batch;

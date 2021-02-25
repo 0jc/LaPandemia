@@ -1,72 +1,94 @@
 package com.colegiovivas.lapandemia.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
 
-public class StagedScreen implements Screen {
-    private Array<Subscreen> subscreens;
-    private GameStage gameStage;
+import java.util.Iterator;
+
+public abstract class StagedScreen implements Screen {
+    private final ArrayMap<Integer, GameStage> gameStages;
+    private Integer currentGameStageId;
 
     public StagedScreen() {
-        subscreens = new Array<>();
-    }
-
-    @Override
-    public void show() {
-        gameStage.show();
+        gameStages = new ArrayMap<>();
     }
 
     @Override
     public void render(float delta) {
-        gameStage.render(delta);
+        getCurrentGameStage().render(delta);
     }
 
     @Override
     public void resize(int width, int height) {
-        for (Subscreen subscreen : subscreens) {
-            subscreen.resize(width, height);
-        }
+        getCurrentGameStage().resize(width, height);
     }
 
     @Override
     public void pause() {
-
+        getCurrentGameStage().pause();
     }
 
     @Override
     public void resume() {
-
+        getCurrentGameStage().resume();
     }
 
     @Override
     public void hide() {
+        if (currentGameStageId != null) getCurrentGameStage().hide();
+    }
 
+    @Override
+    public void show() {
+        getCurrentGameStage().show();
+    }
+
+    public void setGameStage(int stageId) {
+        if (!gameStages.containsKey(stageId)) {
+            throw new IllegalArgumentException();
+        }
+
+        GameStage oldGameStage = getCurrentGameStage();
+        if (oldGameStage != null) {
+            oldGameStage.leave();
+        }
+
+        currentGameStageId = stageId;
+        gameStages.get(currentGameStageId).enter();
+        gameStages.get(currentGameStageId).show();
+    }
+
+    public void addGameStage(int id, GameStage stage) {
+        if (gameStages.containsKey(id) || stage == null) {
+            throw new IllegalArgumentException();
+        }
+
+        gameStages.put(id, stage);
     }
 
     @Override
     public void dispose() {
-        for (Subscreen subscreen : subscreens) {
-            subscreen.dispose();
-        }
-        subscreens.clear();
-    }
-
-    protected void setGameStage(GameStage gameStage) {
-        this.gameStage = gameStage;
-        show();
-    }
-
-    protected void addSubscreen(Subscreen subscreen) {
-        this.subscreens.add(subscreen);
-    }
-
-    public abstract static class GameStage {
-        void show() {
-            Gdx.input.setInputProcessor(new InputAdapter());
+        Iterator<GameStage> iterator = gameStages.values();
+        while (iterator.hasNext()) {
+            GameStage stage = iterator.next();
+            stage.leave();
+            stage.dispose();
         }
 
-        abstract void render(float delta);
+        gameStages.clear();
+        currentGameStageId = null;
+    }
+
+    public GameStage getCurrentGameStage() {
+        if (currentGameStageId != null) {
+            return gameStages.get(currentGameStageId);
+        } else {
+            return null;
+        }
+    }
+
+    public interface GameStage extends Screen {
+        void enter();
+        void leave();
     }
 }

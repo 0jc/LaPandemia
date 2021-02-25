@@ -1,14 +1,11 @@
-package com.colegiovivas.lapandemia.screens;
+package com.colegiovivas.lapandemia.screens.results;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -16,8 +13,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 
-public class ResultsSubscreen extends Subscreen{
-    private final LaPandemia game;
+public class ResultsView {
+    private final LaPandemia main;
     private final Stage stage;
     private final Label levelIdLabel;
     private final Table levelIdRow;
@@ -26,22 +23,23 @@ public class ResultsSubscreen extends Subscreen{
     private final Label paperLabel;
     private final Table paperRow;
     private final Table continueRow;
-    private boolean accepted = false;
 
-    public ResultsSubscreen(LaPandemia game, int levelId) {
-        this.game = game;
+    private ContinueListener continueListener;
 
-        Camera uiCamera = new OrthographicCamera();
-        Viewport uiViewport = new StretchViewport(800, 480, uiCamera);
-        stage = new Stage(uiViewport);
+    public ResultsView(LaPandemia main, int levelId) {
+        this.main = main;
+
+        Camera camera = new OrthographicCamera();
+        Viewport viewport = new StretchViewport(800, 480, camera);
+        stage = new Stage(viewport);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.fontColor = Color.BLACK;
-        labelStyle.font = game.assetManager.get("fonts/nice32.fnt");
+        labelStyle.font = main.assetManager.get("fonts/nice32.fnt");
 
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.fontColor = Color.BLACK;
-        buttonStyle.font = game.assetManager.get("fonts/nice32.fnt");
+        buttonStyle.font = main.assetManager.get("fonts/nice32.fnt");
 
         Table table = new Table();
         table.setFillParent(true);
@@ -68,7 +66,7 @@ public class ResultsSubscreen extends Subscreen{
         continueButton.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                ResultsSubscreen.this.accepted = true;
+                continueClicked();
                 return false;
             }
         });
@@ -81,49 +79,25 @@ public class ResultsSubscreen extends Subscreen{
         continueRow.setVisible(false);
 
         stage.addActor(table);
+
+        setTime(0);
+        setPaperCount(0);
     }
 
-    @Override
-    protected void drawWithinBounds(float delta) {
-        stage.draw();
+    private void continueClicked() {
+        if (continueListener != null) continueListener.continueClicked();
     }
 
-    @Override
-    public void act(float delta) {
+    public void setTimeVisible(boolean visible) {
+        timeRow.setVisible(visible);
     }
 
-    @Override
-    public void dispose() {
-        stage.dispose();
+    public void setPaperCountVisible(boolean visible) {
+        paperRow.setVisible(visible);
     }
 
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height);
-    }
-
-    public boolean showingTime() {
-        return timeRow.isVisible();
-    }
-
-    public boolean showingPaperCount() {
-        return paperRow.isVisible();
-    }
-
-    public boolean showingContinueButton() {
-        return continueRow.isVisible();
-    }
-
-    public void showTime() {
-        timeRow.setVisible(true);
-    }
-
-    public void showPaperCount() {
-        paperRow.setVisible(true);
-    }
-
-    public void showContinueButton() {
-        continueRow.setVisible(true);
+    public void setContinueButtonVisible(boolean visible) {
+        continueRow.setVisible(visible);
     }
 
     public void setTime(float time) {
@@ -134,11 +108,23 @@ public class ResultsSubscreen extends Subscreen{
         paperLabel.setText(paperCount);
     }
 
-    public InputProcessor getInputProcessor() {
+    public void setContinueListener(ContinueListener continueListener) {
+        this.continueListener = continueListener;
+    }
+
+    public Stage getStage() {
         return stage;
     }
 
-    public boolean isAccepted() {
-        return accepted;
+    public boolean isShowingTime() {
+        return timeRow.isVisible();
+    }
+
+    public boolean isShowingPaperCount() {
+        return paperRow.isVisible();
+    }
+
+    public interface ContinueListener {
+        void continueClicked();
     }
 }

@@ -1,12 +1,13 @@
 package com.colegiovivas.lapandemia.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class RectanglesTransition extends Subscreen {
+public class RectangleTransition {
+    public enum Dir { IN, OUT }
+
     private final OrthographicCamera camera;
     private final Viewport viewport;
     private final ShapeRenderer shapeRenderer;
@@ -18,11 +19,12 @@ public class RectanglesTransition extends Subscreen {
 
     private float progress;
 
-    public RectanglesTransition(float baseLine, Dir dir, boolean vertical, float speed){
+    public RectangleTransition(float baseLine, Dir dir, boolean vertical, float speed) {
         this.baseLine = baseLine;
         this.dir = dir;
         this.speed = speed;
         this.vertical = vertical;
+
         camera = new OrthographicCamera();
         viewport = new StretchViewport(800, 480, camera);
         float totalLength = vertical ? viewport.getWorldHeight() : viewport.getWorldWidth();
@@ -33,20 +35,7 @@ public class RectanglesTransition extends Subscreen {
         progress = -1;
     }
 
-    public void start() {
-        progress = 0;
-    }
-
-    public void stop() {
-        progress = -1;
-    }
-
-    public boolean isPlaying() {
-        return progress >= 0;
-    }
-
-    @Override
-    protected void drawWithinBounds(float delta) {
+    public void draw() {
         if (isPlaying()) {
             float firstX = 0;
             float firstY = 0;
@@ -71,8 +60,7 @@ public class RectanglesTransition extends Subscreen {
         }
     }
 
-    @Override
-    public void act(float delta) {
+    public void render(float delta) {
         if (isPlaying()) {
             progress = Math.min(progress + speed*delta, biggerRectLength);
             if (progress == biggerRectLength) {
@@ -81,15 +69,23 @@ public class RectanglesTransition extends Subscreen {
         }
     }
 
-    @Override
+    public void start() {
+        progress = 0;
+    }
+
+    public void stop() {
+        progress = -1;
+    }
+
+    public boolean isPlaying() {
+        return progress >= 0;
+    }
+
+    public Viewport getViewport() {
+        return viewport;
+    }
+
     public void dispose() {
         shapeRenderer.dispose();
     }
-
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height);
-    }
-
-    public enum Dir { IN, OUT }
 }

@@ -1,6 +1,5 @@
-package com.colegiovivas.lapandemia.screens;
+package com.colegiovivas.lapandemia.screens.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
@@ -8,46 +7,43 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.*;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionDispatcher;
-import com.colegiovivas.lapandemia.actors.world.ActorGenerator;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
 import com.colegiovivas.lapandemia.level.Level;
 import com.colegiovivas.lapandemia.level.LevelFanActor;
 import com.colegiovivas.lapandemia.level.LevelWallActor;
 
-public class WorldSubscreen extends Subscreen implements ZoomGestureListener.ZoomListener {
-    private final Stage stage;
+public class World implements ZoomGestureListener.ZoomListener {
+    private final WorldStage stage;
     private PlayerActor playerActor;
     private Array<ActorGenerator> actorGenerators;
     private final CollisionDispatcher collisionDispatcher;
-    private final Group worldGroup;
-    private int worldWidth;
-    private int worldHeight;
+    private final Group rootGroup;
+    private int width;
+    private int height;
     private float maxZoom;
     private float runningTime;
-
     private boolean paused = false;
 
-    public WorldSubscreen(LaPandemia parent, FileHandle levelFile) {
+    public World(LaPandemia main, FileHandle levelFile) {
         OrthographicCamera worldCamera = new OrthographicCamera();
         Viewport worldViewport = new StretchViewport(800, 480, worldCamera);
-        stage = new Stage(worldViewport);
+        stage = new WorldStage(worldViewport);
 
-        worldGroup = new Group();
-        stage.addActor(worldGroup);
+        rootGroup = new Group();
+        stage.addActor(rootGroup);
 
-        collisionDispatcher = new CollisionDispatcher(parent, worldGroup);
+        collisionDispatcher = new CollisionDispatcher(main, rootGroup);
 
-        setUpMap(parent, levelFile);
+        setUpMap(main, levelFile);
 
-        HealthActor healthActor = new HealthActor(parent);
-        healthActor.setWorldSubscreen(this);
+        HealthActor healthActor = new HealthActor(main);
+        healthActor.setWorld(this);
         playerActor.setHealthActor(healthActor);
         healthActor.setPlayerActor(playerActor);
         Group healthGroup = new Group();
@@ -55,7 +51,7 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         stage.addActor(healthGroup);
     }
 
-    private void setUpMap(LaPandemia parent, FileHandle levelFile) {
+    private void setUpMap(LaPandemia main, FileHandle levelFile) {
         Json json = new Json();
         json.setTypeName(null);
         json.setUsePrototypes(false);
@@ -64,31 +60,31 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
 
         Level level = json.fromJson(Level.class, levelFile);
 
-        worldWidth = level.size[0];
-        worldHeight = level.size[1];
+        width = level.size[0];
+        height = level.size[1];
 
         Group powerups = new Group();
         Group worldTop = new Group();
-        worldGroup.addActor(powerups);
-        worldGroup.addActor(worldTop);
+        rootGroup.addActor(powerups);
+        rootGroup.addActor(worldTop);
 
-        playerActor = new PlayerActor(parent);
-        playerActor.setWorldSubscreen(this);
+        playerActor = new PlayerActor(main);
+        playerActor.setWorld(this);
         playerActor.setPosition(level.playerState.pos[0], level.playerState.pos[1]);
         playerActor.setCollisionDispatcher(collisionDispatcher);
         playerActor.setDirection(level.playerState.dir[0], level.playerState.dir[1]);
         worldTop.addActor(playerActor);
 
         for (LevelFanActor levelFanActor : level.fans) {
-            FanActor fanActor = new FanActor(parent, levelFanActor.sprite, levelFanActor.frameDuration);
-            fanActor.setWorldSubscreen(this);
+            FanActor fanActor = new FanActor(main, levelFanActor.sprite, levelFanActor.frameDuration);
+            fanActor.setWorld(this);
             fanActor.setPosition(levelFanActor.pos[0], levelFanActor.pos[1]);
             fanActor.setCollisionDispatcher(collisionDispatcher);
             worldTop.addActor(fanActor);
         }
         for (LevelWallActor levelWallActor : level.walls) {
-            WallActor wallActor = new WallActor(parent, levelWallActor.sprite);
-            wallActor.setWorldSubscreen(this);
+            WallActor wallActor = new WallActor(main, levelWallActor.sprite);
+            wallActor.setWorld(this);
             wallActor.setPosition(levelWallActor.pos[0], levelWallActor.pos[1]);
             wallActor.setSize(levelWallActor.size[0], levelWallActor.size[1]);
             wallActor.setCollisionDispatcher(collisionDispatcher);
@@ -96,37 +92,49 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         }
 
         actorGenerators = new Array<>();
-        actorGenerators.add(new ActorGenerator(VirusActor.class, ActorId.VIRUS, worldTop, 48, 48, 1.25f, 1000, 120f, parent, this));
-        actorGenerators.add(new ActorGenerator(MaskActor.class, ActorId.MASK, powerups, 48, 48, 10, 3, 30f, parent, this));
-        actorGenerators.add(new ActorGenerator(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10, 30f, parent, this));
-        actorGenerators.add(new ActorGenerator(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 1+0*90, 1, 30f, parent, this));
+        actorGenerators.add(new ActorGenerator(VirusActor.class, ActorId.VIRUS, worldTop, 48, 48, 1.25f, 1000, 120f, main, this));
+        actorGenerators.add(new ActorGenerator(MaskActor.class, ActorId.MASK, powerups, 48, 48, 10, 3, 30f, main, this));
+        actorGenerators.add(new ActorGenerator(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10, 30f, main, this));
+        actorGenerators.add(new ActorGenerator(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 90, 1, 30f, main, this));
 
-        maxZoom = Math.min(worldWidth/stage.getViewport().getWorldWidth(),
-                           worldHeight/stage.getViewport().getWorldHeight());
+        maxZoom = Math.min(width /stage.getViewport().getWorldWidth(),
+                height /stage.getViewport().getWorldHeight());
+    }
+
+    public void render(float delta) {
+        if (!isPaused()) {
+            runningTime += delta;
+
+            for (int i = 0; i < actorGenerators.size; i++) {
+                actorGenerators.get(i).render(delta);
+            }
+
+            stage.act();
+        }
     }
 
     public void setPaused(boolean paused) {
         this.paused = paused;
     }
 
-    public boolean getPaused() {
+    public boolean isPaused() {
         return paused;
     }
 
-    public Stage getWorldStage() {
+    public Stage getStage() {
         return stage;
     }
 
-    public int getWorldWidth() {
-        return worldWidth;
+    public int getWidth() {
+        return width;
     }
 
-    public int getWorldHeight() {
-        return worldHeight;
+    public int getHeight() {
+        return height;
     }
-
-    public Group getWorldGroup() {
-        return worldGroup;
+    
+    public Group getRootGroup() {
+        return rootGroup;
     }
 
     public CollisionDispatcher getCollisionDispatcher() {
@@ -153,54 +161,6 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         return !playerActor.isAlive();
     }
 
-    private void adjustWorldCamera() {
-        // Se muestra siempre el mayor espacio posible alrededor del personaje, pero sin
-        // hacer scroll más allá de los límites del mapa. Cuando el personaje no está
-        // cerca de los bordes, aparece en el centro de la pantalla.
-        OrthographicCamera worldCamera = (OrthographicCamera)stage.getCamera();
-        float leftBound = worldCamera.zoom * stage.getViewport().getWorldWidth() / 2;
-        float rightBound = worldWidth - leftBound;
-        float lowerBound = worldCamera.zoom * stage.getViewport().getWorldHeight() / 2 + 1;
-        float upperBound = worldHeight - lowerBound;
-        float xToCenter = playerActor.getX() + playerActor.getWidth() / 2;
-        float yToCenter = playerActor.getY() + playerActor.getHeight() / 2;
-
-        worldCamera.position.x = MathUtils.clamp(xToCenter, leftBound, rightBound);
-        worldCamera.position.y = MathUtils.clamp(yToCenter, lowerBound, upperBound);
-    }
-
-    @Override
-    protected void drawWithinBounds(float delta) {
-        // El orden de las siguientes dos líneas es importante. Si se invierten, el movimiento
-        // de playerActor se muestra notablemente menos fluido.
-        adjustWorldCamera();
-        stage.draw();
-    }
-
-    @Override
-    public void act(float delta) {
-        runningTime += delta;
-
-        for (int i = 0; i < actorGenerators.size; i++) {
-            actorGenerators.get(i).render(delta);
-        }
-
-        stage.act();
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
-        for (ActorGenerator actorGenerator : actorGenerators) {
-            actorGenerator.getPool().clear();
-        }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height);
-    }
-
     @Override
     public void zoom(float delta) {
         // Nos aseguramos de que el nuevo zoom no sea tan grande que el mapa entero se
@@ -208,8 +168,8 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         // que adjustCamera() pueda averiguar con seguridad y sin tener que manipular el
         // zoom unas coordenadas de la cámara que centren al personaje lo máximo posible
         // sin mostrar aquello que hay más allá de los límites del mapa.
-        OrthographicCamera worldCamera = (OrthographicCamera)stage.getCamera();
-        worldCamera.zoom = MathUtils.clamp(worldCamera.zoom + delta, 0.8f, maxZoom);
+        OrthographicCamera camera = (OrthographicCamera)stage.getCamera();
+        camera.zoom = MathUtils.clamp(camera.zoom + delta, 0.8f, maxZoom);
 
         // Si se está ampliando el zoom y tan solo quedan unos pocos píxeles de ampliación
         // para alcanzar el valor máximo, se ajusta automáticamente el zoom al máximo. Si no
@@ -219,10 +179,40 @@ public class WorldSubscreen extends Subscreen implements ZoomGestureListener.Zoo
         // pequeño salto cada vez que el personaje cruza la mitad de la pantalla, lo que tan
         // solo se trata del zoom persiguiéndolo pero suele resultar ser un efecto confuso y
         // molesto.
-        if (delta > 0 && (Math.min(worldWidth - worldCamera.zoom * stage.getViewport().getWorldWidth(),
-                worldHeight - worldCamera.zoom * stage.getViewport().getWorldHeight()) < 20))
+        if (delta > 0 && (Math.min(width - camera.zoom * stage.getViewport().getWorldWidth(),
+                height - camera.zoom * stage.getViewport().getWorldHeight()) < 20))
         {
-            worldCamera.zoom = maxZoom;
+            camera.zoom = maxZoom;
+        }
+    }
+
+    private class WorldStage extends Stage {
+        private final OrthographicCamera camera;
+
+        public WorldStage(Viewport viewport) {
+            super(viewport);
+            camera = (OrthographicCamera)getCamera();
+        }
+
+        @Override
+        public void draw() {
+            adjustCamera();
+            super.draw();
+        }
+
+        private void adjustCamera() {
+            // Se muestra siempre el mayor espacio posible alrededor del personaje, pero sin
+            // hacer scroll más allá de los límites del mapa. Cuando el personaje no está
+            // cerca de los bordes, aparece en el centro de la pantalla.
+            float leftBound = camera.zoom * getViewport().getWorldWidth() / 2;
+            float rightBound = width - leftBound;
+            float lowerBound = camera.zoom * getViewport().getWorldHeight() / 2 + 1;
+            float upperBound = height - lowerBound;
+            float xToCenter = playerActor.getX() + playerActor.getWidth() / 2;
+            float yToCenter = playerActor.getY() + playerActor.getHeight() / 2;
+
+            camera.position.x = MathUtils.clamp(xToCenter, leftBound, rightBound);
+            camera.position.y = MathUtils.clamp(yToCenter, lowerBound, upperBound);
         }
     }
 }

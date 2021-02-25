@@ -1,16 +1,16 @@
 package com.colegiovivas.lapandemia.actors;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.colegiovivas.lapandemia.screens.WorldSubscreen;
+import com.colegiovivas.lapandemia.screens.game.World;
 
 public class WorldActor extends Actor {
-    private WorldSubscreen worldSubscreen;
+    private World world;
 
-    public void setWorldSubscreen(WorldSubscreen worldSubscreen) {
-        this.worldSubscreen = worldSubscreen;
+    public void setWorld(World world) {
+        this.world = world;
     }
 
-    public WorldSubscreen getWorldSubscreen() {
-        return worldSubscreen;
+    public World getWorld() {
+        return world;
     }
 }

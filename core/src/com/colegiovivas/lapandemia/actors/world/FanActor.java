@@ -28,7 +28,7 @@ public class FanActor extends CollisionableActor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        elapsedTime += getWorldSubscreen().getPaused() ? 0 : Gdx.graphics.getDeltaTime();
+        elapsedTime += getWorld().isPaused() ? 0 : Gdx.graphics.getDeltaTime();
 
         batch.draw(
                 animation.getKeyFrame(elapsedTime, true),
