@@ -143,4 +143,8 @@ public class ActorGenerator {
         }
         return true;
     }
+
+    public void dispose() {
+        generableActorPool.clear();
+    }
 }

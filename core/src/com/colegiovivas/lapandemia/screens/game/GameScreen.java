@@ -153,7 +153,7 @@ public class GameScreen extends StagedScreen {
     @Override
     public void dispose() {
         super.dispose();
-        world.getStage().dispose();
+        world.dispose();
         stats.getStage().dispose();
         countdown.getStage().dispose();
         openingTransition.dispose();

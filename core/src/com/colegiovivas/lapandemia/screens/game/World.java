@@ -187,6 +187,14 @@ public class World implements ZoomGestureListener.ZoomListener {
         }
     }
 
+    public void dispose() {
+        for (ActorGenerator actorGenerator : actorGenerators) {
+            actorGenerator.dispose();
+        }
+
+        stage.dispose();
+    }
+
     private class WorldStage extends Stage {
         private final OrthographicCamera camera;
 
