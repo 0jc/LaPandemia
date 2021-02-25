@@ -20,6 +20,7 @@ public class GameStats {
     private final Stage stage;
     private final Label masksLabel;
     private final Label paperLabel;
+    private final Label pausedLabel;
     private final GameTimerLabel runningTimeLabel;
     private final InvincibilityTimerLabel invincibilityTimerLabel;
 
@@ -42,6 +43,7 @@ public class GameStats {
 
         masksLabel = new Label("0", labelStyle);
         paperLabel = new Label("0", labelStyle);
+        pausedLabel = new Label("Pausado", labelStyle);
         runningTimeLabel = new GameTimerLabel(labelStyle);
         invincibilityTimerLabel = new InvincibilityTimerLabel(labelStyle, new InvincibilityTimerLabel.InvincibilityTimerListener() {
             @Override
@@ -74,11 +76,14 @@ public class GameStats {
         table.add(invincibilityTimerLabel).padLeft(10);
 
         Table rightElements = new Table();
+        rightElements.add(pausedLabel).padLeft(10).padRight(30);
         rightElements.add(maskIcon);
         rightElements.add(masksLabel).padLeft(10).padRight(30);
         rightElements.add(paperIcon);
         rightElements.add(paperLabel).padLeft(10);
         table.add(rightElements).right().expandX();
+
+        pausedLabel.setVisible(false);
 
         stage.addActor(table);
     }
@@ -101,6 +106,7 @@ public class GameStats {
 
     public void setPaused(boolean paused) {
         this.paused = paused;
+        pausedLabel.setVisible(paused);
     }
 
     public boolean isPaused() {

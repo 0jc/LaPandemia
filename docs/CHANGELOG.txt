@@ -301,3 +301,5 @@ Cambios presentados el 2021/02/25
 ---------------------------------
 Se remplaza el sistema de "subpantallas" por un mecanismo mejor de gestión de las
 diferentes vistas y fases del juego.
+
+Se añade una indicación cuando el juego está pausado.
