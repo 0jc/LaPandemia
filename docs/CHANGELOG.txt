@@ -295,3 +295,9 @@ Se añade el modo de pausa del juego, activado mediante un gesto físico con el 
 que se detecta con el giroscopio.
 
 También se añaden algunas músicas y sonidos.
+
+
+Cambios presentados el 2021/02/25
+---------------------------------
+Se remplaza el sistema de "subpantallas" por un mecanismo mejor de gestión de las
+diferentes vistas y fases del juego.
