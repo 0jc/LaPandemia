@@ -14,6 +14,7 @@ import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 public class PlayerActor extends CollisionableActor {
     private final Animation<TextureRegion> defaultAnimation;
     private final Animation<TextureRegion> invincibleAnimation;
+    private final Animation<TextureRegion> deadAnimation;
     private final LaPandemia game;
     private final Music turnSound;
     private final Sound wallHitSound;
@@ -72,6 +73,8 @@ public class PlayerActor extends CollisionableActor {
                 ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("player-default"));
         invincibleAnimation = new Animation<TextureRegion>(0.2f,
                 ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("player-invincible"));
+        deadAnimation = new Animation<TextureRegion>(1f,
+                ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("player-dead"));
 
         maskCount = 0;
         paperCount = 0;
@@ -143,9 +146,11 @@ public class PlayerActor extends CollisionableActor {
     public void draw(Batch batch, float parentAlpha) {
         elapsedTime += getWorld().isPaused() ? 0 : Gdx.graphics.getDeltaTime();
         Animation<TextureRegion> animation =
-                invincibilityTimeLeft <= 0
-                        ? defaultAnimation
-                        : invincibleAnimation;
+                isAlive()
+                ? invincibilityTimeLeft <= 0
+                  ? defaultAnimation
+                  : invincibleAnimation
+                : deadAnimation;
         batch.draw(
                 animation.getKeyFrame(elapsedTime, true),
                 getX(), getY());

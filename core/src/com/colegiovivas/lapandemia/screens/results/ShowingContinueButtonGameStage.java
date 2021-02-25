@@ -24,8 +24,6 @@ public class ShowingContinueButtonGameStage implements StagedScreen.GameStage {
 
     @Override
     public void enter() {
-        resultsScreen.getBackgroundMusic().setLooping(true);
-        resultsScreen.getBackgroundMusic().play();
         resultsScreen.getResultsView().setContinueButtonVisible(true);
         resultsScreen.getResultsView().setContinueListener(continueListener);
     }

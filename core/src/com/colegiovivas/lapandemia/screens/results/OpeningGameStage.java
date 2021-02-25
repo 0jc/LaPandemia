@@ -13,6 +13,8 @@ public class OpeningGameStage implements StagedScreen.GameStage {
 
     @Override
     public void enter() {
+        resultsScreen.getBackgroundMusic().setLooping(true);
+        resultsScreen.getBackgroundMusic().play();
         resultsScreen.getOpeningTransition().start();
     }
 

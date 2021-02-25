@@ -51,9 +51,9 @@ public class ResultsScreen extends StagedScreen {
         addGameStage(STAGE_SHOWING_CONTINUE_BUTTON, new ShowingContinueButtonGameStage(this));
         addGameStage(STAGE_CLOSING, new ClosingGameStage(this));
 
-        setGameStage(STAGE_OPENING);
-
         backgroundMusic = main.assetManager.get("audio/results.wav");
+
+        setGameStage(STAGE_OPENING);
     }
 
     public void draw() {

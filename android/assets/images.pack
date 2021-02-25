@@ -73,9 +73,16 @@ fan
   orig: 64, 64
   offset: 0, 0
   index: 2
-player-invincible
+player-dead
   rotate: false
   xy: 199, 205
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+player-invincible
+  rotate: false
+  xy: 303, 477
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -89,35 +96,35 @@ mask
   index: -1
 virus
   rotate: false
-  xy: 303, 493
+  xy: 369, 559
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 12
 virus
   rotate: false
-  xy: 369, 559
+  xy: 435, 625
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 1
 virus
   rotate: false
-  xy: 435, 625
+  xy: 943, 832
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 9
 virus
   rotate: false
-  xy: 943, 832
+  xy: 199, 155
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 8
 ui-mask
   rotate: false
-  xy: 199, 155
+  xy: 303, 427
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
@@ -131,7 +138,7 @@ virus
   index: 5
 virus
   rotate: false
-  xy: 303, 443
+  xy: 369, 509
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
@@ -159,14 +166,14 @@ virus
   index: 3
 virus
   rotate: false
-  xy: 783, 680
+  xy: 303, 377
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 2
 toiletpaper
   rotate: false
-  xy: 303, 393
+  xy: 783, 680
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
@@ -201,14 +208,14 @@ health
   index: 0
 wall
   rotate: false
-  xy: 833, 696
+  xy: 303, 343
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 health
   rotate: false
-  xy: 303, 359
+  xy: 833, 696
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

@@ -6,7 +6,7 @@ import com.colegiovivas.lapandemia.screens.StagedScreen;
 
 public class TimeVisibleGameStage implements StagedScreen.GameStage {
     private final ResultsScreen resultsScreen;
-    private boolean visible;
+    private final boolean visible;
 
     public TimeVisibleGameStage(ResultsScreen resultsScreen, boolean visible) {
         this.resultsScreen = resultsScreen;
@@ -15,7 +15,6 @@ public class TimeVisibleGameStage implements StagedScreen.GameStage {
 
     @Override
     public void enter() {
-
     }
 
     @Override
