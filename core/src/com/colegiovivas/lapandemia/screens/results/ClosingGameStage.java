@@ -37,7 +37,7 @@ public class ClosingGameStage implements StagedScreen.GameStage {
         resultsScreen.draw();
         resultsScreen.getClosingTransition().draw();
 
-        if (!resultsScreen.getClosingTransition().isPlaying()) {
+        if (resultsScreen.getClosingTransition().isComplete()) {
             resultsScreen.finish();
         }
     }

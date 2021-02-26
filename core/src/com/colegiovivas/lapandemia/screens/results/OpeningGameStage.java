@@ -38,7 +38,7 @@ public class OpeningGameStage implements StagedScreen.GameStage {
         resultsScreen.draw();
         resultsScreen.getOpeningTransition().draw();
 
-        if (!resultsScreen.getOpeningTransition().isPlaying()) {
+        if (resultsScreen.getOpeningTransition().isComplete()) {
             resultsScreen.setGameStage(ResultsScreen.STAGE_TIME_VISIBLE);
         }
     }

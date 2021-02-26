@@ -41,7 +41,7 @@ public class OpeningGameStage implements StagedScreen.GameStage {
         gameScreen.draw();
         gameScreen.getOpeningTransition().draw();
 
-        if (!gameScreen.getOpeningTransition().isPlaying()) {
+        if (gameScreen.getOpeningTransition().isComplete()) {
             gameScreen.setGameStage(GameScreen.STAGE_WAIT_AFTER_OPENING);
         }
     }

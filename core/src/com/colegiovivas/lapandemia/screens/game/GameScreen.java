@@ -8,8 +8,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.ActorId;
 import com.colegiovivas.lapandemia.actors.world.PlayerActor;
-import com.colegiovivas.lapandemia.screens.RectangleTransition;
 import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.transitions.HCenterOutTransition;
+import com.colegiovivas.lapandemia.screens.transitions.VCenterInTransition;
 
 public class GameScreen extends StagedScreen {
     private static final int STATS_H = 75;
@@ -31,8 +32,8 @@ public class GameScreen extends StagedScreen {
     private final World world;
     private final GameStats stats;
     private final Countdown countdown;
-    private final RectangleTransition openingTransition;
-    private final RectangleTransition closingTransition;
+    private final HCenterOutTransition openingTransition;
+    private final VCenterInTransition closingTransition;
     private final Music introMusic;
     private final Music gameOverMusic;
     private final Music mapMusic;
@@ -48,8 +49,8 @@ public class GameScreen extends StagedScreen {
         world = new World(main, levelFile);
         stats = new GameStats(main);
         countdown = new Countdown(main);
-        openingTransition = new RectangleTransition(400, RectangleTransition.Dir.OUT, false, 600);
-        closingTransition = new RectangleTransition(240, RectangleTransition.Dir.IN, true, 300);
+        openingTransition = new HCenterOutTransition(600);
+        closingTransition = new VCenterInTransition(300);
 
         addGameStage(STAGE_OPENING, new OpeningGameStage(this));
         addGameStage(STAGE_WAIT_AFTER_OPENING, new WaitGameStage(this, 1f, STAGE_ZOOM_IN));
@@ -119,11 +120,11 @@ public class GameScreen extends StagedScreen {
         return countdown;
     }
 
-    public RectangleTransition getOpeningTransition() {
+    public HCenterOutTransition getOpeningTransition() {
         return openingTransition;
     }
 
-    public RectangleTransition getClosingTransition() {
+    public VCenterInTransition getClosingTransition() {
         return closingTransition;
     }
 

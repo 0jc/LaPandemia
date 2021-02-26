@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.screens.RectangleTransition;
 import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.transitions.LeftInTransition;
+import com.colegiovivas.lapandemia.screens.transitions.LeftOutTransition;
 
 public class ResultsScreen extends StagedScreen {
     static final int STAGE_OPENING = 0;
@@ -25,8 +26,8 @@ public class ResultsScreen extends StagedScreen {
     private final int paperCount;
     private final float runningTime;
     private final ResultsView resultsView;
-    private final RectangleTransition openingTransition;
-    private final RectangleTransition closingTransition;
+    private final LeftOutTransition openingTransition;
+    private final LeftInTransition closingTransition;
     private final Music backgroundMusic;
 
     public ResultsScreen(LaPandemia main, int levelId, int paperCount, float runningTime) {
@@ -36,8 +37,8 @@ public class ResultsScreen extends StagedScreen {
         this.runningTime = runningTime;
         this.resultsView = new ResultsView(main, levelId);
 
-        openingTransition = new RectangleTransition(240, RectangleTransition.Dir.OUT, true, 300);
-        closingTransition = new RectangleTransition(400, RectangleTransition.Dir.IN, false, 600);
+        openingTransition = new LeftOutTransition(900);
+        closingTransition = new LeftInTransition(900);
 
         addGameStage(STAGE_OPENING, new OpeningGameStage(this));
         addGameStage(STAGE_TIME_VISIBLE, new TimeVisibleGameStage(this, true));
@@ -80,11 +81,11 @@ public class ResultsScreen extends StagedScreen {
         closingTransition.dispose();
     }
 
-    public RectangleTransition getOpeningTransition() {
+    public LeftOutTransition getOpeningTransition() {
         return openingTransition;
     }
 
-    public RectangleTransition getClosingTransition() {
+    public LeftInTransition getClosingTransition() {
         return closingTransition;
     }
 

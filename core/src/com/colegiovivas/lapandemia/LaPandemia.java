@@ -75,6 +75,7 @@ public class LaPandemia extends Game {
             setScreen(nextScreen);
             nextScreen = null;
         } else {
+            //setScreen(new ResultsScreen(this, 12345, 1234234234, 23908f));
             setScreen(new GameScreen(this, 1, Gdx.files.internal("levels/test.json")));
         }
     }
