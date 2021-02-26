@@ -12,12 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.levels.LevelInfo;
 
 public class ResultsView {
     private final LaPandemia main;
     private final Stage stage;
-    private final Label levelIdLabel;
-    private final Table levelIdRow;
+    private final Label levelNameLabel;
+    private final Table levelNameRow;
     private final Label timeLabel;
     private final Table timeRow;
     private final Label paperLabel;
@@ -26,7 +27,7 @@ public class ResultsView {
 
     private ContinueListener continueListener;
 
-    public ResultsView(LaPandemia main, int levelId) {
+    public ResultsView(LaPandemia main, LevelInfo level) {
         this.main = main;
 
         Camera camera = new OrthographicCamera();
@@ -44,11 +45,11 @@ public class ResultsView {
         Table table = new Table();
         table.setFillParent(true);
 
-        levelIdLabel = new Label(levelId + "", labelStyle);
-        levelIdRow = new Table();
-        levelIdRow.add(new Label("ID del nivel:", labelStyle)).padRight(30);
-        levelIdRow.add(levelIdLabel);
-        table.add(levelIdRow).row();
+        levelNameLabel = new Label(level.getName(), labelStyle);
+        levelNameRow = new Table();
+        levelNameRow.add(new Label("Nivel:", labelStyle)).padRight(30);
+        levelNameRow.add(levelNameLabel);
+        table.add(levelNameRow).row();
 
         timeLabel = new Label("", labelStyle);
         timeRow = new Table();

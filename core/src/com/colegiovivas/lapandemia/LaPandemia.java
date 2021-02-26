@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import com.colegiovivas.lapandemia.levels.LevelCatalog;
+import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.results.ResultsScreen;
 import com.colegiovivas.lapandemia.screens.game.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
@@ -20,10 +22,14 @@ public class LaPandemia extends Game {
     public Pool<Array<Actor>> actorArrayPool;
 
     private Screen nextScreen = null;
+    private LevelCatalog levelCatalog;
 
     @Override
     public void create() {
         Gdx.app.log("LaPandemia", "create()");
+
+        levelCatalog = new LevelCatalog();
+
         batch = new SpriteBatch();
         assetManager = new AssetManager();
 
@@ -76,14 +82,18 @@ public class LaPandemia extends Game {
             nextScreen = null;
         } else {
             //setScreen(new ResultsScreen(this, 12345, 1234234234, 23908f));
-            setScreen(new GameScreen(this, 1, Gdx.files.internal("levels/test.json")));
+            LevelInfo level = null;
+            for (LevelInfo currLevel : levelCatalog.levels()) {
+                level = currLevel;
+            }
+            setScreen(new GameScreen(this, level));
         }
     }
 
-    public void gameOver(GameScreen gameScreen, int levelId, int paperCount, float runningTime) {
+    public void gameOver(GameScreen gameScreen, LevelInfo level, int paperCount, float runningTime) {
         gameScreen.dispose();
 
-        setScreen(new ResultsScreen(this, levelId, paperCount, runningTime));
+        setScreen(new ResultsScreen(this, level, paperCount, runningTime));
     }
 
     public void resultsAccepted(ResultsScreen resultsScreen) {

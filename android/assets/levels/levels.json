@@ -1,7 +1,9 @@
-[
-    {
-        "name": "Test",
-        "id": 1,
-        "file": "test.json"
-    }
-]
+{
+    "levels": [
+        {
+            "name": "Test",
+            "id": 1,
+            "filename": "test.json"
+        }
+    ]
+}

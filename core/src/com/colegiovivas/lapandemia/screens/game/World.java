@@ -15,9 +15,10 @@ import com.colegiovivas.lapandemia.actors.world.*;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionDispatcher;
 import com.colegiovivas.lapandemia.actors.world.generator.ActorGenerator;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
-import com.colegiovivas.lapandemia.level.Level;
-import com.colegiovivas.lapandemia.level.LevelFanActor;
-import com.colegiovivas.lapandemia.level.LevelWallActor;
+import com.colegiovivas.lapandemia.levels.LevelInfo;
+import com.colegiovivas.lapandemia.levels.json.LevelJson;
+import com.colegiovivas.lapandemia.levels.json.FanActorJsonEntry;
+import com.colegiovivas.lapandemia.levels.json.WallActorJsonEntry;
 
 public class World implements ZoomGestureListener.ZoomListener {
     private final WorldStage stage;
@@ -31,7 +32,7 @@ public class World implements ZoomGestureListener.ZoomListener {
     private float runningTime;
     private boolean paused = false;
 
-    public World(LaPandemia main, FileHandle levelFile) {
+    public World(LaPandemia main, LevelInfo level) {
         OrthographicCamera worldCamera = new OrthographicCamera();
         Viewport worldViewport = new StretchViewport(800, 480, worldCamera);
         stage = new WorldStage(worldViewport);
@@ -41,7 +42,7 @@ public class World implements ZoomGestureListener.ZoomListener {
 
         collisionDispatcher = new CollisionDispatcher(main, rootGroup);
 
-        setUpMap(main, levelFile);
+        setUpMap(main, level);
 
         HealthActor healthActor = new HealthActor(main);
         healthActor.setWorld(this);
@@ -52,17 +53,17 @@ public class World implements ZoomGestureListener.ZoomListener {
         stage.addActor(healthGroup);
     }
 
-    private void setUpMap(LaPandemia main, FileHandle levelFile) {
+    private void setUpMap(LaPandemia main, LevelInfo level) {
         Json json = new Json();
         json.setTypeName(null);
         json.setUsePrototypes(false);
         json.setIgnoreUnknownFields(false);
         json.setOutputType(JsonWriter.OutputType.json);
 
-        Level level = json.fromJson(Level.class, levelFile);
+        LevelJson levelJson = json.fromJson(LevelJson.class, level.getLevelJsonFile());
 
-        width = level.size[0];
-        height = level.size[1];
+        width = levelJson.size[0];
+        height = levelJson.size[1];
 
         Group powerups = new Group();
         Group worldTop = new Group();
@@ -71,23 +72,23 @@ public class World implements ZoomGestureListener.ZoomListener {
 
         playerActor = new PlayerActor(main);
         playerActor.setWorld(this);
-        playerActor.setPosition(level.playerState.pos[0], level.playerState.pos[1]);
+        playerActor.setPosition(levelJson.playerState.pos[0], levelJson.playerState.pos[1]);
         playerActor.setCollisionDispatcher(collisionDispatcher);
-        playerActor.setDirection(level.playerState.dir[0], level.playerState.dir[1]);
+        playerActor.setDirection(levelJson.playerState.dir[0], levelJson.playerState.dir[1]);
         worldTop.addActor(playerActor);
 
-        for (LevelFanActor levelFanActor : level.fans) {
-            FanActor fanActor = new FanActor(main, levelFanActor.sprite, levelFanActor.frameDuration);
+        for (FanActorJsonEntry fanActorJsonEntry : levelJson.fans) {
+            FanActor fanActor = new FanActor(main, fanActorJsonEntry.sprite, fanActorJsonEntry.frameDuration);
             fanActor.setWorld(this);
-            fanActor.setPosition(levelFanActor.pos[0], levelFanActor.pos[1]);
+            fanActor.setPosition(fanActorJsonEntry.pos[0], fanActorJsonEntry.pos[1]);
             fanActor.setCollisionDispatcher(collisionDispatcher);
             worldTop.addActor(fanActor);
         }
-        for (LevelWallActor levelWallActor : level.walls) {
-            WallActor wallActor = new WallActor(main, levelWallActor.sprite);
+        for (WallActorJsonEntry wallActorJsonEntry : levelJson.walls) {
+            WallActor wallActor = new WallActor(main, wallActorJsonEntry.sprite);
             wallActor.setWorld(this);
-            wallActor.setPosition(levelWallActor.pos[0], levelWallActor.pos[1]);
-            wallActor.setSize(levelWallActor.size[0], levelWallActor.size[1]);
+            wallActor.setPosition(wallActorJsonEntry.pos[0], wallActorJsonEntry.pos[1]);
+            wallActor.setSize(wallActorJsonEntry.size[0], wallActorJsonEntry.size[1]);
             wallActor.setCollisionDispatcher(collisionDispatcher);
             worldTop.addActor(wallActor);
         }

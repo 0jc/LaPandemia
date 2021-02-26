@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.StagedScreen;
 import com.colegiovivas.lapandemia.screens.transitions.LeftInTransition;
 import com.colegiovivas.lapandemia.screens.transitions.LeftOutTransition;
@@ -22,7 +23,7 @@ public class ResultsScreen extends StagedScreen {
     static final int STAGE_CLOSING = 10;
 
     private final LaPandemia main;
-    private final int levelId;
+    private final LevelInfo level;
     private final int paperCount;
     private final float runningTime;
     private final ResultsView resultsView;
@@ -30,12 +31,12 @@ public class ResultsScreen extends StagedScreen {
     private final LeftInTransition closingTransition;
     private final Music backgroundMusic;
 
-    public ResultsScreen(LaPandemia main, int levelId, int paperCount, float runningTime) {
+    public ResultsScreen(LaPandemia main, LevelInfo level, int paperCount, float runningTime) {
         this.main = main;
-        this.levelId = levelId;
+        this.level = level;
         this.paperCount = paperCount;
         this.runningTime = runningTime;
-        this.resultsView = new ResultsView(main, levelId);
+        this.resultsView = new ResultsView(main, level);
 
         openingTransition = new LeftOutTransition(900);
         closingTransition = new LeftInTransition(900);

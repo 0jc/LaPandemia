@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.ActorId;
 import com.colegiovivas.lapandemia.actors.world.PlayerActor;
+import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.StagedScreen;
 import com.colegiovivas.lapandemia.screens.transitions.HCenterOutTransition;
 import com.colegiovivas.lapandemia.screens.transitions.VCenterInTransition;
@@ -27,7 +28,7 @@ public class GameScreen extends StagedScreen {
     static final int STAGE_GAME_OVER_MUSIC = 8;
     static final int STAGE_CLOSING = 9;
 
-    private final int levelId;
+    private final LevelInfo level;
     private final LaPandemia main;
     private final World world;
     private final GameStats stats;
@@ -42,11 +43,11 @@ public class GameScreen extends StagedScreen {
 
     private Music  currentGameMusic;
 
-    public GameScreen(LaPandemia main, int levelId, FileHandle levelFile) {
+    public GameScreen(LaPandemia main, LevelInfo level) {
         this.main = main;
-        this.levelId = levelId;
+        this.level = level;
 
-        world = new World(main, levelFile);
+        world = new World(main, level);
         stats = new GameStats(main);
         countdown = new Countdown(main);
         openingTransition = new HCenterOutTransition(600);
@@ -169,7 +170,7 @@ public class GameScreen extends StagedScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        main.gameOver(this, levelId, world.getPaperCount(), world.getRunningTime());
+        main.gameOver(this, level, world.getPaperCount(), world.getRunningTime());
     }
 
     @Override
