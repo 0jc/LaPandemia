@@ -2,6 +2,7 @@ package com.colegiovivas.lapandemia.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.loaders.MusicLoader;
 import com.badlogic.gdx.audio.Music;
@@ -24,6 +25,7 @@ public class LoadingScreen implements Screen {
     private final OrthographicCamera camera;
     private final GlyphLayout loadingTitleLayout;
     private final GlyphLayout loadedPercentLayout;
+    private final InputProcessor noInput;
 
     // Espacio entre el texto "Cargando..." y el porcentaje de carga.
     private static final float LINE_SPACING = 40;
@@ -35,11 +37,12 @@ public class LoadingScreen implements Screen {
         viewport = new ExtendViewport(800, 480, camera);
         loadingTitleLayout = new GlyphLayout();
         loadedPercentLayout = new GlyphLayout();
+        noInput = new InputAdapter();
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(new InputAdapter());
+        Gdx.input.setInputProcessor(noInput);
 
         // Lo básico para poder mostrar esta misma pantalla.
         parent.assetManager.load("fonts/nice32.fnt", BitmapFont.class);
