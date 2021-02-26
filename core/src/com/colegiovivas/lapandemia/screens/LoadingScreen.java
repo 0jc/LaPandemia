@@ -10,16 +10,14 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 
 public class LoadingScreen implements Screen {
+    private final SpriteBatch batch;
     private final LaPandemia parent;
     private final Viewport viewport;
     private final OrthographicCamera camera;
@@ -38,6 +36,7 @@ public class LoadingScreen implements Screen {
         loadingTitleLayout = new GlyphLayout();
         loadedPercentLayout = new GlyphLayout();
         noInput = new InputAdapter();
+        batch = new SpriteBatch();
     }
 
     @Override
@@ -85,20 +84,20 @@ public class LoadingScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
-        parent.batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(camera.combined);
 
-        parent.batch.begin();
+        batch.begin();
         nice32.draw(
-                parent.batch,
+                batch,
                 loadingTitleLayout,
                 -loadingTitleLayout.width / 2,
                 -loadingTitleLayout.height + (LINE_SPACING + loadedPercentLayout.height) / 2);
         nice32.draw(
-                parent.batch,
+                batch,
                 loadedPercentLayout,
                 -loadedPercentLayout.width / 2,
                 -(loadingTitleLayout.height + LINE_SPACING + loadedPercentLayout.height) / 2);
-        parent.batch.end();
+        batch.end();
     }
 
     @Override
@@ -120,5 +119,6 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void dispose() {
+        batch.dispose();
     }
 }

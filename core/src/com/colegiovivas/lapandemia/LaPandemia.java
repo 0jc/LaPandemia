@@ -16,7 +16,6 @@ import com.colegiovivas.lapandemia.screens.game.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
 
 public class LaPandemia extends Game {
-    public SpriteBatch batch;
     public AssetManager assetManager;
     public Pool<Rectangle> rectPool;
     public Pool<Array<Actor>> actorArrayPool;
@@ -30,7 +29,6 @@ public class LaPandemia extends Game {
 
         levelCatalog = new LevelCatalog();
 
-        batch = new SpriteBatch();
         assetManager = new AssetManager();
 
         abstract class PoolableRectangle extends Rectangle implements Pool.Poolable {}
@@ -107,7 +105,6 @@ public class LaPandemia extends Game {
     public void dispose() {
         super.dispose();
         if (getScreen() != null) getScreen().dispose();
-        batch.dispose();
         assetManager.dispose();
         rectPool.clear();
         actorArrayPool.clear();
