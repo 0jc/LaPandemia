@@ -303,3 +303,5 @@ Se remplaza el sistema de "subpantallas" por un mecanismo mejor de gestión de l
 diferentes vistas y fases del juego.
 
 Se añaden más sonidos y una indicación cuando el juego está pausado.
+
+Se añade el uso del vibrador.

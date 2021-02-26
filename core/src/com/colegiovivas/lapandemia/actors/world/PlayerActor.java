@@ -262,6 +262,7 @@ public class PlayerActor extends CollisionableActor {
     private void infected() {
         if (invincibilityTimeLeft == 0) {
             infectionSound.play();
+            Gdx.input.vibrate(100);
             maskCount--;
             powerupListener.updateCount(ActorId.MASK, maskCount);
         } else {
