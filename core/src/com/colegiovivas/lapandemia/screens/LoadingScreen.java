@@ -53,8 +53,11 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("audio/infected.wav", Sound.class);
         parent.assetManager.load("audio/mask-collected.wav", Sound.class);
         parent.assetManager.load("audio/toilet-paper-collected.wav", Sound.class);
-        parent.assetManager.load("audio/zoom-in.wav", Music.class);
+        parent.assetManager.load("audio/pause.wav", Sound.class);
+        parent.assetManager.load("audio/virus-killed.wav", Sound.class);
+        parent.assetManager.load("audio/ticking.wav", Music.class);
         parent.assetManager.load("audio/direction-turn.wav", Music.class);
+        parent.assetManager.load("audio/game-opening.wav", Music.class);
         parent.assetManager.load("audio/map.wav", Music.class);
         parent.assetManager.load("audio/game-over.wav", Music.class);
         parent.assetManager.load("audio/results.wav", Music.class);

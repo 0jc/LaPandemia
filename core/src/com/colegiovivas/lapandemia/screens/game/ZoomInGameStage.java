@@ -18,8 +18,6 @@ public class ZoomInGameStage implements StagedScreen.GameStage {
 
     @Override
     public void enter() {
-        gameScreen.getZoomInMusic().setLooping(false);
-        gameScreen.getZoomInMusic().play();
     }
 
     @Override
@@ -41,8 +39,8 @@ public class ZoomInGameStage implements StagedScreen.GameStage {
 
         if (camera.zoom > 1) {
             camera.zoom = Math.max(camera.zoom - delta*speed, 1);
-        } else if (!gameScreen.getZoomInMusic().isPlaying()) {
-            gameScreen.setGameStage(GameScreen.STAGE_WAIT_AFTER_ZOOM_IN);
+        } else if (!gameScreen.getIntroMusic().isPlaying()) {
+            gameScreen.setGameStage(GameScreen.STAGE_WAIT_INTRO_MUSIC);
         }
     }
 

@@ -20,11 +20,12 @@ public class PauseGameStage implements StagedScreen.GameStage {
         resume = false;
         gameScreen.getWorld().setPaused(true);
         gameScreen.getStats().setPaused(true);
+        gameScreen.getPauseSound().play();
     }
 
     @Override
     public void leave() {
-
+        gameScreen.getPauseSound().stop();
     }
 
     @Override

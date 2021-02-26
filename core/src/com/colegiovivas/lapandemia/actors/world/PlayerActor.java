@@ -22,6 +22,7 @@ public class PlayerActor extends CollisionableActor {
     private final Sound infectionSound;
     private final Sound maskSound;
     private final Sound paperSound;
+    private final Sound virusKilledSound;
     private PowerupListener powerupListener;
     private InvincibilityListener invincibilityListener;
 
@@ -88,6 +89,7 @@ public class PlayerActor extends CollisionableActor {
         infectionSound = game.assetManager.get("audio/infected.wav");
         maskSound = game.assetManager.get("audio/mask-collected.wav");
         paperSound = game.assetManager.get("audio/toilet-paper-collected.wav");
+        virusKilledSound = game.assetManager.get("audio/virus-killed.wav");
     }
 
     public void setMaskCount(int maskCount) {
@@ -178,6 +180,9 @@ public class PlayerActor extends CollisionableActor {
 
         if (invincibilityTimeLeft > 0) {
             invincibilityTimeLeft = Math.max(0, invincibilityTimeLeft - delta);
+            if (invincibilityTimeLeft == 0) {
+                if (invincibilityListener != null) invincibilityListener.stateChanged(false);
+            }
         }
 
         int xDisplacement = (int)Math.floor(speed*delta*xDir);
@@ -232,7 +237,12 @@ public class PlayerActor extends CollisionableActor {
 
             case NEEDLE:
                 invincibilityTimeLeft += INVINCIBILITY_TIMESPAN;
-                invincibilityListener.updateTimer(invincibilityTimeLeft);
+                if (invincibilityListener != null) {
+                    invincibilityListener.updateTimer(invincibilityTimeLeft);
+                    if (invincibilityTimeLeft == INVINCIBILITY_TIMESPAN) {
+                        invincibilityListener.stateChanged(true);
+                    }
+                }
                 break;
         }
     }
@@ -254,6 +264,8 @@ public class PlayerActor extends CollisionableActor {
             infectionSound.play();
             maskCount--;
             powerupListener.updateCount(ActorId.MASK, maskCount);
+        } else {
+            virusKilledSound.play();
         }
     }
 
@@ -263,5 +275,6 @@ public class PlayerActor extends CollisionableActor {
 
     public interface InvincibilityListener {
         void updateTimer(float total);
+        void stateChanged(boolean invincible);
     }
 }

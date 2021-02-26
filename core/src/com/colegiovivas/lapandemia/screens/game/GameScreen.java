@@ -2,6 +2,7 @@ package com.colegiovivas.lapandemia.screens.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -17,13 +18,13 @@ public class GameScreen extends StagedScreen {
     static final int STAGE_OPENING = 0;
     static final int STAGE_WAIT_AFTER_OPENING = 1;
     static final int STAGE_ZOOM_IN = 2;
-    static final int STAGE_WAIT_AFTER_ZOOM_IN = 3;
-    static final int STAGE_COUNTDOWN = 4;
-    static final int STAGE_PLAYING = 5;
-    static final int STAGE_PAUSE = 6;
-    static final int STAGE_GAME_OVER = 7;
-    static final int STAGE_GAME_OVER_MUSIC = 7;
-    static final int STAGE_CLOSING = 8;
+    static final int STAGE_WAIT_INTRO_MUSIC = 3;
+    static final int STAGE_WAIT_AFTER_ZOOM_IN = 4;
+    static final int STAGE_COUNTDOWN = 5;
+    static final int STAGE_PLAYING = 6;
+    static final int STAGE_PAUSE = 7;
+    static final int STAGE_GAME_OVER_MUSIC = 8;
+    static final int STAGE_CLOSING = 9;
 
     private final int levelId;
     private final LaPandemia main;
@@ -32,9 +33,13 @@ public class GameScreen extends StagedScreen {
     private final Countdown countdown;
     private final RectangleTransition openingTransition;
     private final RectangleTransition closingTransition;
-    private final Music zoomInMusic;
+    private final Music introMusic;
     private final Music gameOverMusic;
     private final Music mapMusic;
+    private final Music invincibleMusic;
+    private final Sound pauseSound;
+
+    private Music  currentGameMusic;
 
     public GameScreen(LaPandemia main, int levelId, FileHandle levelFile) {
         this.main = main;
@@ -49,6 +54,7 @@ public class GameScreen extends StagedScreen {
         addGameStage(STAGE_OPENING, new OpeningGameStage(this));
         addGameStage(STAGE_WAIT_AFTER_OPENING, new WaitGameStage(this, 1f, STAGE_ZOOM_IN));
         addGameStage(STAGE_ZOOM_IN, new ZoomInGameStage(this, 2.5f));
+        addGameStage(STAGE_WAIT_INTRO_MUSIC, new WaitIntroMusicGameStage(this));
         addGameStage(STAGE_WAIT_AFTER_ZOOM_IN, new WaitGameStage(this, 1f, STAGE_COUNTDOWN));
         addGameStage(STAGE_COUNTDOWN, new CountdownGameStage(main, this));
         addGameStage(STAGE_PLAYING, new PlayingGameStage(main, this));
@@ -75,11 +81,28 @@ public class GameScreen extends StagedScreen {
             public void updateTimer(float total) {
                 stats.setInvincibilityTime(total);
             }
+
+            @Override
+            public void stateChanged(boolean invincible) {
+                if (invincible) {
+                    currentGameMusic = invincibleMusic;
+                    mapMusic.stop();
+                    invincibleMusic.play();
+                } else {
+                    currentGameMusic = mapMusic;
+                    invincibleMusic.stop();
+                    mapMusic.play();
+                }
+            }
         });
 
-        zoomInMusic = main.assetManager.get("audio/zoom-in.wav");
+        introMusic = main.assetManager.get("audio/game-opening.wav");
         gameOverMusic = main.assetManager.get("audio/game-over.wav");
         mapMusic = main.assetManager.get("audio/map.wav");
+        invincibleMusic = main.assetManager.get("audio/ticking.wav");
+        pauseSound = main.assetManager.get("audio/pause.wav");
+
+        currentGameMusic = mapMusic;
 
         setGameStage(STAGE_OPENING);
     }
@@ -104,8 +127,8 @@ public class GameScreen extends StagedScreen {
         return closingTransition;
     }
 
-    public Music getZoomInMusic() {
-        return zoomInMusic;
+    public Music getIntroMusic() {
+        return introMusic;
     }
 
     public Music getGameOverMusic() {
@@ -114,6 +137,14 @@ public class GameScreen extends StagedScreen {
 
     public Music getMapMusic() {
         return mapMusic;
+    }
+
+    public Sound getPauseSound() {
+        return pauseSound;
+    }
+
+    public Music getCurrentGameMusic() {
+        return currentGameMusic;
     }
 
     public void draw() {

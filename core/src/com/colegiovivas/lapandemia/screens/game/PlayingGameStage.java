@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.input.GestureDetector;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -31,15 +30,15 @@ public class PlayingGameStage implements StagedScreen.GameStage {
 
     @Override
     public void enter() {
-        gameScreen.getMapMusic().setLooping(true);
-        gameScreen.getMapMusic().play();
+        gameScreen.getCurrentGameMusic().setLooping(true);
+        gameScreen.getCurrentGameMusic().play();
         gameScreen.getWorld().setPaused(false);
         gameScreen.getStats().setPaused(false);
     }
 
     @Override
     public void leave() {
-        gameScreen.getMapMusic().pause();
+        gameScreen.getCurrentGameMusic().pause();
         Gdx.input.setInputProcessor(noInput);
     }
 
@@ -61,7 +60,7 @@ public class PlayingGameStage implements StagedScreen.GameStage {
         gameScreen.drawCountdown();
 
         if (gameScreen.getWorld().gameIsOver()) {
-            gameScreen.setGameStage(GameScreen.STAGE_GAME_OVER);
+            gameScreen.setGameStage(GameScreen.STAGE_GAME_OVER_MUSIC);
         } else if (Gdx.input.getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
             gameScreen.setGameStage(GameScreen.STAGE_PAUSE);
         }
