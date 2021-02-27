@@ -98,8 +98,8 @@ public class LaPandemia extends Game {
             for (LevelInfo currLevel : levelCatalog.levels()) {
                 level = currLevel;
             }
-            //setScreen(new GameScreen(this, level));
-            setScreen(new ResultsScreen(this, level, 23908, 123456f));
+            setScreen(new GameScreen(this, level));
+            //setScreen(new ResultsScreen(this, level, 23908, 123456f));
         }
     }
 

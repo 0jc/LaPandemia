@@ -12,15 +12,13 @@ import com.colegiovivas.lapandemia.screens.transitions.LeftOutTransition;
 public class ResultsScreen extends StagedScreen {
     static final int STAGE_OPENING = 0;
     static final int STAGE_TIME_VISIBLE = 1;
-    static final int STAGE_TIME_PRE_WAIT = 2;
-    static final int STAGE_INCREASING_TIME = 3;
-    static final int STAGE_TIME_POST_WAIT = 4;
-    static final int STAGE_PAPER_COUNT_VISIBLE = 5;
-    static final int STAGE_PAPER_COUNT_PRE_WAIT = 6;
-    static final int STAGE_INCREASING_PAPER_COUNT = 7;
-    static final int STAGE_PAPER_COUNT_POST_WAIT = 8;
-    static final int STAGE_SHOWING_CONTINUE_BUTTON = 9;
-    static final int STAGE_CLOSING = 10;
+    static final int STAGE_INCREASING_TIME = 2;
+    static final int STAGE_TIME_FINISHED_MUSIC = 3;
+    static final int STAGE_PAPER_COUNT_VISIBLE = 4;
+    static final int STAGE_INCREASING_PAPER_COUNT = 5;
+    static final int STAGE_PAPER_COUNT_FINISHED_MUSIC = 6;
+    static final int STAGE_SHOWING_CONTINUE_BUTTON = 7;
+    static final int STAGE_CLOSING = 8;
 
     private final LaPandemia main;
     private final LevelInfo level;
@@ -42,15 +40,16 @@ public class ResultsScreen extends StagedScreen {
         openingTransition = new LeftOutTransition(900);
         closingTransition = new LeftInTransition(900);
 
+        Music statReachedItsValue = main.assetManager.get("audio/stat-reached-its-value.wav");
         addGameStage(STAGE_OPENING, new OpeningGameStage(this));
-        addGameStage(STAGE_TIME_VISIBLE, new TimeVisibleGameStage(this, true));
-        addGameStage(STAGE_TIME_PRE_WAIT, new WaitGameStage(this, 0.5f, STAGE_INCREASING_TIME));
+        addGameStage(STAGE_TIME_VISIBLE, new TimeVisibleGameStage(main, this, true));
         addGameStage(STAGE_INCREASING_TIME, new IncreasingTimeGameStage(this));
-        addGameStage(STAGE_TIME_POST_WAIT, new WaitGameStage(this, 0.5f, STAGE_PAPER_COUNT_VISIBLE));
-        addGameStage(STAGE_PAPER_COUNT_VISIBLE, new PaperCountVisibleGameStage(this, true));
-        addGameStage(STAGE_PAPER_COUNT_PRE_WAIT, new WaitGameStage(this, 0.5f, STAGE_INCREASING_PAPER_COUNT));
+        addGameStage(STAGE_TIME_FINISHED_MUSIC, new WaitMusicGameStage(statReachedItsValue,
+                this, STAGE_PAPER_COUNT_VISIBLE));
+        addGameStage(STAGE_PAPER_COUNT_VISIBLE, new PaperCountVisibleGameStage(main, this, true));
         addGameStage(STAGE_INCREASING_PAPER_COUNT, new IncreasingPaperCountGameStage(this));
-        addGameStage(STAGE_PAPER_COUNT_POST_WAIT, new WaitGameStage(this, 0.5f, STAGE_SHOWING_CONTINUE_BUTTON));
+        addGameStage(STAGE_PAPER_COUNT_FINISHED_MUSIC, new WaitMusicGameStage(statReachedItsValue,
+                this, STAGE_SHOWING_CONTINUE_BUTTON));
         addGameStage(STAGE_SHOWING_CONTINUE_BUTTON, new ShowingContinueButtonGameStage(this));
         addGameStage(STAGE_CLOSING, new ClosingGameStage(this));
 

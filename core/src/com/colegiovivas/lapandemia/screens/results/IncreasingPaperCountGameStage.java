@@ -44,7 +44,7 @@ public class IncreasingPaperCountGameStage implements StagedScreen.GameStage {
                 resultsScreen.getResultsView().setTitleColor(Color.GOLD);
             }
         } else {
-            resultsScreen.setGameStage(ResultsScreen.STAGE_PAPER_COUNT_POST_WAIT);
+            resultsScreen.setGameStage(ResultsScreen.STAGE_PAPER_COUNT_FINISHED_MUSIC);
         }
     }
 

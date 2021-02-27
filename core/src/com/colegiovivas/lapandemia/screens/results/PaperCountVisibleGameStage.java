@@ -1,21 +1,28 @@
 package com.colegiovivas.lapandemia.screens.results;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.StagedScreen;
 
 public class PaperCountVisibleGameStage implements StagedScreen.GameStage {
     private final ResultsScreen resultsScreen;
+    private final Music statShownMusic;
+
     private boolean visible;
 
-    public PaperCountVisibleGameStage(ResultsScreen resultsScreen, boolean visible) {
+    public PaperCountVisibleGameStage(LaPandemia main, ResultsScreen resultsScreen, boolean visible) {
         this.resultsScreen = resultsScreen;
         this.visible = visible;
+        statShownMusic = main.assetManager.get("audio/stat-shown.wav");
     }
 
     @Override
     public void enter() {
-
+        statShownMusic.setLooping(false);
+        statShownMusic.play();
+        resultsScreen.getResultsView().setPaperCountVisible(visible);
     }
 
     @Override
@@ -33,9 +40,10 @@ public class PaperCountVisibleGameStage implements StagedScreen.GameStage {
         Gdx.gl.glClearColor(0xFF, 0xFF, 0xFF, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        resultsScreen.getResultsView().setPaperCountVisible(visible);
         resultsScreen.draw();
-        resultsScreen.setGameStage(ResultsScreen.STAGE_PAPER_COUNT_PRE_WAIT);
+        if (!statShownMusic.isPlaying()) {
+            resultsScreen.setGameStage(ResultsScreen.STAGE_INCREASING_PAPER_COUNT);
+        }
     }
 
     @Override
