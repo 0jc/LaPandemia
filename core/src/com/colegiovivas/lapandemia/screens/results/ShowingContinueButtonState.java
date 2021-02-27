@@ -4,20 +4,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
-import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-public class ShowingContinueButtonGameStage implements StagedScreen.GameStage {
+/**
+ * Estado en el que se muestra el botón de aceptar y, en caso de haber
+ * logrado batir el récord previo, se reproduce la música congratulatoria
+ * y se muestra en el formulario el campo donde se pide al usuario que
+ * introduzca su nombre.
+ */
+public class ShowingContinueButtonState implements MultistateScreen.State {
     private final ResultsScreen resultsScreen;
     private final ResultsView.ContinueListener continueListener;
     private final InputProcessor noInput;
 
-    public ShowingContinueButtonGameStage(final ResultsScreen resultsScreen) {
+    public ShowingContinueButtonState(final ResultsScreen resultsScreen) {
         this.resultsScreen = resultsScreen;
         noInput = new InputAdapter();
         continueListener = new ResultsView.ContinueListener() {
             @Override
             public void continueClicked() {
-                resultsScreen.setGameStage(ResultsScreen.STAGE_CLOSING);
+                resultsScreen.setState(ResultsScreen.STAGE_CLOSING);
             }
         };
     }

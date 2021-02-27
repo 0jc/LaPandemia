@@ -2,24 +2,22 @@ package com.colegiovivas.lapandemia.screens.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-public class WaitGameStage implements StagedScreen.GameStage {
+/**
+ * Estado en el que se está llevando a cabo la cuenta atrás.
+ */
+public class CountdownState implements MultistateScreen.State {
     private final GameScreen gameScreen;
-    private final float totalTime;
-    private final int nextGameStage;
 
-    private float waitedTime;
-
-    public WaitGameStage(GameScreen gameScreen, float totalTime, int nextGameStage) {
+    public CountdownState(LaPandemia main, GameScreen gameScreen) {
         this.gameScreen = gameScreen;
-        this.totalTime = totalTime;
-        this.nextGameStage = nextGameStage;
     }
 
     @Override
     public void enter() {
-        waitedTime = 0;
+        gameScreen.getCountdown().start();
     }
 
     @Override
@@ -36,11 +34,13 @@ public class WaitGameStage implements StagedScreen.GameStage {
         Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        gameScreen.draw();
+        gameScreen.getCountdown().render(delta);
 
-        waitedTime += delta;
-        if (waitedTime >= totalTime) {
-            gameScreen.setGameStage(nextGameStage);
+        gameScreen.draw();
+        gameScreen.drawCountdown();
+
+        if (!gameScreen.getCountdown().isCountingDown()) {
+            gameScreen.setState(GameScreen.STAGE_PLAYING);
         }
     }
 
@@ -66,6 +66,5 @@ public class WaitGameStage implements StagedScreen.GameStage {
 
     @Override
     public void dispose() {
-
     }
 }

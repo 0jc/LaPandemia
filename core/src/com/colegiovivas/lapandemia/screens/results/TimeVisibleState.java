@@ -4,29 +4,36 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-public class IncreasingTimeGameStage implements StagedScreen.GameStage {
+/**
+ * Estado en el que se hace visible la estadística de la duración de la partida
+ * (mostrándose todavía como 00:00) y se reproduce el efecto sonoro asociado.
+ */
+public class TimeVisibleState implements MultistateScreen.State {
     private final ResultsScreen resultsScreen;
-    private final CounterAnimator counterAnimator;
+    private final Music statShownMusic;
 
-    public IncreasingTimeGameStage(ResultsScreen resultsScreen) {
+    public TimeVisibleState(LaPandemia main, ResultsScreen resultsScreen) {
         this.resultsScreen = resultsScreen;
-        this.counterAnimator = new CounterAnimator();
+        statShownMusic = main.assetManager.get("audio/stat-shown.wav");
     }
 
     @Override
     public void enter() {
-        this.counterAnimator.init(0.3f, 0, resultsScreen.getRunningTime());
+        statShownMusic.setLooping(false);
+        statShownMusic.play();
         resultsScreen.getResultsView().setTimeVisible(true);
     }
 
     @Override
     public void leave() {
+
     }
 
     @Override
     public void show() {
+
     }
 
     @Override
@@ -35,11 +42,8 @@ public class IncreasingTimeGameStage implements StagedScreen.GameStage {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         resultsScreen.draw();
-
-        if (counterAnimator.isIncreasing()) {
-            resultsScreen.getResultsView().setTime(counterAnimator.update(delta));
-        } else {
-            resultsScreen.setGameStage(ResultsScreen.STAGE_TIME_FINISHED_MUSIC);
+        if (!statShownMusic.isPlaying()) {
+            resultsScreen.setState(ResultsScreen.STAGE_INCREASING_TIME);
         }
     }
 
@@ -67,5 +71,4 @@ public class IncreasingTimeGameStage implements StagedScreen.GameStage {
     public void dispose() {
 
     }
-
 }

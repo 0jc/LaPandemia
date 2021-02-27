@@ -2,21 +2,22 @@ package com.colegiovivas.lapandemia.screens.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-public class GameOverMusicGameStage implements StagedScreen.GameStage {
+/**
+ * Estado en el que se espera a que la música introductoria se termine
+ * de reproducir.
+ */
+public class WaitIntroMusicState implements MultistateScreen.State {
     private final GameScreen gameScreen;
 
-    public GameOverMusicGameStage(LaPandemia main, GameScreen gameScreen) {
+    public WaitIntroMusicState(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
 
     @Override
     public void enter() {
-        gameScreen.getMapMusic().stop();
-        gameScreen.getGameOverMusic().setLooping(false);
-        gameScreen.getGameOverMusic().play();
+
     }
 
     @Override
@@ -36,8 +37,8 @@ public class GameOverMusicGameStage implements StagedScreen.GameStage {
 
         gameScreen.draw();
 
-        if (!gameScreen.getGameOverMusic().isPlaying()) {
-            gameScreen.setGameStage(GameScreen.STAGE_CLOSING);
+        if (!gameScreen.getIntroMusic().isPlaying()) {
+            gameScreen.setState(GameScreen.STAGE_WAIT_AFTER_ZOOM_IN);
         }
     }
 

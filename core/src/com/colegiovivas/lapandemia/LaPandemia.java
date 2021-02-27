@@ -16,13 +16,49 @@ import com.colegiovivas.lapandemia.screens.results.ResultsScreen;
 import com.colegiovivas.lapandemia.screens.game.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
 
+/**
+ * La clase principal del juego. Coordina la gestión de las pantallas y ofrece
+ * acceso a varios elementos de uso global en la aplicación, como por ejemplo
+ * los fondos de diversas clases, que permiten reciclar instancias liberadas
+ * o preparadas de objetos de una clase determinada en lugar de tener que
+ * instanciar otros nuevos para reducir la actividad del recolector de basura
+ * y mejorar así el rendimiento del juego.
+ */
 public class LaPandemia extends Game {
+    /**
+     * El gestor de assets (recursos como imágenes y música). Permite cargar una
+     * única vez dichos recursos, acceder a ellos fácilmente cuando es necesario
+     * y luego finalmente liberarlos.
+     */
     public AssetManager assetManager;
+
+    /**
+     * Fondo global para instancias de Rectangle.
+     */
     public Pool<Rectangle> rectPool;
+
+    /**
+     * Fondo global para instancias de Array&lt;Actor&gt;.
+     */
     public Pool<Array<Actor>> actorArrayPool;
+
+    /**
+     * Fondo global para instancias de Color.
+     */
     public Pool<Color> colorPool;
 
+    /**
+     * La pantalla a la que saltar después de cargar los recursos. Si es null, se
+     * entiende que la aplicación se acaba de iniciar y se carga el menú principal.
+     * Al producirse ciertos eventos como la pausa de la aplicación, se establece
+     * el valor de esta propiedad al de la pantalla actual para poder restaurarla
+     * después tras la carga de recursos.
+     */
     private Screen nextScreen = null;
+
+    /**
+     * Interfaz hacia el catálogo de niveles disponibles.
+     */
     private LevelCatalog levelCatalog;
 
     @Override
@@ -87,6 +123,10 @@ public class LaPandemia extends Game {
         setScreen(new LoadingScreen(this));
     }
 
+    /**
+     * Evento que un LoadingScreen lanza cuando ha cargado los recursos del juego.
+     * @param loadingScreen La pantalla que ha lanzado el evento.
+     */
     public void resourcesLoaded(LoadingScreen loadingScreen) {
         loadingScreen.dispose();
 
@@ -99,19 +139,30 @@ public class LaPandemia extends Game {
                 level = currLevel;
             }
             setScreen(new GameScreen(this, level));
-            //setScreen(new ResultsScreen(this, level, 23908, 123456f));
         }
     }
 
+    /**
+     * Evento que un GameScreen lanza cuando ha finalizado su actividad.
+     * @param gameScreen La pantalla que ha lanzado el evento.
+     * @param level Nivel en el que se ha jugado la partida.
+     * @param paperCount Número de rollos de papel recolectados.
+     * @param runningTime Tiempo de juego desde el final de la cuenta atrás hasta haber perdido.
+     */
     public void gameOver(GameScreen gameScreen, LevelInfo level, int paperCount, float runningTime) {
         gameScreen.dispose();
 
         setScreen(new ResultsScreen(this, level, paperCount, runningTime));
     }
 
+    /**
+     * Evento que un ResultsScreen lanza cuando ha finalizado su actividad.
+     * @param resultsScreen La pantalla que ha lanzado el evento.
+     */
     public void resultsAccepted(ResultsScreen resultsScreen) {
         resultsScreen.dispose();
 
+        // Cuando el proyecto esté terminado, se volverá al menú.
         setScreen(null);
         Gdx.app.exit();
     }

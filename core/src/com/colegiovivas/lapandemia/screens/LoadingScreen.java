@@ -17,7 +17,16 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 
+/**
+ * Pantalla de carga de los assets del juego. Cuando se lanza, se cargan todos los
+ * assets del assetManager, mostrando mientras en pantalla el porcentaje de progreso.
+ * Una vez se ha completado la carga, se notifica a la clase principal para que
+ * determine a qué pantalla cambiar.
+ */
 public class LoadingScreen implements Screen {
+    /**
+     * Batch de Libgdx que se utiliza para dibujar en pantalla el porcentaje de carga.
+     */
     private final SpriteBatch batch;
     private final LaPandemia parent;
     private final Viewport viewport;
@@ -26,7 +35,9 @@ public class LoadingScreen implements Screen {
     private final GlyphLayout loadedPercentLayout;
     private final InputProcessor noInput;
 
-    // Espacio entre el texto "Cargando..." y el porcentaje de carga.
+    /**
+     * Espacio entre el texto "Cargando..." y el porcentaje de carga.
+     */
     private static final float LINE_SPACING = 40;
 
     public LoadingScreen(final LaPandemia parent) {
@@ -44,10 +55,12 @@ public class LoadingScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(noInput);
 
-        // Lo básico para poder mostrar esta misma pantalla.
+        // Lo imprescindible para poder mostrar esta misma pantalla.
+        // finishLoading() se asegura de cargar todos estos recursos antes de devolver.
         parent.assetManager.load("fonts/nice32.fnt", BitmapFont.class);
         parent.assetManager.finishLoading();
 
+        // Todos los demás recursos se irán cargando después gradualmente.
         parent.assetManager.load("images.pack", TextureAtlas.class);
         parent.assetManager.load("audio/countdown-beep-number.wav", Sound.class);
         parent.assetManager.load("audio/countdown-beep-go.wav", Sound.class);
@@ -76,6 +89,7 @@ public class LoadingScreen implements Screen {
     @Override
     public void render(float delta) {
         if (parent.assetManager.update()) {
+            // Todos los recursos han sido cargados ya.
             parent.resourcesLoaded(this);
             return;
         }
@@ -92,6 +106,8 @@ public class LoadingScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
+        // Situamos ambas líneas de texto de forma que el rectángulo formado por estas dos
+        // y su espacio intermedio se muestre centrado en la pantalla.
         nice32.draw(
                 batch,
                 loadingTitleLayout,

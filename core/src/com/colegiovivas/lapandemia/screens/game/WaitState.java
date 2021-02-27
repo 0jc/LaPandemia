@@ -2,18 +2,39 @@ package com.colegiovivas.lapandemia.screens.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-public class WaitIntroMusicGameStage implements StagedScreen.GameStage {
+/**
+ * Estado en el que la pantalla se encuentra en espera, por motivos de
+ * presentación.
+ */
+public class WaitState implements MultistateScreen.State {
     private final GameScreen gameScreen;
 
-    public WaitIntroMusicGameStage(GameScreen gameScreen) {
+    /**
+     * Tiempo total de espera deseado.
+     */
+    private final float totalTime;
+
+    /**
+     * Estado al que se salta una vez se termina el tiempo de espera.
+     */
+    private final int nextState;
+
+    /**
+     * Tiempo que se lleva esperado.
+     */
+    private float waitedTime;
+
+    public WaitState(GameScreen gameScreen, float totalTime, int nextState) {
         this.gameScreen = gameScreen;
+        this.totalTime = totalTime;
+        this.nextState = nextState;
     }
 
     @Override
     public void enter() {
-
+        waitedTime = 0;
     }
 
     @Override
@@ -23,7 +44,6 @@ public class WaitIntroMusicGameStage implements StagedScreen.GameStage {
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -33,8 +53,9 @@ public class WaitIntroMusicGameStage implements StagedScreen.GameStage {
 
         gameScreen.draw();
 
-        if (!gameScreen.getIntroMusic().isPlaying()) {
-            gameScreen.setGameStage(GameScreen.STAGE_WAIT_AFTER_ZOOM_IN);
+        waitedTime += delta;
+        if (waitedTime >= totalTime) {
+            gameScreen.setState(nextState);
         }
     }
 

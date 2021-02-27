@@ -2,19 +2,20 @@ package com.colegiovivas.lapandemia.screens.results;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
-import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-public class TimeVisibleGameStage implements StagedScreen.GameStage {
+/**
+ * Estado en el que se hace visible la estadística de la puntuación (aunque
+ * todavía con su valor inicial de 0) y se reproduce el efecto sonoro relevante.
+ */
+public class PaperCountVisibleState implements MultistateScreen.State {
     private final ResultsScreen resultsScreen;
-    private final boolean visible;
     private final Music statShownMusic;
 
-    public TimeVisibleGameStage(LaPandemia main, ResultsScreen resultsScreen, boolean visible) {
+    public PaperCountVisibleState(LaPandemia main, ResultsScreen resultsScreen) {
         this.resultsScreen = resultsScreen;
-        this.visible = visible;
         statShownMusic = main.assetManager.get("audio/stat-shown.wav");
     }
 
@@ -22,7 +23,7 @@ public class TimeVisibleGameStage implements StagedScreen.GameStage {
     public void enter() {
         statShownMusic.setLooping(false);
         statShownMusic.play();
-        resultsScreen.getResultsView().setTimeVisible(visible);
+        resultsScreen.getResultsView().setPaperCountVisible(true);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class TimeVisibleGameStage implements StagedScreen.GameStage {
 
         resultsScreen.draw();
         if (!statShownMusic.isPlaying()) {
-            resultsScreen.setGameStage(ResultsScreen.STAGE_INCREASING_TIME);
+            resultsScreen.setState(ResultsScreen.STAGE_INCREASING_PAPER_COUNT);
         }
     }
 

@@ -5,11 +5,16 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
-import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
 import com.colegiovivas.lapandemia.screens.transitions.LeftInTransition;
 import com.colegiovivas.lapandemia.screens.transitions.LeftOutTransition;
 
-public class ResultsScreen extends StagedScreen {
+/**
+ * Pantalla de los resultados de una partida. Muestra las estadísticas, informa al usuario
+ * en caso de haber establecido un nuevo récord y, en tal caso, lo guarda junto con un nombre
+ * elegido por él.
+ */
+public class ResultsScreen extends MultistateScreen {
     static final int STAGE_OPENING = 0;
     static final int STAGE_TIME_VISIBLE = 1;
     static final int STAGE_INCREASING_TIME = 2;
@@ -21,13 +26,48 @@ public class ResultsScreen extends StagedScreen {
     static final int STAGE_CLOSING = 8;
 
     private final LaPandemia main;
+
+    /**
+     * Nivel en el que transcurrió la partida.
+     */
     private final LevelInfo level;
+
+    /**
+     * Número de rollos de papel recolectados.
+     */
     private final int paperCount;
+
+    /**
+     * Duración de la partida en segundos.
+     */
     private final float runningTime;
+
+    /**
+     * Vista de los resultados. Se establecen datos en ella y los representa
+     * gráficamente, además de actuar como fuente de entrada de datos para
+     * obtener el nick del jugador y el evento del click en el botón de continuar.
+     */
     private final ResultsView resultsView;
+
+    /**
+     * Transición final.
+     */
     private final LeftOutTransition openingTransition;
+
+    /**
+     * Transición inicial.
+     */
     private final LeftInTransition closingTransition;
+
+    /**
+     * Música de fondo que se reproduce en bucle.
+     */
     private final Music backgroundMusic;
+
+    /**
+     * Efecto sonoro que se reproduce para dar la enhorabuena al usuario por establecer un
+     * nuevo récord.
+     */
     private final Music highscoreMusic;
 
     public ResultsScreen(LaPandemia main, LevelInfo level, int paperCount, float runningTime) {
@@ -37,26 +77,27 @@ public class ResultsScreen extends StagedScreen {
         this.runningTime = runningTime;
         this.resultsView = new ResultsView(main, level);
 
-        openingTransition = new LeftOutTransition(900);
-        closingTransition = new LeftInTransition(900);
+        openingTransition = new LeftOutTransition(0.7f);
+        closingTransition = new LeftInTransition(0.3f);
 
+        // Efecto sonoro que se reproduce cuando el valor de una estadística ha terminado de subir.
         Music statReachedItsValue = main.assetManager.get("audio/stat-reached-its-value.wav");
-        addGameStage(STAGE_OPENING, new OpeningGameStage(this));
-        addGameStage(STAGE_TIME_VISIBLE, new TimeVisibleGameStage(main, this, true));
-        addGameStage(STAGE_INCREASING_TIME, new IncreasingTimeGameStage(this));
-        addGameStage(STAGE_TIME_FINISHED_MUSIC, new WaitMusicGameStage(statReachedItsValue,
+        addState(STAGE_OPENING, new OpeningState(this));
+        addState(STAGE_TIME_VISIBLE, new TimeVisibleState(main, this));
+        addState(STAGE_INCREASING_TIME, new IncreasingTimeState(this));
+        addState(STAGE_TIME_FINISHED_MUSIC, new WaitMusicState(statReachedItsValue,
                 this, STAGE_PAPER_COUNT_VISIBLE));
-        addGameStage(STAGE_PAPER_COUNT_VISIBLE, new PaperCountVisibleGameStage(main, this, true));
-        addGameStage(STAGE_INCREASING_PAPER_COUNT, new IncreasingPaperCountGameStage(this));
-        addGameStage(STAGE_PAPER_COUNT_FINISHED_MUSIC, new WaitMusicGameStage(statReachedItsValue,
+        addState(STAGE_PAPER_COUNT_VISIBLE, new PaperCountVisibleState(main, this));
+        addState(STAGE_INCREASING_PAPER_COUNT, new IncreasingPaperCountState(this));
+        addState(STAGE_PAPER_COUNT_FINISHED_MUSIC, new WaitMusicState(statReachedItsValue,
                 this, STAGE_SHOWING_CONTINUE_BUTTON));
-        addGameStage(STAGE_SHOWING_CONTINUE_BUTTON, new ShowingContinueButtonGameStage(this));
-        addGameStage(STAGE_CLOSING, new ClosingGameStage(this));
+        addState(STAGE_SHOWING_CONTINUE_BUTTON, new ShowingContinueButtonState(this));
+        addState(STAGE_CLOSING, new ClosingState(this));
 
         backgroundMusic = main.assetManager.get("audio/results.wav");
         highscoreMusic = main.assetManager.get("audio/claps.wav");
 
-        setGameStage(STAGE_OPENING);
+        setState(STAGE_OPENING);
     }
 
     public void draw() {
@@ -83,14 +124,25 @@ public class ResultsScreen extends StagedScreen {
         closingTransition.dispose();
     }
 
+    /**
+     * @return True si y solo si la puntuación del usuario constituye un nuevo récord.
+     */
     public boolean isNewHighscore() {
         return level.getHighscore().getScore() < paperCount;
     }
 
+    /**
+     * @return El récord actual en el nivel jugado, sin tener en cuenta la marca establecida
+     * en esta partida.
+     */
     public int getHighscore() {
         return level.getHighscore().getScore();
     }
 
+    /**
+     * Guarda la marca actual como nuevo récord, utilizando el nombre introducido en el
+     * formulario de la vista.
+     */
     public void saveScore() {
         level.getHighscore().set(paperCount, resultsView.getNickname());
     }
@@ -119,6 +171,9 @@ public class ResultsScreen extends StagedScreen {
         return paperCount;
     }
 
+    /**
+     * Devuelve el control a la clase principal.
+     */
     public void finish() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

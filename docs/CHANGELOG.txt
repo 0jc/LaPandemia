@@ -221,7 +221,7 @@ con los propios del mapa.
 
 Cambios presentados el 2021/02/03
 ---------------------------------
-Se divide estructuralmente la renderización de GameScreen en tres fases (GameStages):
+Se divide estructuralmente la renderización de GameScreen en tres fases (States):
 la cuenta atrás, la partida y el fin. Se implementa una primera versión de la cuenta
 atrás, en la que se muestra todo el mapa y se da tiempo al jugador a prepararse antes
 de empezar la partida.
@@ -282,7 +282,7 @@ Cambios presentados el 2021/02/19
 ---------------------------------
 Se añaden algunas músicas y efectos sonoros, aunque todavía son una minoría.
 
-Se implementa StagedScreen para hacer más fácil implementar pantallas con varias
+Se implementa MultistateScreen para hacer más fácil implementar pantallas con varias
 fases, del mismo modo que ya lo estaba haciendo GameScreen.
 
 Se añade una primera versión de la pantalla que muestra los resultados de la

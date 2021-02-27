@@ -1,21 +1,35 @@
 package com.colegiovivas.lapandemia.screens.results;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
-import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-public class OpeningGameStage implements StagedScreen.GameStage {
+/**
+ * Estado de reproducción de música. Se reproduce una única vez una
+ * música especificada y después se cambia a otro estado.
+ */
+public class WaitMusicState implements MultistateScreen.State {
     private final ResultsScreen resultsScreen;
+    /**
+     * Siguiente estado al que se salta al terminarse la música.
+     */
+    private final int nextState;
+    /**
+     * Música que se reproduce.
+     */
+    private final Music music;
 
-    public OpeningGameStage(ResultsScreen resultsScreen) {
+    public WaitMusicState(Music music, ResultsScreen resultsScreen, int nextState) {
         this.resultsScreen = resultsScreen;
+        this.nextState = nextState;
+        this.music = music;
     }
 
     @Override
     public void enter() {
-        resultsScreen.getBackgroundMusic().setLooping(true);
-        resultsScreen.getBackgroundMusic().play();
-        resultsScreen.getOpeningTransition().start();
+        music.setLooping(false);
+        music.play();
     }
 
     @Override
@@ -33,13 +47,9 @@ public class OpeningGameStage implements StagedScreen.GameStage {
         Gdx.gl.glClearColor(0xFF, 0xFF, 0xFF, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        resultsScreen.getOpeningTransition().render(delta);
-
         resultsScreen.draw();
-        resultsScreen.getOpeningTransition().draw();
-
-        if (resultsScreen.getOpeningTransition().isComplete()) {
-            resultsScreen.setGameStage(ResultsScreen.STAGE_TIME_VISIBLE);
+        if (!music.isPlaying()) {
+            resultsScreen.setState(nextState);
         }
     }
 

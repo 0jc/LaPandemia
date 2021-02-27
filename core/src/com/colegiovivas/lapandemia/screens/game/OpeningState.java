@@ -3,21 +3,27 @@ package com.colegiovivas.lapandemia.screens.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-public class ZoomInGameStage implements StagedScreen.GameStage {
+/**
+ * Estado en el que se reproduce la transición inicial y se empieza a
+ * reproducir la música introductoria.
+ */
+public class OpeningState implements MultistateScreen.State {
     private final GameScreen gameScreen;
     private final OrthographicCamera camera;
-    private final float speed;
 
-    public ZoomInGameStage(GameScreen gameScreen, float speed) {
+    public OpeningState(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
-        this.speed = speed;
         camera = (OrthographicCamera)gameScreen.getWorld().getStage().getCamera();
     }
 
     @Override
     public void enter() {
+        camera.zoom = gameScreen.getWorld().getMaxZoom();
+        gameScreen.getOpeningTransition().start();
+        gameScreen.getIntroMusic().setLooping(false);
+        gameScreen.getIntroMusic().play();
     }
 
     @Override
@@ -27,7 +33,6 @@ public class ZoomInGameStage implements StagedScreen.GameStage {
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -35,12 +40,13 @@ public class ZoomInGameStage implements StagedScreen.GameStage {
         Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        gameScreen.draw();
+        gameScreen.getOpeningTransition().render(delta);
 
-        if (camera.zoom > 1) {
-            camera.zoom = Math.max(camera.zoom - delta*speed, 1);
-        } else if (!gameScreen.getIntroMusic().isPlaying()) {
-            gameScreen.setGameStage(GameScreen.STAGE_WAIT_INTRO_MUSIC);
+        gameScreen.draw();
+        gameScreen.getOpeningTransition().draw();
+
+        if (gameScreen.getOpeningTransition().isComplete()) {
+            gameScreen.setState(GameScreen.STAGE_WAIT_AFTER_OPENING);
         }
     }
 

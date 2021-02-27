@@ -2,12 +2,15 @@ package com.colegiovivas.lapandemia.screens.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-public class ClosingGameStage implements StagedScreen.GameStage {
+/**
+ * Estado en el que se reproduce la transición final.
+ */
+public class ClosingState implements MultistateScreen.State {
     private final GameScreen gameScreen;
 
-    public ClosingGameStage(GameScreen gameScreen) {
+    public ClosingState(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
 

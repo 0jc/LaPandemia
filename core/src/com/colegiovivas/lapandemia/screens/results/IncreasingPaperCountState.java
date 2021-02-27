@@ -3,13 +3,17 @@ package com.colegiovivas.lapandemia.screens.results;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.colegiovivas.lapandemia.screens.StagedScreen;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-public class IncreasingPaperCountGameStage implements StagedScreen.GameStage {
+/**
+ * Estado en el que el valor de la vista de la puntuación de la partida
+ * se incrementa gradualmente hasta alcanzar su valor real.
+ */
+public class IncreasingPaperCountState implements MultistateScreen.State {
     private final ResultsScreen resultsScreen;
     private final CounterAnimator counterAnimator;
 
-    public IncreasingPaperCountGameStage(ResultsScreen resultsScreen) {
+    public IncreasingPaperCountState(ResultsScreen resultsScreen) {
         this.resultsScreen = resultsScreen;
         this.counterAnimator = new CounterAnimator();
     }
@@ -44,7 +48,7 @@ public class IncreasingPaperCountGameStage implements StagedScreen.GameStage {
                 resultsScreen.getResultsView().setTitleColor(Color.GOLD);
             }
         } else {
-            resultsScreen.setGameStage(ResultsScreen.STAGE_PAPER_COUNT_FINISHED_MUSIC);
+            resultsScreen.setState(ResultsScreen.STAGE_PAPER_COUNT_FINISHED_MUSIC);
         }
     }
 

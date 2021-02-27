@@ -20,16 +20,73 @@ import com.colegiovivas.lapandemia.levels.json.LevelJson;
 import com.colegiovivas.lapandemia.levels.json.FanActorJsonEntry;
 import com.colegiovivas.lapandemia.levels.json.WallActorJsonEntry;
 
+/**
+ * Controlador del mundo en el que se desarrolla la partida.
+ */
 public class World implements ZoomGestureListener.ZoomListener {
+    /**
+     * Stage de Libgdx que contiene los actores (personajes, muros, etc.).
+     */
     private final WorldStage stage;
+
+    /**
+     * Personaje controlado por el jugador.
+     */
     private PlayerActor playerActor;
+
+    /**
+     * Generadores de actores. Añaden actores de un tipo específico al mapa
+     * periódicamente, escogiendo siempre lugares que no estén ocupados por
+     * actores que no acepten la colisión resultante ni estén demasiado cerca
+     * del personaje principal.
+     */
     private Array<ActorGenerator> actorGenerators;
+
+    /**
+     * Gestor de colisiones. Los actores le informan de los desplazamientos que
+     * quieren realizar y el gestor se encarga de ajustar estos desplazamientos
+     * cuando sea necesario para asegurarse de que las nuevas coordenadas son
+     * válidas para el actor y de lanzar eventos de colisión a los actores
+     * afectados.
+     */
     private final CollisionDispatcher collisionDispatcher;
+
+    /**
+     * Grupo que contiene todos los actores pertenecientes al mundo. Se excluye
+     * de él únicamente el indicador de salúd del personaje. Esta exclusión
+     * garantiza que dicho indicador se pueda mostrar siempre por encima de
+     * todos los demás actores, ya que realmente es un componente de interfaz
+     * de usuario.
+     */
     private final Group rootGroup;
+
+    /**
+     * Anchura del mapa.
+     */
     private int width;
+
+    /**
+     * Altura del mapa.
+     */
     private int height;
+
+    /**
+     * Zoom máximo que se puede aplicar en el mapa. Cuanto más alto es el valor,
+     * mayor es la proporción del mapa que se puede mostrar y más pequeños se ven
+     * los actores. Este valor máximo asegura que, sea cual sea la posición del
+     * personaje principal, exista una posición de la cámara donde se muestre el
+     * personaje sin hacer visibles regiones del mapa que estén fuera de límites.
+     */
     private float maxZoom;
+
+    /**
+     * Tiempo actual de duración de la partida.
+     */
     private float runningTime;
+
+    /**
+     * Si la partida está o no pausada.
+     */
     private boolean paused = false;
 
     public World(LaPandemia main, LevelInfo level) {
@@ -53,6 +110,12 @@ public class World implements ZoomGestureListener.ZoomListener {
         stage.addActor(healthGroup);
     }
 
+    /**
+     * Carga un mapa de juego, añadiendo actores, calculando parámetros como el zoom
+     * máximo y creando los generadores de actores.
+     * @param main La clase principal de la aplicación.
+     * @param level El mapa para cargar.
+     */
     private void setUpMap(LaPandemia main, LevelInfo level) {
         Json json = new Json();
         json.setTypeName(null);
@@ -103,6 +166,10 @@ public class World implements ZoomGestureListener.ZoomListener {
                 height /stage.getViewport().getWorldHeight());
     }
 
+    /**
+     * Actualiza el estado del mundo.
+     * @param delta Segundos transcurridos desde la última actualización.
+     */
     public void render(float delta) {
         if (!isPaused()) {
             runningTime += delta;
@@ -115,54 +182,96 @@ public class World implements ZoomGestureListener.ZoomListener {
         }
     }
 
+    /**
+     * Especifica si el juego está en pausa o no.
+     * @param paused True si y solo si el juego está pausado.
+     */
     public void setPaused(boolean paused) {
         this.paused = paused;
     }
 
+    /**
+     * @return True si y solo si el juego está pausado.
+     */
     public boolean isPaused() {
         return paused;
     }
 
+    /**
+     * @return El Stage de Libgdx del mundo.
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * @return La anchura del mundo.
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * @return La altura del mundo.
+     */
     public int getHeight() {
         return height;
     }
-    
+
+    /**
+     * @return El grupo que contiene todos los actores del mundo excepto el indicador
+     * de salúd.
+     */
     public Group getRootGroup() {
         return rootGroup;
     }
 
+    /**
+     * @return El gestor de colisiones.
+     */
     public CollisionDispatcher getCollisionDispatcher() {
         return collisionDispatcher;
     }
 
+    /**
+     * @return El personaje principal.
+     */
     public PlayerActor getPlayerActor() {
         return playerActor;
     }
 
+    /**
+     * @return El zoom máximo que se puede aplicar al mapa.
+     */
     public float getMaxZoom() {
         return maxZoom;
     }
 
+    /**
+     * @return El número actual de rollos de papel higiénico recolectados.
+     */
     public int getPaperCount() {
         return playerActor.getPaperCount();
     }
 
+    /**
+     * @return El tiempo que la partida lleva jugándose en segundos.
+     */
     public float getRunningTime() {
         return runningTime;
     }
 
+    /**
+     * @return True si y solo si la partida ha finalizado.
+     */
     public boolean gameIsOver() {
         return !playerActor.isAlive();
     }
 
+    /**
+     * Modifica el zoom actual.
+     * @param delta Diferencia del nuevo zoom con respecto al valor actual.
+     */
     @Override
     public void zoom(float delta) {
         // Nos aseguramos de que el nuevo zoom no sea tan grande que el mapa entero se
@@ -188,6 +297,9 @@ public class World implements ZoomGestureListener.ZoomListener {
         }
     }
 
+    /**
+     * Libera los recursos consumidos por los actores, generadores, etc.
+     */
     public void dispose() {
         for (ActorGenerator actorGenerator : actorGenerators) {
             actorGenerator.dispose();
