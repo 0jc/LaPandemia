@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.colegiovivas.lapandemia.levels.json.LevelJsonEntry;
 import com.colegiovivas.lapandemia.levels.json.LevelsJson;
 import org.jetbrains.annotations.NotNull;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Iterator;
 
@@ -59,7 +58,7 @@ public class LevelCatalog {
 
             @Override
             public void remove() {
-                throw new NotImplementedException();
+                catalog.removeIndex(i);
             }
         }
     }
