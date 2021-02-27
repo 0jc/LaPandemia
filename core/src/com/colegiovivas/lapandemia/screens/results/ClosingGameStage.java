@@ -21,6 +21,7 @@ public class ClosingGameStage implements StagedScreen.GameStage {
     @Override
     public void leave() {
         resultsScreen.getBackgroundMusic().stop();
+        resultsScreen.getHighscoreMusic().stop();
     }
 
     @Override

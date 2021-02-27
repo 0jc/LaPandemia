@@ -41,7 +41,7 @@ public class ResultsView {
         timeRightLabel = new Label("", cloudFormSkin);
         paperLeftLabel = new Label("Rollos de papel:", cloudFormSkin);
         paperRightLabel = new Label("", cloudFormSkin);
-        continueButton = new TextButton("Continuar", cloudFormSkin);
+        continueButton = new TextButton("Volver", cloudFormSkin);
         nickLabel = new Label("Tu nombre:", cloudFormSkin);
         nickField = new TextField("", cloudFormSkin);
         nickField.setText("Profesor Bacterio");
@@ -122,6 +122,10 @@ public class ResultsView {
 
     public void setContinueButtonVisible(boolean visible) {
         continueButton.setVisible(visible);
+    }
+
+    public void setContinueButtonText(String text) {
+        continueButton.setText(text);
     }
 
     public void setTime(float time) {

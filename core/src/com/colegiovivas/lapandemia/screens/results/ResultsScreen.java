@@ -30,6 +30,7 @@ public class ResultsScreen extends StagedScreen {
     private final LeftOutTransition openingTransition;
     private final LeftInTransition closingTransition;
     private final Music backgroundMusic;
+    private final Music highscoreMusic;
 
     public ResultsScreen(LaPandemia main, LevelInfo level, int paperCount, float runningTime) {
         this.main = main;
@@ -54,6 +55,7 @@ public class ResultsScreen extends StagedScreen {
         addGameStage(STAGE_CLOSING, new ClosingGameStage(this));
 
         backgroundMusic = main.assetManager.get("audio/results.wav");
+        highscoreMusic = main.assetManager.get("audio/claps.wav");
 
         setGameStage(STAGE_OPENING);
     }
@@ -97,6 +99,10 @@ public class ResultsScreen extends StagedScreen {
 
     public Music getBackgroundMusic() {
         return backgroundMusic;
+    }
+
+    public Music getHighscoreMusic() {
+        return highscoreMusic;
     }
 
     public float getRunningTime() {
