@@ -305,3 +305,19 @@ diferentes vistas y fases del juego.
 Se añaden más sonidos y una indicación cuando el juego está pausado.
 
 Se añade el uso del vibrador.
+
+Cambios presentados el 2021/02/26
+---------------------------------
+Se cambia el sistema de transiciones a uno más simple compuesto por varias clases.
+
+Se crea la clase LevelCatalog como interfaz hacia el "catálogo" de niveles disponible.
+Permite iterar sobre la información de los niveles existentes y en el futuro cercano
+permitirá también leer y escribir los récords asociados a ellos.
+
+Se rediseña la pantalla donde se muestran los resultados de la partida, de modo que
+utiliza una estructura de tablas más compleja y colorida (no obstante, visualmente
+es muy muy básica, pero ahora al menos es presentable).
+
+Ya que aprender a hacer interfaces complejas es un mundo de por sí y me queda poco
+tiempo para dedicarle a este trabajo, las demás pantallas tendrán una apariencia
+similar.

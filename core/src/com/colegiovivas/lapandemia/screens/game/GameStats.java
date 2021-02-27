@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.ingameui.GameTimerLabel;
 import com.colegiovivas.lapandemia.actors.ingameui.InvincibilityTimerLabel;
+import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
 public class GameStats {
     private final Stage stage;
@@ -57,18 +58,7 @@ public class GameStats {
         table.setFillParent(true);
         table.padRight(20);
         table.padLeft(20);
-        table.setBackground(new BaseDrawable() {
-            private final Color savedBatchColor = new Color();
-            private final TextureAtlas.AtlasRegion whitePixel = atlas.findRegion("ui-whitepixel");
-
-            @Override
-            public void draw(Batch batch, float x, float y, float width, float height) {
-                savedBatchColor.set(batch.getColor());
-                batch.setColor(0, 0, 0, 1);
-                batch.draw(whitePixel, x, y, width, height);
-                batch.setColor(savedBatchColor);
-            }
-        });
+        table.setBackground(new MonochromaticDrawable(main, Color.BLACK));
 
         table.add(runningTimeIcon);
         table.add(runningTimeLabel).padLeft(10).padRight(30);

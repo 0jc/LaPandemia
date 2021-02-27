@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -19,6 +20,7 @@ public class LaPandemia extends Game {
     public AssetManager assetManager;
     public Pool<Rectangle> rectPool;
     public Pool<Array<Actor>> actorArrayPool;
+    public Pool<Color> colorPool;
 
     private Screen nextScreen = null;
     private LevelCatalog levelCatalog;
@@ -28,7 +30,6 @@ public class LaPandemia extends Game {
         Gdx.app.log("LaPandemia", "create()");
 
         levelCatalog = new LevelCatalog();
-
         assetManager = new AssetManager();
 
         abstract class PoolableRectangle extends Rectangle implements Pool.Poolable {}
@@ -57,6 +58,20 @@ public class LaPandemia extends Game {
             }
         };
 
+        abstract class PoolableColor extends Color implements Pool.Poolable {}
+        colorPool = new Pool<Color>() {
+            @Override
+            protected Color newObject() {
+                return new PoolableColor() {
+                    @Override
+                    public void reset() {
+                        set(0, 0, 0, 1);
+                    }
+                };
+            }
+        };
+        colorPool.fill(10);
+
         setScreen(new LoadingScreen(this));
     }
 
@@ -79,12 +94,12 @@ public class LaPandemia extends Game {
             setScreen(nextScreen);
             nextScreen = null;
         } else {
-            //setScreen(new ResultsScreen(this, 12345, 1234234234, 23908f));
             LevelInfo level = null;
             for (LevelInfo currLevel : levelCatalog.levels()) {
                 level = currLevel;
             }
             setScreen(new GameScreen(this, level));
+            //setScreen(new ResultsScreen(this, level, 23908, 123456f));
         }
     }
 
@@ -108,5 +123,6 @@ public class LaPandemia extends Game {
         assetManager.dispose();
         rectPool.clear();
         actorArrayPool.clear();
+        colorPool.clear();
     }
 }

@@ -82,6 +82,11 @@ public class ResultsScreen extends StagedScreen {
         closingTransition.dispose();
     }
 
+    public int getHighestScore() {
+        // Para hacer pruebas.
+        return 10;
+    }
+
     public LeftOutTransition getOpeningTransition() {
         return openingTransition;
     }

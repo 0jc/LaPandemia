@@ -1,6 +1,7 @@
 package com.colegiovivas.lapandemia.screens.results;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.screens.StagedScreen;
 
@@ -37,7 +38,11 @@ public class IncreasingPaperCountGameStage implements StagedScreen.GameStage {
         resultsScreen.draw();
 
         if (counterAnimator.isIncreasing()) {
-            resultsScreen.getResultsView().setPaperCount((int)counterAnimator.update(delta));
+            int newValue = (int)counterAnimator.update(delta);
+            resultsScreen.getResultsView().setPaperCount(newValue);
+            if (newValue > resultsScreen.getHighestScore()) {
+                resultsScreen.getResultsView().setTitleColor(Color.GOLD);
+            }
         } else {
             resultsScreen.setGameStage(ResultsScreen.STAGE_PAPER_COUNT_POST_WAIT);
         }

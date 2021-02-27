@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -63,6 +64,7 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("audio/map.wav", Music.class);
         parent.assetManager.load("audio/game-over.wav", Music.class);
         parent.assetManager.load("audio/results.wav", Music.class);
+        parent.assetManager.load("cloud-form-skin/cloud-form-ui.json", Skin.class);
 
         loadingTitleLayout.setText(
                 (BitmapFont)parent.assetManager.get("fonts/nice32.fnt"), "Cargando...");

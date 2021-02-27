@@ -3,27 +3,26 @@ package com.colegiovivas.lapandemia.screens.results;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
+import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
 public class ResultsView {
     private final LaPandemia main;
     private final Stage stage;
     private final Label levelNameLabel;
-    private final Table levelNameRow;
-    private final Label timeLabel;
-    private final Table timeRow;
-    private final Label paperLabel;
-    private final Table paperRow;
-    private final Table continueRow;
+    private final Label timeLeftLabel;
+    private final Label timeRightLabel;
+    private final Label paperLeftLabel;
+    private final Label paperRightLabel;
+    private final Label nickLabel;
+    private final TextField nickField;
+    private final TextButton continueButton;
 
     private ContinueListener continueListener;
 
@@ -31,82 +30,109 @@ public class ResultsView {
         this.main = main;
 
         Camera camera = new OrthographicCamera();
-        Viewport viewport = new StretchViewport(800, 480, camera);
+        Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.fontColor = Color.BLACK;
-        labelStyle.font = main.assetManager.get("fonts/nice32.fnt");
+        Skin couldFormSkin = main.assetManager.get("cloud-form-skin/cloud-form-ui.json");
 
-        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.fontColor = Color.BLACK;
-        buttonStyle.font = main.assetManager.get("fonts/nice32.fnt");
+        levelNameLabel = new Label(level.getName(), couldFormSkin, "title");
+        timeLeftLabel = new Label("Tiempo de juego:", couldFormSkin);
+        timeRightLabel = new Label("", couldFormSkin);
+        paperLeftLabel = new Label("Rollos de papel:", couldFormSkin);
+        paperRightLabel = new Label("", couldFormSkin);
+        continueButton = new TextButton("Continuar", couldFormSkin);
+        nickLabel = new Label("Tu nombre:", couldFormSkin);
+        nickField = new TextField("", couldFormSkin);
+        nickField.setText("Profesor Bacterio");
+
+        boolean debug = false;
 
         Table table = new Table();
+        table.setBackground(new MonochromaticDrawable(main, Color.CYAN));
         table.setFillParent(true);
+        table.setDebug(debug);
+        table.left().top();
 
-        levelNameLabel = new Label(level.getName(), labelStyle);
-        levelNameRow = new Table();
-        levelNameRow.add(new Label("Nivel:", labelStyle)).padRight(30);
-        levelNameRow.add(levelNameLabel);
-        table.add(levelNameRow).row();
+        Table levelNameTable = new Table();
+        levelNameTable.setBackground(new MonochromaticDrawable(main, Color.MAROON));
+        levelNameTable.setDebug(debug);
+        table.add(levelNameTable).pad(10).expandX().fillX().row();
 
-        timeLabel = new Label("", labelStyle);
-        timeRow = new Table();
-        timeRow.add(new Label("Tiempo de juego:", labelStyle)).padRight(30);
-        timeRow.add(timeLabel);
-        table.add(timeRow).row();
+        levelNameTable.pad(10);
+        levelNameTable.add(levelNameLabel).expandX().left();
 
-        paperLabel = new Label("", labelStyle);
-        paperRow = new Table();
-        paperRow.add(new Label("Rollos de papel:", labelStyle)).padRight(30);
-        paperRow.add(paperLabel);
-        table.add(paperRow).row();
+        Table statsTable = new Table();
+        statsTable.setBackground(new MonochromaticDrawable(main, Color.WHITE));
+        statsTable.setDebug(debug);
+        table.add(statsTable).padLeft(10).padRight(10).padBottom(10).expand().fill().row();
 
-        TextButton continueButton = new TextButton("Continuar", buttonStyle);
-        continueButton.addListener(new EventListener() {
+        statsTable.padLeft(10).padRight(10).padTop(10).padBottom(10).top();
+        statsTable.add(timeLeftLabel).expandX().padRight(15).right();
+        statsTable.add(timeRightLabel).expandX().left().row();
+
+        statsTable.add(paperLeftLabel).expandX().padRight(15).right().padTop(10);
+        statsTable.add(paperRightLabel).expandX().left().padTop(10).row();
+
+        statsTable.add(nickLabel).expandX().padRight(15).right().padTop(10);
+        statsTable.add(nickField).expandX().left().padTop(10).row();
+
+        table.add(continueButton).expandX().fillX().padLeft(10).padRight(10).padBottom(10).row();
+
+        continueButton.addListener(new ClickListener() {
             @Override
-            public boolean handle(Event event) {
-                continueClicked();
-                return false;
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (continueButton.getX() <= x && x <= continueButton.getX() + continueButton.getWidth()) {
+                    if (continueButton.getY() <= y && y <= continueButton.getY() + continueButton.getHeight()) {
+                        continueClicked();
+                    }
+                }
             }
         });
-        continueRow = new Table();
-        continueRow.add(continueButton).padTop(50);
-        table.add(continueRow).row();
-
-        timeRow.setVisible(false);
-        paperRow.setVisible(false);
-        continueRow.setVisible(false);
 
         stage.addActor(table);
 
         setTime(0);
         setPaperCount(0);
+
+        setContinueButtonVisible(false);
+        setNicknameVisible(false);
+        setPaperCountVisible(false);
+        setTimeVisible(false);
     }
 
     private void continueClicked() {
         if (continueListener != null) continueListener.continueClicked();
     }
 
+    public void setTitleColor(Color color) {
+        ((MonochromaticDrawable)((Table)levelNameLabel.getParent()).getBackground()).setColor(color);
+    }
+
     public void setTimeVisible(boolean visible) {
-        timeRow.setVisible(visible);
+        timeLeftLabel.setVisible(visible);
+        timeRightLabel.setVisible(visible);
     }
 
     public void setPaperCountVisible(boolean visible) {
-        paperRow.setVisible(visible);
+        paperLeftLabel.setVisible(visible);
+        paperRightLabel.setVisible(visible);
+    }
+
+    public void setNicknameVisible(boolean visible) {
+        nickLabel.setVisible(visible);
+        nickField.setVisible(visible);
     }
 
     public void setContinueButtonVisible(boolean visible) {
-        continueRow.setVisible(visible);
+        continueButton.setVisible(visible);
     }
 
     public void setTime(float time) {
-        timeLabel.setText(String.format("%02d:%02d", (int)time/60, (int)time % 60));
+        timeRightLabel.setText(String.format("%02d:%02d", (int)time/60, (int)time % 60));
     }
 
     public void setPaperCount(int paperCount) {
-        paperLabel.setText(paperCount);
+        paperRightLabel.setText(paperCount);
     }
 
     public void setContinueListener(ContinueListener continueListener) {
@@ -117,12 +143,16 @@ public class ResultsView {
         return stage;
     }
 
+    public String getNickname() {
+        return nickField.getText();
+    }
+
     public boolean isShowingTime() {
-        return timeRow.isVisible();
+        return timeRightLabel.isVisible();
     }
 
     public boolean isShowingPaperCount() {
-        return paperRow.isVisible();
+        return paperRightLabel.isVisible();
     }
 
     public interface ContinueListener {

@@ -26,6 +26,9 @@ public class ShowingContinueButtonGameStage implements StagedScreen.GameStage {
     public void enter() {
         resultsScreen.getResultsView().setContinueButtonVisible(true);
         resultsScreen.getResultsView().setContinueListener(continueListener);
+        if (resultsScreen.getPaperCount() > resultsScreen.getHighestScore()) {
+            resultsScreen.getResultsView().setNicknameVisible(true);
+        }
     }
 
     @Override
