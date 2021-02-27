@@ -83,9 +83,16 @@ public class ResultsScreen extends StagedScreen {
         closingTransition.dispose();
     }
 
-    public int getHighestScore() {
-        // Para hacer pruebas.
-        return 10;
+    public boolean isNewHighscore() {
+        return level.getHighscore().getScore() < paperCount;
+    }
+
+    public int getHighscore() {
+        return level.getHighscore().getScore();
+    }
+
+    public void saveScore() {
+        level.getHighscore().set(paperCount, resultsView.getNickname());
     }
 
     public LeftOutTransition getOpeningTransition() {
@@ -116,7 +123,6 @@ public class ResultsScreen extends StagedScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        backgroundMusic.stop();
         main.resultsAccepted(this);
     }
 }

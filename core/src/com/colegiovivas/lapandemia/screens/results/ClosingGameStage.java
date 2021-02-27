@@ -15,6 +15,9 @@ public class ClosingGameStage implements StagedScreen.GameStage {
 
     @Override
     public void enter() {
+        if (resultsScreen.isNewHighscore()) {
+            resultsScreen.saveScore();
+        }
         resultsScreen.getClosingTransition().start();
     }
 

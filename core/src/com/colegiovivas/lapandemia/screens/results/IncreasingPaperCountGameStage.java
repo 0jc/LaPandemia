@@ -40,7 +40,7 @@ public class IncreasingPaperCountGameStage implements StagedScreen.GameStage {
         if (counterAnimator.isIncreasing()) {
             int newValue = (int)counterAnimator.update(delta);
             resultsScreen.getResultsView().setPaperCount(newValue);
-            if (newValue > resultsScreen.getHighestScore()) {
+            if (newValue > resultsScreen.getHighscore()) {
                 resultsScreen.getResultsView().setTitleColor(Color.GOLD);
             }
         } else {
