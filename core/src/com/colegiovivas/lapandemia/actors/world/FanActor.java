@@ -9,9 +9,20 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 
+/**
+ * Actor ventilador.
+ */
 public class FanActor extends CollisionableActor {
+    /**
+     * Animación del actor.
+     */
     private final Animation<TextureRegion> animation;
+
     private final LaPandemia game;
+
+    /**
+     * Tiempo transcurrido desde el principio de la existencia del actor.
+     */
     private float elapsedTime;
 
     public FanActor(final LaPandemia game, String regionName, float frameDuration) {

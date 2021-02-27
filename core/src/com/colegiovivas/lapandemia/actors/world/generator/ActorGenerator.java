@@ -13,22 +13,71 @@ import com.colegiovivas.lapandemia.actors.world.PlayerActor;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.screens.game.World;
 
+/**
+ * Generador periódico de actores de mundo colisionables.
+ */
 public class ActorGenerator {
+    /**
+     * Distancia mínima que los actores generados deben guardar con el personaje principal
+     * en el momento de su aparición.
+     */
     private static final float SAFE_DISTANCE = 400;
 
+    /**
+     * Cada cuánto se genera un nuevo actor.
+     */
     private final float tick;
+
+    /**
+     * Anchura de los actores generados.
+     */
     private final float width;
+
+    /**
+     * Altura de los actores generados.
+     */
     private final float height;
+
+    /**
+     * Número máximo de actores de este tipo que pueden existir simultáneamente.
+     */
     private final Integer maxCount;
+
+    /**
+     * Fondo de donde se obtienen los actores.
+     */
     private final Pool<GenerableActor> generableActorPool;
+
+    /**
+     * Tiempo de vida en segundos. Null indica un tiempo de vida ilimitado.
+     */
     private final Float ttl;
+
+    /**
+     * ID de los actores generados.
+     */
     private final ActorId actorId;
+
+    /**
+     * Grupo al que se añaden los actores generados.
+     */
     private final Group destGroup;
 
     private final LaPandemia game;
+
+    /**
+     * Controlador del mundo al que pertenecen los actores generados.
+     */
     private final World world;
 
+    /**
+     * Cantidad actual de actores generados.
+     */
     private int count;
+
+    /**
+     * Tiempo transcurrido desde la generación del último actor.
+     */
     private float lastActorTime;
 
     public ActorGenerator(final Class<? extends GenerableActor> generableActorClass, ActorId actorId,
@@ -59,15 +108,27 @@ public class ActorGenerator {
         generableActorPool.fill(maxCount);
     }
 
+    /**
+     * @return Fondo de donde se obtienen los actores.
+     */
     public Pool<GenerableActor> getPool() {
         return generableActorPool;
     }
 
+    /**
+     * Notifica al generador de que un actor ha sido eliminado del mundo, para que pueda ser
+     * liberado y se actualice el contador de actores.
+     * @param actor Actor eliminado.
+     */
     public void remove(GenerableActor actor) {
         count--;
         generableActorPool.free(actor);
     }
 
+    /**
+     * Actualiza el estado del generador.
+     * @param delta Tiempo en segundos transcurrido desde la última actualización.
+     */
     public void render(float delta) {
         if (maxCount != null && count == maxCount) {
             lastActorTime = 0;
@@ -101,6 +162,13 @@ public class ActorGenerator {
         }
     }
 
+    /**
+     * Reporta información sobre una hipotética posición inicial para un nuevo actor.
+     * @param outCoords Coordenas que se desean para el actor.
+     * @param overlappedActors Lista en la que se guardarán los actores con los que se
+     *                         colisionará por la aparición del actor.
+     * @return True si y solo si las coordenadas solicitadas son aceptables.
+     */
     private boolean tryAssignCoords(Rectangle outCoords, Array<Actor> overlappedActors) {
         // No generamos coordenadas demasiado cerca de los bordes del mapa, donde de
         // todos modos es improbable que no haya muros en cualquier nivel.
@@ -144,6 +212,9 @@ public class ActorGenerator {
         return true;
     }
 
+    /**
+     * Libera los recursos utilizados por el generador.
+     */
     public void dispose() {
         generableActorPool.clear();
     }

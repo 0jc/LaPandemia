@@ -12,19 +12,60 @@ import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.actors.world.generator.GenerableActor;
 
+/**
+ * Actor virus.
+ */
 public class VirusActor extends GenerableActor {
-    private final LaPandemia game;
-    private final Animation<TextureRegion> animation;
+    /**
+     * Velocidad a la que se desplaza el virus.
+     */
     private static final float SPEED = 100;
+
+    /**
+     * Tiempo mínimo que el virus espera antes de cambiar de dirección.
+     */
     private static final float MIN_DIR_TICK = 0.7f;
+
+    /**
+     * Tiempo máximo que el virus espera antes de cambiar de dirección.
+     */
     private static final float MAX_DIR_TICK = 1.5f;
 
+    private final LaPandemia game;
+
+    /**
+     * Animación que realiza el virus.
+     */
+    private final Animation<TextureRegion> animation;
+
+    /**
+     * Tiempo total que se lleva reproduciendo la animación.
+     */
     private float animationTime;
+
+    /**
+     * True si el virus está vivo o false si no lo está.
+     */
     private boolean alive;
 
+    /**
+     * Tiempo que el virus lleva moviéndose en la dirección actual.
+     */
     private float directionTime;
+
+    /**
+     * Tiempo total durante el que el virus debe desplazarse en la dirección actual.
+     */
     private float directionTick;
+
+    /**
+     * Dirección en el eje X del virus (-1 = izquierda, 1 = derecha, 0 = ninguna).
+     */
     private int xDir;
+
+    /**
+     * Dirección en el eje Y del virus (-1 = abajo, 1 = arriba, 0 = ninguna).
+     */
     private int yDir;
 
     // El virus tiene una velocidad, pero debe moverse una cantidad entera de píxeles
@@ -34,7 +75,14 @@ public class VirusActor extends GenerableActor {
     // 2.8 píxeles, la distancia total que deberá recorrer será -0.4 + (-2.8) = -3.2,
     // bajando otros 3 píxeles y teniendo untraveledY==-0.2 para el siguiente frame,
     // y así sucesivamente.
+    /**
+     * Fracción de píxel acumulada de movimiento en el eje X.
+     */
     private float untraveledX;
+
+    /**
+     * Fracción de píxel acumulada de movimiento en el eje Y.
+     */
     private float untraveledY;
 
     public VirusActor(final LaPandemia game) {
@@ -138,6 +186,9 @@ public class VirusActor extends GenerableActor {
         }
     }
 
+    /**
+     * Evento que se lanza cuando el virus colisiona con el jugador.
+     */
     private void caughtPlayer() {
         remove();
     }

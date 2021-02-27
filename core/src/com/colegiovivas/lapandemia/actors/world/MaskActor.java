@@ -8,8 +8,15 @@ import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.actors.world.generator.GenerableActor;
 
+/**
+ * Actor mascarilla.
+ */
 public class MaskActor extends GenerableActor {
+    /**
+     * Textura del actor.
+     */
     private final TextureAtlas.AtlasRegion texture;
+
     private final LaPandemia game;
 
     public MaskActor(final LaPandemia game) {

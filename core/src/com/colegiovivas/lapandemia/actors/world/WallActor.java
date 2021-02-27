@@ -10,8 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 
+/**
+ * Actor muro.
+ */
 public class WallActor extends CollisionableActor {
+    /**
+     * Textura del actor.
+     */
     private final TextureAtlas.AtlasRegion texture;
+
     private final LaPandemia game;
     private float elapsedTime;
 

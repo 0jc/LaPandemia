@@ -10,7 +10,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
+/**
+ * Catálogo de niveles. Proporciona información sobre todos los niveles existentes en el juego.
+ */
 public class LevelCatalog {
+    /**
+     * Información sobre cada nivel disponible.
+     */
     private final Array<LevelInfo> catalog;
 
     public LevelCatalog() {
@@ -31,10 +37,16 @@ public class LevelCatalog {
         }
     }
 
+    /**
+     * @return Iterable sobre los LevelInfo de cada nivel.
+     */
     public Iterable<LevelInfo> levels() {
         return new CatalogIterable();
     }
 
+    /**
+     * Iterable sobre los LevelInfo de los niveles existentes.
+     */
     private class CatalogIterable implements Iterable<LevelInfo> {
         @Override
         @NotNull

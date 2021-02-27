@@ -8,14 +8,34 @@ import com.badlogic.gdx.utils.Array;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.WorldActor;
 
+/**
+ * Indicador de salud del actor.
+ */
 public class HealthActor extends WorldActor {
+    /**
+     * Texturas con los diferentes niveles de salud.
+     */
     private final Array<TextureAtlas.AtlasRegion> textures;
     private final LaPandemia game;
+
+    /**
+     * Personaje cuya salud se monitorea.
+     */
     private PlayerActor playerActor;
+
+    /**
+     * Salud reportada por el personaje.
+     */
     private int health;
+
+    /**
+     * True si y solo si se debe mostrar el indicador.
+     */
     private boolean show;
 
-    // Tiempo restante durante el que se muestra la salud máxima.
+    /**
+     * Tiempo restante durante el que se muestra la salud máxima.
+     */
     private float showMaxFor;
 
     public HealthActor(final LaPandemia game) {
@@ -26,6 +46,9 @@ public class HealthActor extends WorldActor {
         show = true;
     }
 
+    /**
+     * @param health Nuevo valor de salud.
+     */
     public void setHealth(int health) {
         this.health = health;
         if (health == 4) {
@@ -33,10 +56,16 @@ public class HealthActor extends WorldActor {
         }
     }
 
+    /**
+     * @param show True si y solo si se debe mostrar el indicador de salud.
+     */
     public void showHealth(boolean show) {
         this.show = show;
     }
 
+    /**
+     * @param playerActor El personaje principal cuya salud se monitorea.
+     */
     public void setPlayerActor(PlayerActor playerActor) {
         this.playerActor = playerActor;
     }

@@ -11,54 +11,145 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 
+/**
+ * Actor del personaje principal.
+ */
 public class PlayerActor extends CollisionableActor {
-    private final Animation<TextureRegion> defaultAnimation;
-    private final Animation<TextureRegion> invincibleAnimation;
-    private final Animation<TextureRegion> deadAnimation;
-    private final LaPandemia game;
-    private final Music turnSound;
-    private final Sound wallHitSound;
-    private final Sound fanHitSound;
-    private final Sound infectionSound;
-    private final Sound maskSound;
-    private final Sound paperSound;
-    private final Sound virusKilledSound;
-    private PowerupListener powerupListener;
-    private InvincibilityListener invincibilityListener;
+    /**
+     * Velocidad a la que se mueve el personaje.
+     */
+    private final float SPEED = 400;
 
-    // Cada cuánto se incrementa el nivel de salud (segundos) y nivel máximo.
+    /**
+     * Cada cuánto se incrementa el nivel de salud (en segundos).
+     */
     private static final float HEALTH_TICK = 1;
+
+    /**
+     * Nivel máximo de salud alcanzable.
+     */
     private static final int MAX_HEALTH = 4;
 
-    // -1: izquierda/abajo, 0: quieto, 1: derecha/arriba.
-    private int xDir;
-    private int yDir;
-
-    // Tiempo transcurrido desde la última llamada a draw(), necesario para
-    // animar el sprite.
-    private float elapsedTime;
-    private float speed;
-
-    // Mascarillas recolectadas.
-    private int maskCount;
-
-    // Salud y cuánto tiempo ha pasado desde su último incremento o decremento.
-    private int health;
-    private float healthTime;
-
-    // Cantidad de rollos de papel recogidos (equivalentes a puntos).
-    private int paperCount;
-
-    // Durante cuánto tiempo será invencible (0: no invencible).
-    private float invincibilityTimeLeft;
-    // Tiempo total de invencibilidad por jeringuilla.
+    /**
+     * Tiempo de invencibilidad que proporciona cada vacuna.
+     */
     private static final float INVINCIBILITY_TIMESPAN = 10;
 
+    /**
+     * Animación que el actor cobra por defecto.
+     */
+    private final Animation<TextureRegion> defaultAnimation;
+
+    /**
+     * Animación que el actor cobra al volverse invencible.
+     */
+    private final Animation<TextureRegion> invincibleAnimation;
+
+    /**
+     * Animación que el actor cobra al morirse.
+     */
+    private final Animation<TextureRegion> deadAnimation;
+
+    private final LaPandemia game;
+
+    /**
+     * Sonido que se reproduce al cambiar de dirección (actualmente desactivado).
+     */
+    private final Music turnSound;
+
+    /**
+     * Sonido que se reproduce al chocar con un muro.
+     */
+    private final Sound wallHitSound;
+
+    /**
+     * Sonido que se reproduce al chocar con un ventilador.
+     */
+    private final Sound fanHitSound;
+
+    /**
+     * Sonido que se reproduce al ser infectado por un virus.
+     */
+    private final Sound infectionSound;
+
+    /**
+     * Sonido que se reproduce al capturar una mascarilla.
+     */
+    private final Sound maskSound;
+
+    /**
+     * Sonido que se reproduce al capturar un rollo de papel higiénico.
+     */
+    private final Sound paperSound;
+
+    /**
+     * Sonido que se reproduce al matar un virus.
+     */
+    private final Sound virusKilledSound;
+
+    /**
+     * Evento que se lanza al capturar un powerup (mascarilla, papel...).
+     */
+    private PowerupListener powerupListener;
+
+    /**
+     * Evento que se lanza al volverse invencible.
+     */
+    private InvincibilityListener invincibilityListener;
+
+    /**
+     * Dirección de desplazamiento sobre el eje X (-1 = izquierda, 1 = derecha, 0 = ninguna).
+     */
+    private int xDir;
+
+    /**
+     * Dirección de desplazamiento sobre el eje Y (-1 = abajo, 1 = arriba, 0 = ninguna).
+     */
+    private int yDir;
+
+    /**
+     * Tiempo transcurrido desde el inicio de la vida del personaje.
+     */
+    private float elapsedTime;
+
+    /**
+     * Mascarillas recolectadas.
+     */
+    private int maskCount;
+
+    /**
+     * Salud del personaje.
+     */
+    private int health;
+
+    /**
+     * Tiempo que ha pasado desde el último cambio de salud del personaje.
+     */
+    private float healthTime;
+
+    /**
+     * Cantidad de rollos de papel recogidos.
+     */
+    private int paperCount;
+
+    /**
+     * Tiempo restante para dejar de ser invencible (0: no invencible).
+     */
+    private float invincibilityTimeLeft;
+
+    /**
+     * Actor monitor de salud.
+     */
     private HealthActor healthActor;
 
-    // Para evitar que se gestione dos veces la colisión simultánea con
-    // dos WallActors o FanActors.
+    /**
+     * True si y solo si se ha gestionado una colisión con un muro en el frame actual.
+     */
     private boolean wallCollisionSeen;
+
+    /**
+     * True si y solo si se ha gestionado una colisión con un ventilador en el frame actual.
+     */
     private boolean fanCollisionSeen;
 
     public PlayerActor(final LaPandemia game) {
@@ -67,7 +158,6 @@ public class PlayerActor extends CollisionableActor {
         setDirection(0, 0);
         elapsedTime = 0;
         healthTime = 0;
-        speed = 400;
         health = MAX_HEALTH;
 
         defaultAnimation = new Animation<TextureRegion>(1f,
@@ -92,22 +182,6 @@ public class PlayerActor extends CollisionableActor {
         virusKilledSound = game.assetManager.get("audio/virus-killed.wav");
     }
 
-    public void setMaskCount(int maskCount) {
-        this.maskCount = maskCount;
-    }
-
-    public int getMaskCount() {
-        return maskCount;
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
-    }
-
-    public float getSpeed() {
-        return speed;
-    }
-
     public int getPaperCount() {
         return paperCount;
     }
@@ -124,6 +198,11 @@ public class PlayerActor extends CollisionableActor {
         this.invincibilityListener = invincibilityListener;
     }
 
+    /**
+     * Establece la dirección del personaje en cada eje de coordenadas.
+     * @param xDir -1 = izquierda, 1 = derecha, 0 = sin movimiento en el eje X.
+     * @param yDir -1 = abajo, 1 = arriba, 0 = sin movimiento en el eje Y.
+     */
     public void setDirection(int xDir, int yDir) {
         if (xDir < -1 || xDir > 1 || yDir < -1 || yDir > 1) {
             throw new IllegalArgumentException();
@@ -133,13 +212,25 @@ public class PlayerActor extends CollisionableActor {
         this.yDir = yDir;
     }
 
+    /**
+     * Realiza un cambio de dirección completo del personaje, no solo reestableciendo
+     * el valor de esta sino también reproduciendo el sonido de cambio de dirección.
+     * Se debe utilizar para cambios de dirección solicitados para el usuario, a
+     * diferencia por ejemplo de los producidos por la colisión con un muro.
+     * @param xDir Valor xDir para setDirection().
+     * @param yDir Valor yDir para setDirection().
+     */
     public void turn(int xDir, int yDir) {
         if (xDir != this.xDir || yDir != this.yDir) {
+            // Actualmente, el sonido de cambio de dirección está desactivado.
             //turnSound.play();
             setDirection(xDir, yDir);
         }
     }
 
+    /**
+     * @return True si y solo si el personaje no ha muerto.
+     */
     public boolean isAlive() {
         return maskCount >= 0 && health > 0;
     }
@@ -185,8 +276,8 @@ public class PlayerActor extends CollisionableActor {
             }
         }
 
-        int xDisplacement = (int)Math.floor(speed*delta*xDir);
-        int yDisplacement = (int)Math.floor(speed*delta*yDir);
+        int xDisplacement = (int)Math.floor(SPEED *delta*xDir);
+        int yDisplacement = (int)Math.floor(SPEED *delta*yDir);
         collisionDispatcher.tryMove(this, xDisplacement, yDisplacement);
     }
 
@@ -259,6 +350,9 @@ public class PlayerActor extends CollisionableActor {
         }
     }
 
+    /**
+     * Informa al actor de que se ha infectado.
+     */
     private void infected() {
         if (invincibilityTimeLeft == 0) {
             infectionSound.play();
@@ -271,11 +365,26 @@ public class PlayerActor extends CollisionableActor {
     }
 
     public interface PowerupListener {
+        /**
+         * Notifica de un cambio en el número total de powerups de un tipo recolectados.
+         * @param powerupId ID del powerup.
+         * @param total Nueva cantidad total de powerups recolectados de este tipo.
+         */
         void updateCount(ActorId powerupId, int total);
     }
 
     public interface InvincibilityListener {
+        /**
+         * Notifica de un cambio en el tiempo de invencibilidad originado por la
+         * recolección de una vacuna.
+         * @param total Nuevo valor de tiempo restante total.
+         */
         void updateTimer(float total);
+
+        /**
+         * Notifica de un cambio entre los estados de invencibilidad y no invencibilidad.
+         * @param invincible True si se ha vuelto invencible o false si se ha vuelto no invencible.
+         */
         void stateChanged(boolean invincible);
     }
 }

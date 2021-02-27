@@ -2,7 +2,13 @@ package com.colegiovivas.lapandemia.actors.ingameui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
+/**
+ * Actor contador de tiempo de juego.
+ */
 public class GameTimerLabel extends Label {
+    /**
+     * Segundos de juego que han transcurrido.
+     */
     private float seconds;
 
     public GameTimerLabel(LabelStyle style) {
@@ -11,6 +17,10 @@ public class GameTimerLabel extends Label {
         updateText();
     }
 
+    /**
+     * Actualizar el estado del contador.
+     * @param delta Segundos transcurridos desde la última actualización.
+     */
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -23,10 +33,17 @@ public class GameTimerLabel extends Label {
         }
     }
 
+    /**
+     * Ajusta la cantidad de segundos que se indica en el marcador.
+     * @param seconds Nuevo valor.
+     */
     public void setSeconds(float seconds) {
         this.seconds = seconds;
     }
 
+    /**
+     * Actualiza el texto exacto que se muestra en el contador.
+     */
     private void updateText() {
         int rounded = (int)Math.floor(seconds);
         setText(String.format("%02d:%02d", rounded/60, rounded % 60));

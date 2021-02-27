@@ -53,7 +53,7 @@ public class World implements ZoomGestureListener.ZoomListener {
 
     /**
      * Grupo que contiene todos los actores pertenecientes al mundo. Se excluye
-     * de él únicamente el indicador de salúd del personaje. Esta exclusión
+     * de él únicamente el indicador de salud del personaje. Esta exclusión
      * garantiza que dicho indicador se pueda mostrar siempre por encima de
      * todos los demás actores, ya que realmente es un componente de interfaz
      * de usuario.
@@ -220,7 +220,7 @@ public class World implements ZoomGestureListener.ZoomListener {
 
     /**
      * @return El grupo que contiene todos los actores del mundo excepto el indicador
-     * de salúd.
+     * de salud.
      */
     public Group getRootGroup() {
         return rootGroup;
