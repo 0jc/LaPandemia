@@ -1,5 +1,6 @@
 package com.colegiovivas.lapandemia.screens.results;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -33,16 +34,16 @@ public class ResultsView {
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin couldFormSkin = main.assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        Skin cloudFormSkin = main.assetManager.get("cloud-form-skin/cloud-form-ui.json");
 
-        levelNameLabel = new Label(level.getName(), couldFormSkin, "title");
-        timeLeftLabel = new Label("Tiempo de juego:", couldFormSkin);
-        timeRightLabel = new Label("", couldFormSkin);
-        paperLeftLabel = new Label("Rollos de papel:", couldFormSkin);
-        paperRightLabel = new Label("", couldFormSkin);
-        continueButton = new TextButton("Continuar", couldFormSkin);
-        nickLabel = new Label("Tu nombre:", couldFormSkin);
-        nickField = new TextField("", couldFormSkin);
+        levelNameLabel = new Label(level.getName(), cloudFormSkin, "title");
+        timeLeftLabel = new Label("Tiempo de juego:", cloudFormSkin);
+        timeRightLabel = new Label("", cloudFormSkin);
+        paperLeftLabel = new Label("Rollos de papel:", cloudFormSkin);
+        paperRightLabel = new Label("", cloudFormSkin);
+        continueButton = new TextButton("Continuar", cloudFormSkin);
+        nickLabel = new Label("Tu nombre:", cloudFormSkin);
+        nickField = new TextField("", cloudFormSkin);
         nickField.setText("Profesor Bacterio");
 
         boolean debug = false;
@@ -81,11 +82,7 @@ public class ResultsView {
         continueButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (continueButton.getX() <= x && x <= continueButton.getX() + continueButton.getWidth()) {
-                    if (continueButton.getY() <= y && y <= continueButton.getY() + continueButton.getHeight()) {
-                        continueClicked();
-                    }
-                }
+                continueClicked();
             }
         });
 
