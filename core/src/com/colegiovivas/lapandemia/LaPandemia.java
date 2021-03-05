@@ -5,14 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.levels.LevelCatalog;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
-import com.colegiovivas.lapandemia.screens.main.MainScreen;
+import com.colegiovivas.lapandemia.screens.main.MainMenuScreen;
 import com.colegiovivas.lapandemia.screens.results.ResultsScreen;
 import com.colegiovivas.lapandemia.screens.game.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
@@ -135,12 +134,12 @@ public class LaPandemia extends Game {
             setScreen(nextScreen);
             nextScreen = null;
         } else {
-            setScreen(new MainScreen(this));
+            setScreen(new MainMenuScreen(this));
         }
     }
 
-    public void mapSelectionScreenChosen(MainScreen mainScreen) {
-        mainScreen.dispose();
+    public void mapSelectionScreenChosen(MainMenuScreen mainMenuScreen) {
+        mainMenuScreen.dispose();
 
         LevelInfo level = null;
         for (LevelInfo currLevel : levelCatalog.levels()) {
@@ -172,7 +171,7 @@ public class LaPandemia extends Game {
         if (playAgain) {
             setScreen(new GameScreen(this, sourceLevel));
         } else {
-            setScreen(new MainScreen(this));
+            setScreen(new MainMenuScreen(this));
         }
     }
 

@@ -1,0 +1,69 @@
+package com.colegiovivas.lapandemia.screens.main;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.screens.MultistateScreen;
+import com.colegiovivas.lapandemia.screens.game.GameScreen;
+
+public class OpeningState implements MultistateScreen.State {
+    private final MainMenuScreen mainMenuScreen;
+
+    public OpeningState(MainMenuScreen mainMenuScreen) {
+        this.mainMenuScreen = mainMenuScreen;
+    }
+
+    @Override
+    public void enter() {
+        mainMenuScreen.getOpeningTransition().start();
+    }
+
+    @Override
+    public void leave() {
+
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        mainMenuScreen.getOpeningTransition().render(delta);
+
+        mainMenuScreen.draw();
+
+        if (mainMenuScreen.getOpeningTransition().isComplete()) {
+            mainMenuScreen.setState(MainMenuScreen.STAGE_IDLE);
+        }
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
+}

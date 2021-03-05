@@ -1,10 +1,7 @@
 package com.colegiovivas.lapandemia.screens.main;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,20 +13,19 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
-public class MainScreen implements Screen {
-    private final LaPandemia main;
+public class MainMenuView {
     private final Stage stage;
 
-    public MainScreen(LaPandemia main) {
-        this.main = main;
+    private PlayListener playListener;
 
+    public MainMenuView(LaPandemia main) {
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
         Skin cloudFormSkin = main.assetManager.get("cloud-form-skin/cloud-form-ui.json");
 
-        TextButton playButton = new TextButton("Jugar", cloudFormSkin);
+        final TextButton playButton = new TextButton("Jugar", cloudFormSkin);
         TextButton settingsButton = new TextButton("Ajustes", cloudFormSkin);
         TextButton creditsButton = new TextButton("Agradecimientos", cloudFormSkin);
         Label headerLabel = new Label("LA PANDEMIA", cloudFormSkin);
@@ -63,48 +59,25 @@ public class MainScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                MainScreen.this.main.mapSelectionScreenChosen(MainScreen.this);
+                if (playListener != null) playListener.playClicked();
             }
         });
 
         stage.addActor(table);
     }
 
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(stage);
+    public void setPlayListener(PlayListener playListener) {
+        this.playListener = playListener;
     }
 
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0xFF, 0xFF, 0xFF, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        stage.act();
-        stage.draw();
+    public Stage getStage() {
+        return stage;
     }
 
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height);
+    public interface PlayListener {
+        void playClicked();
     }
 
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
         stage.dispose();
     }
