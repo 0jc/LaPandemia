@@ -1,6 +1,7 @@
 package com.colegiovivas.lapandemia.screens.main;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 import com.colegiovivas.lapandemia.screens.transitions.HCenterOutTransition;
@@ -14,6 +15,7 @@ public class MainMenuScreen extends MultistateScreen {
     private final LaPandemia main;
     private final MainMenuView mainMenuView;
     private final Transition openingTransition;
+    private final Music backgroundMusic;
 
     public MainMenuScreen(LaPandemia main) {
         this.main = main;
@@ -22,6 +24,9 @@ public class MainMenuScreen extends MultistateScreen {
 
         mainMenuView = new MainMenuView(main);
 
+        backgroundMusic = main.assetManager.get("audio/menu-misc.mp3");
+        backgroundMusic.setLooping(true);
+
         addState(STAGE_OPENING, new OpeningState(this));
         addState(STAGE_IDLE, new IdleState(main, this));
 
@@ -29,6 +34,7 @@ public class MainMenuScreen extends MultistateScreen {
             @Override
             public void playClicked() {
                 MainMenuScreen.this.main.mapSelectionScreenChosen(MainMenuScreen.this);
+                backgroundMusic.stop();
             }
         });
 
@@ -53,6 +59,10 @@ public class MainMenuScreen extends MultistateScreen {
 
     public Transition getOpeningTransition() {
         return openingTransition;
+    }
+
+    public Music getBackgroundMusic() {
+        return backgroundMusic;
     }
 
     @Override

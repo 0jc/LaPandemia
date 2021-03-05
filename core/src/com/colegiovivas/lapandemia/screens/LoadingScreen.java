@@ -80,6 +80,7 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("audio/map.wav", Music.class);
         parent.assetManager.load("audio/game-over.wav", Music.class);
         parent.assetManager.load("audio/results.wav", Music.class);
+        parent.assetManager.load("audio/menu-misc.mp3", Music.class);
         parent.assetManager.load("cloud-form-skin/cloud-form-ui.json", Skin.class);
 
         loadingTitleLayout.setText(

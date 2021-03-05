@@ -25,7 +25,7 @@ public class OpeningState implements MultistateScreen.State {
 
     @Override
     public void show() {
-
+        mainMenuScreen.getBackgroundMusic().play();
     }
 
     @Override
