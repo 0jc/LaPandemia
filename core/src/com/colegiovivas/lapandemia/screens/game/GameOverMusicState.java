@@ -1,6 +1,7 @@
 package com.colegiovivas.lapandemia.screens.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
@@ -29,7 +30,7 @@ public class GameOverMusicState implements MultistateScreen.State {
 
     @Override
     public void show() {
-
+        Gdx.input.setCatchKey(Input.Keys.BACK, false);
     }
 
     @Override

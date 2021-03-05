@@ -1,6 +1,9 @@
 package com.colegiovivas.lapandemia.screens.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
@@ -22,8 +25,31 @@ public class PauseState implements MultistateScreen.State {
      */
     private boolean resume;
 
+    /**
+     * Procesador de la tecla de retroceso, para utilizarla como botón de
+     * restauración de la partida.
+     */
+    private final InputProcessor backButtonProcessor;
+
+    /**
+     * Procesador para no capturar la entrada de datos al salir de este estado.
+     */
+    private final InputProcessor noInput;
+
     public PauseState(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
+        this.noInput = new InputAdapter();
+        this.backButtonProcessor = new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    resumeGame();
+                    return true;
+                }
+
+                return false;
+            }
+        };
     }
 
     @Override
@@ -38,10 +64,12 @@ public class PauseState implements MultistateScreen.State {
     @Override
     public void leave() {
         gameScreen.getPauseSound().stop();
+        Gdx.input.setInputProcessor(noInput);
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(backButtonProcessor);
     }
 
     @Override
@@ -60,8 +88,15 @@ public class PauseState implements MultistateScreen.State {
                 resume = true;
             }
         } else if (Gdx.input.getGyroscopeY() >= GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
-            gameScreen.setState(GameScreen.STAGE_PLAYING);
+            resumeGame();
         }
+    }
+
+    /**
+     * Restablece el estado de la pantalla al estado de juego.
+     */
+    private void resumeGame() {
+        gameScreen.setState(GameScreen.STAGE_PLAYING);
     }
 
     @Override

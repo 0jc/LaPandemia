@@ -1,9 +1,6 @@
 package com.colegiovivas.lapandemia.screens.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.input.GestureDetector;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -29,6 +26,17 @@ public class PlayingState implements MultistateScreen.State {
         inputProcessor.addProcessor(new GestureDetector(new ZoomGestureListener(gameScreen.getWorld())));
         inputProcessor.addProcessor(new GestureDetector(new MovePlayerGestureListener(
                 gameScreen.getWorld().getPlayerActor())));
+        inputProcessor.addProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    pauseGame();
+                    return true;
+                }
+
+                return false;
+            }
+        });
     }
 
     @Override
@@ -37,6 +45,8 @@ public class PlayingState implements MultistateScreen.State {
         gameScreen.getCurrentGameMusic().play();
         gameScreen.getWorld().setPaused(false);
         gameScreen.getStats().setPaused(false);
+
+        Gdx.input.setCatchKey(Input.Keys.BACK, true);
     }
 
     @Override
@@ -65,8 +75,15 @@ public class PlayingState implements MultistateScreen.State {
         if (gameScreen.getWorld().gameIsOver()) {
             gameScreen.setState(GameScreen.STAGE_GAME_OVER_MUSIC);
         } else if (Gdx.input.getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
-            gameScreen.setState(GameScreen.STAGE_PAUSE);
+            pauseGame();
         }
+    }
+
+    /**
+     * Establece el estado de la pantalla al estado de pausado.
+     */
+    private void pauseGame() {
+        gameScreen.setState(GameScreen.STAGE_PAUSE);
     }
 
     @Override
