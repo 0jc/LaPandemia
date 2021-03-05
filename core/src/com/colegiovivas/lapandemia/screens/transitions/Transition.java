@@ -3,6 +3,7 @@ package com.colegiovivas.lapandemia.screens.transitions;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -21,6 +22,16 @@ public abstract class Transition {
     private final float duration;
 
     /**
+     * Tiempo de pausa durante la ejecución de la transición antes de comenzar su animación.
+     */
+    private final float prewait;
+
+    /**
+     * Tiempo de pausa durante la ejecución de la transición tras finalizarse su animación.
+     */
+    private final float postwait;
+
+    /**
      * Renderizador de figuras disponible para las subclases y cuyos recursos se
      * gestionan desde la base.
      */
@@ -36,8 +47,10 @@ public abstract class Transition {
      */
     private boolean playing = false;
 
-    public Transition(float duration) {
+    public Transition(float prewait, float duration, float postwait) {
+        this.prewait = prewait;
         this.duration = duration;
+        this.postwait = postwait;
         camera = new OrthographicCamera();
         viewport = new StretchViewport(800, 480, camera);
         shapeRenderer = new ShapeRenderer();
@@ -54,7 +67,7 @@ public abstract class Transition {
 
     public void draw() {
         if (playing) {
-            draw(totalTime/duration);
+            draw(MathUtils.clamp(totalTime - prewait, 0, duration)/duration);
         }
     }
 
@@ -65,7 +78,7 @@ public abstract class Transition {
      */
     public void render(float delta) {
         if (playing) {
-            totalTime = Math.min(duration, totalTime + delta);
+            totalTime += delta;
         }
     }
 
@@ -74,7 +87,7 @@ public abstract class Transition {
      * @return
      */
     public boolean isComplete() {
-        return duration == totalTime;
+        return totalTime >= prewait + duration + postwait;
     }
 
     /**

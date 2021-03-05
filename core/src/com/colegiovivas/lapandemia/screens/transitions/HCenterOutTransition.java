@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  * Transición de dos rectángulos separándose desde el centro sobre el eje horizontal.
  */
 public class HCenterOutTransition extends Transition {
-    public HCenterOutTransition(float duration) {
-        super(duration);
+    public HCenterOutTransition(float prewait, float duration, float postwait) {
+        super(prewait, duration, postwait);
     }
 
     @Override

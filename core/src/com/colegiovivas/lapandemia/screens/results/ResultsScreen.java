@@ -6,8 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
-import com.colegiovivas.lapandemia.screens.transitions.LeftInTransition;
-import com.colegiovivas.lapandemia.screens.transitions.LeftOutTransition;
+import com.colegiovivas.lapandemia.screens.transitions.*;
 
 /**
  * Pantalla de los resultados de una partida. Muestra las estadísticas, informa al usuario
@@ -22,7 +21,7 @@ public class ResultsScreen extends MultistateScreen {
     static final int STAGE_PAPER_COUNT_VISIBLE = 4;
     static final int STAGE_INCREASING_PAPER_COUNT = 5;
     static final int STAGE_PAPER_COUNT_FINISHED_MUSIC = 6;
-    static final int STAGE_SHOWING_CONTINUE_BUTTON = 7;
+    static final int STAGE_SHOWING_BUTTONS = 7;
     static final int STAGE_CLOSING = 8;
 
     private final LaPandemia main;
@@ -52,12 +51,12 @@ public class ResultsScreen extends MultistateScreen {
     /**
      * Transición final.
      */
-    private final LeftOutTransition openingTransition;
+    private final Transition openingTransition;
 
     /**
      * Transición inicial.
      */
-    private final LeftInTransition closingTransition;
+    private final Transition closingTransition;
 
     /**
      * Música de fondo que se reproduce en bucle.
@@ -70,6 +69,12 @@ public class ResultsScreen extends MultistateScreen {
      */
     private final Music highscoreMusic;
 
+    /**
+     * Si al aceptar la pantalla se debe empezar una nueva partida en vez de volver al menú
+     * principal.
+     */
+    private boolean playAgain;
+
     public ResultsScreen(LaPandemia main, LevelInfo level, int paperCount, float runningTime) {
         this.main = main;
         this.level = level;
@@ -77,8 +82,8 @@ public class ResultsScreen extends MultistateScreen {
         this.runningTime = runningTime;
         this.resultsView = new ResultsView(main, level);
 
-        openingTransition = new LeftOutTransition(0.7f);
-        closingTransition = new LeftInTransition(0.3f);
+        openingTransition = new LeftOutTransition(0, 0.7f, 0);
+        closingTransition = new HCenterInTransition(0, 0.7f, 0.5f);
 
         // Efecto sonoro que se reproduce cuando el valor de una estadística ha terminado de subir.
         Music statReachedItsValue = main.assetManager.get("audio/stat-reached-its-value.wav");
@@ -90,8 +95,8 @@ public class ResultsScreen extends MultistateScreen {
         addState(STAGE_PAPER_COUNT_VISIBLE, new PaperCountVisibleState(main, this));
         addState(STAGE_INCREASING_PAPER_COUNT, new IncreasingPaperCountState(this));
         addState(STAGE_PAPER_COUNT_FINISHED_MUSIC, new WaitMusicState(statReachedItsValue,
-                this, STAGE_SHOWING_CONTINUE_BUTTON));
-        addState(STAGE_SHOWING_CONTINUE_BUTTON, new ShowingContinueButtonState(this));
+                this, STAGE_SHOWING_BUTTONS));
+        addState(STAGE_SHOWING_BUTTONS, new ShowingButtonsState(this));
         addState(STAGE_CLOSING, new ClosingState(this));
 
         backgroundMusic = main.assetManager.get("audio/results.wav");
@@ -147,11 +152,11 @@ public class ResultsScreen extends MultistateScreen {
         level.getHighscore().set(paperCount, resultsView.getNickname());
     }
 
-    public LeftOutTransition getOpeningTransition() {
+    public Transition getOpeningTransition() {
         return openingTransition;
     }
 
-    public LeftInTransition getClosingTransition() {
+    public Transition getClosingTransition() {
         return closingTransition;
     }
 
@@ -171,6 +176,10 @@ public class ResultsScreen extends MultistateScreen {
         return paperCount;
     }
 
+    public void setPlayAgain(boolean playAgain) {
+        this.playAgain = playAgain;
+    }
+
     /**
      * Devuelve el control a la clase principal.
      */
@@ -178,6 +187,6 @@ public class ResultsScreen extends MultistateScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        main.resultsAccepted(this);
+        main.resultsAccepted(this, playAgain, level);
     }
 }

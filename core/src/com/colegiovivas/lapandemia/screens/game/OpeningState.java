@@ -46,7 +46,7 @@ public class OpeningState implements MultistateScreen.State {
         gameScreen.getOpeningTransition().draw();
 
         if (gameScreen.getOpeningTransition().isComplete()) {
-            gameScreen.setState(GameScreen.STAGE_WAIT_AFTER_OPENING);
+            gameScreen.setState(GameScreen.STAGE_ZOOM_IN);
         }
     }
 

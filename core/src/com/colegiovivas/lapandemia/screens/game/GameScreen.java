@@ -30,8 +30,7 @@ public class GameScreen extends MultistateScreen {
      */
     static final float Y_GYROSCOPE_PAUSE_TRESHOLD = -6;
 
-    static final int STAGE_OPENING = 0;
-    static final int STAGE_WAIT_AFTER_OPENING = 1;
+    static final int STAGE_OPENING = 1;
     static final int STAGE_ZOOM_IN = 2;
     static final int STAGE_WAIT_INTRO_MUSIC = 3;
     static final int STAGE_WAIT_AFTER_ZOOM_IN = 4;
@@ -114,11 +113,10 @@ public class GameScreen extends MultistateScreen {
         world = new World(main, level);
         stats = new GameStats(main);
         countdown = new Countdown(main);
-        openingTransition = new HCenterOutTransition(1.0f);
-        closingTransition = new VCenterInTransition(1.0f);
+        openingTransition = new HCenterOutTransition(0, 1.3f, 1f);
+        closingTransition = new VCenterInTransition(0, 1.0f, 0.2f);
 
         addState(STAGE_OPENING, new OpeningState(this));
-        addState(STAGE_WAIT_AFTER_OPENING, new WaitState(this, 1f, STAGE_ZOOM_IN));
         addState(STAGE_ZOOM_IN, new ZoomInState(this, 2.5f));
         addState(STAGE_WAIT_INTRO_MUSIC, new WaitIntroMusicState(this));
         addState(STAGE_WAIT_AFTER_ZOOM_IN, new WaitState(this, 1f, STAGE_COUNTDOWN));

@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.levels.LevelCatalog;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
+import com.colegiovivas.lapandemia.screens.main.MainScreen;
 import com.colegiovivas.lapandemia.screens.results.ResultsScreen;
 import com.colegiovivas.lapandemia.screens.game.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
@@ -134,12 +135,18 @@ public class LaPandemia extends Game {
             setScreen(nextScreen);
             nextScreen = null;
         } else {
-            LevelInfo level = null;
-            for (LevelInfo currLevel : levelCatalog.levels()) {
-                level = currLevel;
-            }
-            setScreen(new GameScreen(this, level));
+            setScreen(new MainScreen(this));
         }
+    }
+
+    public void mapSelectionScreenChosen(MainScreen mainScreen) {
+        mainScreen.dispose();
+
+        LevelInfo level = null;
+        for (LevelInfo currLevel : levelCatalog.levels()) {
+            level = currLevel;
+        }
+        setScreen(new GameScreen(this, level));
     }
 
     /**
@@ -159,12 +166,14 @@ public class LaPandemia extends Game {
      * Evento que un ResultsScreen lanza cuando ha finalizado su actividad.
      * @param resultsScreen La pantalla que ha lanzado el evento.
      */
-    public void resultsAccepted(ResultsScreen resultsScreen) {
+    public void resultsAccepted(ResultsScreen resultsScreen, boolean playAgain, LevelInfo sourceLevel) {
         resultsScreen.dispose();
 
-        // Cuando el proyecto esté terminado, se volverá al menú.
-        setScreen(null);
-        Gdx.app.exit();
+        if (playAgain) {
+            setScreen(new GameScreen(this, sourceLevel));
+        } else {
+            setScreen(new MainScreen(this));
+        }
     }
 
     @Override

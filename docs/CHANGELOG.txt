@@ -332,3 +332,11 @@ Se añade la clase Highscore para actuar como interfaz hacia las preferencias
 compartidas donde se guardan los datos de la puntuación más alta en un nivel, se
 hacen instancias de esta clase accesibles desde LevelInfo y se utiliza este nuevo
 recurso para guardar los resultados en la pantalla de resultados.
+
+
+Cambios presentados el 2021/03/05
+---------------------------------
+Se añade una primera versión solo parcialmente funcional del menú principal. Se
+mejora el sistema de transiciones para poder introducir pausas inicial y final
+en ellas. Se cambia el botón de aceptar del menú de resultados por dos botones,
+uno para volver a jugar y otro para volver al menú principal.

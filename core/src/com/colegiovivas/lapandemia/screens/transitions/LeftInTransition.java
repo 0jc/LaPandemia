@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  * sentido de derecha a izquierda.
  */
 public class LeftInTransition extends Transition {
-    public LeftInTransition(float duration) {
-        super(duration);
+    public LeftInTransition(float prewait, float duration, float postwait) {
+        super(prewait, duration, postwait);
     }
 
     @Override

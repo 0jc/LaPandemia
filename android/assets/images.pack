@@ -5,259 +5,273 @@ filter: Nearest,Nearest
 repeat: none
 countdown
   rotate: false
-  xy: 1, 675
+  xy: 1, 673
   size: 680, 337
   orig: 680, 337
   offset: 0, 0
   index: 0
 countdown
   rotate: false
-  xy: 1, 337
+  xy: 1, 335
   size: 300, 336
   orig: 300, 336
   offset: 0, 0
   index: 2
 countdown
   rotate: false
-  xy: 683, 730
+  xy: 683, 728
   size: 258, 282
   orig: 258, 282
   offset: 0, 0
   index: 3
 countdown
   rotate: false
-  xy: 1, 4
+  xy: 1, 2
   size: 196, 331
   orig: 196, 331
   offset: 0, 0
   index: 1
 fan
   rotate: false
-  xy: 303, 609
+  xy: 303, 607
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
 player-default
   rotate: false
-  xy: 943, 948
+  xy: 943, 946
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
 player-invincible
   rotate: false
-  xy: 199, 271
+  xy: 199, 269
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 3
 player-invincible
   rotate: false
-  xy: 303, 543
+  xy: 303, 541
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
 fan
   rotate: false
-  xy: 369, 609
+  xy: 369, 607
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 3
 fan
   rotate: false
-  xy: 943, 882
+  xy: 943, 880
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 2
 player-dead
   rotate: false
-  xy: 199, 205
+  xy: 199, 203
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
 player-invincible
   rotate: false
-  xy: 303, 477
+  xy: 303, 475
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 2
 mask
   rotate: false
-  xy: 683, 680
+  xy: 683, 678
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 virus
   rotate: false
-  xy: 369, 559
+  xy: 369, 557
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 12
 virus
   rotate: false
-  xy: 435, 625
+  xy: 435, 623
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 1
 virus
   rotate: false
-  xy: 943, 832
+  xy: 943, 830
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 9
 virus
   rotate: false
-  xy: 199, 155
+  xy: 199, 153
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 8
 ui-mask
   rotate: false
-  xy: 303, 427
+  xy: 303, 425
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 virus
   rotate: false
-  xy: 733, 680
+  xy: 733, 678
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 5
 virus
   rotate: false
-  xy: 369, 509
+  xy: 369, 507
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 6
 virus
   rotate: false
-  xy: 485, 625
+  xy: 485, 623
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 7
 virus
   rotate: false
-  xy: 943, 782
+  xy: 943, 780
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 11
 virus
   rotate: false
-  xy: 199, 105
+  xy: 199, 103
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 3
 virus
   rotate: false
-  xy: 303, 377
+  xy: 303, 375
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 2
 toiletpaper
   rotate: false
-  xy: 783, 680
+  xy: 783, 678
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 virus
   rotate: false
-  xy: 535, 625
+  xy: 535, 623
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 10
 virus
   rotate: false
-  xy: 943, 732
+  xy: 943, 730
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 4
 needle
   rotate: false
-  xy: 265, 271
+  xy: 265, 269
   size: 22, 64
   orig: 22, 64
   offset: 0, 0
   index: -1
 health
   rotate: false
-  xy: 199, 71
+  xy: 199, 69
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 0
+main-menu-virus
+  rotate: false
+  xy: 303, 341
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+main-menu-player
+  rotate: false
+  xy: 833, 694
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 wall
   rotate: false
-  xy: 303, 343
+  xy: 585, 639
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 health
   rotate: false
-  xy: 833, 696
+  xy: 199, 35
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 timer
   rotate: false
-  xy: 585, 641
+  xy: 867, 694
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 health
   rotate: false
-  xy: 199, 37
+  xy: 619, 639
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 2
 health
   rotate: false
-  xy: 867, 696
+  xy: 901, 694
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 3
 ui-toiletpaper
   rotate: false
-  xy: 619, 641
+  xy: 199, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 invincibility-timer
   rotate: false
-  xy: 265, 237
+  xy: 265, 235
   size: 22, 32
   orig: 22, 32
   offset: 0, 0
   index: -1
 ui-whitepixel
   rotate: false
-  xy: 1, 1
+  xy: 1009, 1009
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

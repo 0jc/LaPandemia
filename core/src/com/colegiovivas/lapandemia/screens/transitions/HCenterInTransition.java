@@ -3,11 +3,10 @@ package com.colegiovivas.lapandemia.screens.transitions;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
- * Transición que revela la pantalla gradualmente en sentido horizontal
- * de izquierda a derecha.
+ * Transición de dos rectángulos separándose desde el centro sobre el eje horizontal.
  */
-public class LeftOutTransition extends Transition {
-    public LeftOutTransition(float prewait, float duration, float postwait) {
+public class HCenterInTransition extends Transition {
+    public HCenterInTransition(float prewait, float duration, float postwait) {
         super(prewait, duration, postwait);
     }
 
@@ -17,7 +16,8 @@ public class LeftOutTransition extends Transition {
         shapeRenderer.setProjectionMatrix(getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0, 0, 0, 1);
-        shapeRenderer.rect(800*progress, 0, 800 - 800*progress, 480);
+        shapeRenderer.rect(0, 0, 400*progress, 480);
+        shapeRenderer.rect(800 - 400*progress, 0, 400*progress, 480);
         shapeRenderer.end();
     }
 }

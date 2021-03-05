@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  * Transición de dos rectángulos separándose desde el centro sobre el eje vertical.
  */
 public class VCenterInTransition extends Transition {
-    public VCenterInTransition(float duration) {
-        super(duration);
+    public VCenterInTransition(float prewait, float duration, float postwait) {
+        super(prewait, duration, postwait);
     }
 
     @Override

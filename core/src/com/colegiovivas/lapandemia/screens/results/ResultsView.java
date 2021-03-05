@@ -1,6 +1,5 @@
 package com.colegiovivas.lapandemia.screens.results;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -63,13 +62,23 @@ public class ResultsView {
     /**
      * Botón de aceptar los resultados y volver.
      */
-    private final TextButton continueButton;
+    private final TextButton returnButton;
+
+    /**
+     * Botón de volver a jugar otra partida.
+     */
+    private final TextButton retryButton;
 
     /**
      * Evento que se lanza cuando el usuario pulsa el botón de volver.
      * Configurable mediante setter.
      */
-    private ContinueListener continueListener;
+    private ReturnListener returnListener;
+
+    /**
+     * Evento que se lanza cuando el usuario pulsa el botón de reintentar. Configurable mediante setter.
+     */
+    private RetryListener retryListener;
 
     public ResultsView(LaPandemia main, LevelInfo level) {
         this.main = main;
@@ -85,7 +94,8 @@ public class ResultsView {
         timeRightLabel = new Label("", cloudFormSkin);
         paperLeftLabel = new Label("Rollos de papel:", cloudFormSkin);
         paperRightLabel = new Label("", cloudFormSkin);
-        continueButton = new TextButton("Volver", cloudFormSkin);
+        returnButton = new TextButton("Volver", cloudFormSkin);
+        retryButton = new TextButton("Repetir", cloudFormSkin);
         nickLabel = new Label("Tu nombre:", cloudFormSkin);
         nickField = new TextField("", cloudFormSkin);
         nickField.setText("Profesor Bacterio");
@@ -123,12 +133,24 @@ public class ResultsView {
         statsTable.add(nickLabel).expandX().padRight(15).right().padTop(10);
         statsTable.add(nickField).expandX().left().padTop(10).row();
 
-        table.add(continueButton).expandX().fillX().padLeft(10).padRight(10).padBottom(10).row();
+        Table buttonsTable = new Table();
+        buttonsTable.setDebug(debug);
+        table.add(buttonsTable).padLeft(10).padRight(10).padBottom(10).expandX().fillX();
 
-        continueButton.addListener(new ClickListener() {
+        buttonsTable.add(returnButton).expandX().fillX().padRight(10);
+        buttonsTable.add(retryButton).expandX().fillX().padLeft(10).row();
+
+        returnButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                continueClicked();
+                if (returnListener != null) returnListener.returnClicked();
+            }
+        });
+
+        retryButton.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (retryListener != null) retryListener.retryClicked();
             }
         });
 
@@ -141,17 +163,11 @@ public class ResultsView {
 
         // Ocultamos las diferentes partes del formulario para más adelante ir mostrándolas
         // gradualmente.
-        setContinueButtonVisible(false);
+        setReturnButtonVisible(false);
+        setRetryButtonVisible(false);
         setNicknameVisible(false);
         setPaperCountVisible(false);
         setTimeVisible(false);
-    }
-
-    /**
-     * Evento que se lanza cuando se hace click en el botón de aceptar.
-     */
-    private void continueClicked() {
-        if (continueListener != null) continueListener.continueClicked();
     }
 
     /**
@@ -190,19 +206,19 @@ public class ResultsView {
     }
 
     /**
-     * Cambia la visibilidad del botón de aceptar los resultados.
+     * Cambia la visibilidad del botón de volver.
      * @param visible true para mostrar el botón o false en caso opuesto.
      */
-    public void setContinueButtonVisible(boolean visible) {
-        continueButton.setVisible(visible);
+    public void setReturnButtonVisible(boolean visible) {
+        returnButton.setVisible(visible);
     }
 
     /**
-     * Cambia el texto del botón de aceptar los resultados.
-     * @param text Nuevo texto para el botón.
+     * Cambia la visibilidad del botón de reintentar.
+     * @param visible true para mostrar el botón o false en caso opuesto.
      */
-    public void setContinueButtonText(String text) {
-        continueButton.setText(text);
+    public void setRetryButtonVisible(boolean visible) {
+        retryButton.setVisible(visible);
     }
 
     /**
@@ -222,11 +238,19 @@ public class ResultsView {
     }
 
     /**
-     * Establece un listener para informar de eventos de click en el botón de continuar.
-     * @param continueListener Evento que será lanzado.
+     * Establece un listener para informar de eventos de click en el botón de volver.
+     * @param returnListener Evento que será lanzado.
      */
-    public void setContinueListener(ContinueListener continueListener) {
-        this.continueListener = continueListener;
+    public void setReturnListener(ReturnListener returnListener) {
+        this.returnListener = returnListener;
+    }
+
+    /**
+     * Establece un listener para informar de eventos de click en el botón de reintentar.
+     * @param retryListener Evento que será lanzado.
+     */
+    public void setRetryListener(RetryListener retryListener) {
+        this.retryListener = retryListener;
     }
 
     /**
@@ -244,7 +268,11 @@ public class ResultsView {
         return nickField.getText();
     }
 
-    public interface ContinueListener {
-        void continueClicked();
+    public interface ReturnListener {
+        void returnClicked();
+    }
+
+    public interface RetryListener {
+        void retryClicked();
     }
 }

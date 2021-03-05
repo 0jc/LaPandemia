@@ -7,34 +7,42 @@ import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
 /**
- * Estado en el que se muestra el botón de aceptar y, en caso de haber
- * logrado batir el récord previo, se reproduce la música congratulatoria
- * y se muestra en el formulario el campo donde se pide al usuario que
+ * Estado en el que se muestran los botones y, en caso de haber logrado
+ * batir el récord previo, se reproduce la música congratulatoria y se
+ * muestra en el formulario el campo donde se pide al usuario que
  * introduzca su nombre.
  */
-public class ShowingContinueButtonState implements MultistateScreen.State {
+public class ShowingButtonsState implements MultistateScreen.State {
     private final ResultsScreen resultsScreen;
-    private final ResultsView.ContinueListener continueListener;
     private final InputProcessor noInput;
 
-    public ShowingContinueButtonState(final ResultsScreen resultsScreen) {
+    public ShowingButtonsState(final ResultsScreen resultsScreen) {
         this.resultsScreen = resultsScreen;
         noInput = new InputAdapter();
-        continueListener = new ResultsView.ContinueListener() {
+
+        resultsScreen.getResultsView().setReturnListener(new ResultsView.ReturnListener() {
             @Override
-            public void continueClicked() {
+            public void returnClicked() {
+                resultsScreen.setPlayAgain(false);
                 resultsScreen.setState(ResultsScreen.STAGE_CLOSING);
             }
-        };
+        });
+
+        resultsScreen.getResultsView().setRetryListener(new ResultsView.RetryListener() {
+            @Override
+            public void retryClicked() {
+                resultsScreen.setPlayAgain(true);
+                resultsScreen.setState(ResultsScreen.STAGE_CLOSING);
+            }
+        });
     }
 
     @Override
     public void enter() {
-        resultsScreen.getResultsView().setContinueButtonVisible(true);
-        resultsScreen.getResultsView().setContinueListener(continueListener);
+        resultsScreen.getResultsView().setReturnButtonVisible(true);
+        resultsScreen.getResultsView().setRetryButtonVisible(true);
         if (resultsScreen.isNewHighscore()) {
             resultsScreen.getResultsView().setNicknameVisible(true);
-            resultsScreen.getResultsView().setContinueButtonText("Guardar");
             resultsScreen.getHighscoreMusic().setLooping(false);
             resultsScreen.getHighscoreMusic().play();
         }
