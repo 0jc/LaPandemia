@@ -354,5 +354,6 @@ una clase que actúa como interfaz entre el hardware y el resto del código del
 juego para que este pueda acceder al vibrador y al giroscopio de forma transparente
 a cómo el usuario los ha configurado en la pantalla de ajustes.
 
-Con esto cuento con haber terminado el código del juego. ¡Hurra! Pero todavía
-hay que hacer los archivos JSON de los demás mapas.
+Con esto cuento con haber terminado el código del juego. ¡Hurra!
+
+Finalmente, se ha añadido un segundo nivel más grande al juego.

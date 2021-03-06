@@ -1,9 +1,14 @@
 {
     "levels": [
         {
-            "name": "Test",
+            "name": "Yin Yong",
             "id": 1,
-            "filename": "test.json"
+            "filename": "yinyong.json"
+        },
+        {
+            "name": "Xin Xin",
+            "id": 2,
+            "filename": "xinxin.json"
         }
     ]
 }

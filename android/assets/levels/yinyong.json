@@ -1,0 +1,197 @@
+{
+    "size": [2256, 1632],
+    "playerState": {
+        "pos": [720, 858],
+        "dir": [1, 0]
+    },
+    "walls": [
+        {
+            "sprite": "wall",
+            "pos": [0, 544],
+            "size": [672, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [832, 544],
+            "size": [672, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [0, 576],
+            "size": [32, 1056]
+        },
+        {
+            "sprite": "wall",
+            "pos": [32, 1600],
+            "size": [1472, 32]
+        },
+
+
+        {
+            "sprite": "wall",
+            "pos": [160, 960],
+            "size": [352, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [480, 704],
+            "size": [32, 256]
+        },
+        {
+            "sprite": "wall",
+            "pos": [992, 960],
+            "size": [352, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [992, 704],
+            "size": [32, 256]
+        },
+
+
+        {
+            "sprite": "wall",
+            "pos": [160, 1184],
+            "size": [352, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [480, 1216],
+            "size": [32, 256]
+        },
+        {
+            "sprite": "wall",
+            "pos": [992, 1184],
+            "size": [352, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [992, 1216],
+            "size": [32, 256]
+        },
+
+
+        {
+            "sprite": "wall",
+            "pos": [1472, 576],
+            "size": [32, 1024]
+        },
+        {
+            "sprite": "wall",
+            "pos": [0, 0],
+            "size": [32, 544]
+        },
+        {
+            "sprite": "wall",
+            "pos": [32, 0],
+            "size": [2256, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [2224, 32],
+            "size": [32, 1600]
+        },
+        {
+            "sprite": "wall",
+            "pos": [1504, 1600],
+            "size": [736, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [320, 160],
+            "size": [32, 256]
+        },
+        {
+            "sprite": "wall",
+            "pos": [960, 224],
+            "size": [1088, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [1472, 32],
+            "size": [32, 192]
+        },
+        {
+            "sprite": "wall",
+            "pos": [1888, 352],
+            "size": [32, 320]
+        },
+        {
+            "sprite": "wall",
+            "pos": [1664, 640],
+            "size": [224, 32]
+        },
+        {
+            "sprite": "wall",
+            "pos": [1792, 672],
+            "size": [32, 320]
+        },
+        {
+            "sprite": "wall",
+            "pos": [2016, 960],
+            "size": [224, 32]
+        }
+    ],
+    "fans": [
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [42, 586]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [1398, 586]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [42, 1526]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [1398, 1526]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [656, 1088]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [720, 1088]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [784, 1088]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [656, 1024]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [720, 1024]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [784, 1024]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [1728, 672]
+        },
+        {
+            "sprite": "fan",
+            "frameDuration": 0.25,
+            "pos": [2160, 896]
+        }
+    ]
+}
