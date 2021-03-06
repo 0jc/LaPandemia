@@ -117,7 +117,7 @@ public class GameScreen extends MultistateScreen {
         closingTransition = new VCenterInTransition(0, 1.0f, 0.2f);
 
         addState(STATE_OPENING, new OpeningState(this));
-        addState(STATE_ZOOM_IN, new ZoomInState(this, 2.5f));
+        addState(STATE_ZOOM_IN, new ZoomInState(this, (world.getMaxZoom() - 1)/0.35f));
         addState(STATE_WAIT_INTRO_MUSIC, new WaitIntroMusicState(this));
         addState(STATE_WAIT_AFTER_ZOOM_IN, new WaitState(this, 1f, STATE_COUNTDOWN));
         addState(STATE_COUNTDOWN, new CountdownState(main, this));
