@@ -48,7 +48,7 @@ public class IncreasingPaperCountState implements MultistateScreen.State {
                 resultsScreen.getResultsView().setTitleColor(Color.GOLD);
             }
         } else {
-            resultsScreen.setState(ResultsScreen.STAGE_PAPER_COUNT_FINISHED_MUSIC);
+            resultsScreen.setState(ResultsScreen.STATE_PAPER_COUNT_FINISHED_MUSIC);
         }
     }
 

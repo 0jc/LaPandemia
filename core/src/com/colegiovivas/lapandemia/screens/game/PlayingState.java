@@ -73,7 +73,7 @@ public class PlayingState implements MultistateScreen.State {
         gameScreen.drawCountdown();
 
         if (gameScreen.getWorld().gameIsOver()) {
-            gameScreen.setState(GameScreen.STAGE_GAME_OVER_MUSIC);
+            gameScreen.setState(GameScreen.STATE_GAME_OVER_MUSIC);
         } else if (Gdx.input.getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
             pauseGame();
         }
@@ -83,7 +83,7 @@ public class PlayingState implements MultistateScreen.State {
      * Establece el estado de la pantalla al estado de pausado.
      */
     private void pauseGame() {
-        gameScreen.setState(GameScreen.STAGE_PAUSE);
+        gameScreen.setState(GameScreen.STATE_PAUSE);
     }
 
     @Override

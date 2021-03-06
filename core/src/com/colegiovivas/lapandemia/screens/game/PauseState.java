@@ -96,7 +96,7 @@ public class PauseState implements MultistateScreen.State {
      * Restablece el estado de la pantalla al estado de juego.
      */
     private void resumeGame() {
-        gameScreen.setState(GameScreen.STAGE_PLAYING);
+        gameScreen.setState(GameScreen.STATE_PLAYING);
     }
 
     @Override

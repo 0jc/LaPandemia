@@ -41,7 +41,7 @@ public class GameOverMusicState implements MultistateScreen.State {
         gameScreen.draw();
 
         if (!gameScreen.getGameOverMusic().isPlaying()) {
-            gameScreen.setState(GameScreen.STAGE_CLOSING);
+            gameScreen.setState(GameScreen.STATE_CLOSING);
         }
     }
 

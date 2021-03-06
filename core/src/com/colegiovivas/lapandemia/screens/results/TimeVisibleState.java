@@ -43,7 +43,7 @@ public class TimeVisibleState implements MultistateScreen.State {
 
         resultsScreen.draw();
         if (!statShownMusic.isPlaying()) {
-            resultsScreen.setState(ResultsScreen.STAGE_INCREASING_TIME);
+            resultsScreen.setState(ResultsScreen.STATE_INCREASING_TIME);
         }
     }
 

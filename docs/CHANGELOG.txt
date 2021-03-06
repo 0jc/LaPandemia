@@ -340,3 +340,6 @@ Se añade una primera versión solo parcialmente funcional del menú principal. 
 mejora el sistema de transiciones para poder introducir pausas inicial y final
 en ellas. Se cambia el botón de aceptar del menú de resultados por dos botones,
 uno para volver a jugar y otro para volver al menú principal.
+
+Se añaden los menús de selección de mapas y previsualización de nivel. De este
+modo es posible cargar los mapas disponibles en levels/.

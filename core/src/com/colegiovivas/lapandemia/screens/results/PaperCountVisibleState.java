@@ -43,7 +43,7 @@ public class PaperCountVisibleState implements MultistateScreen.State {
 
         resultsScreen.draw();
         if (!statShownMusic.isPlaying()) {
-            resultsScreen.setState(ResultsScreen.STAGE_INCREASING_PAPER_COUNT);
+            resultsScreen.setState(ResultsScreen.STATE_INCREASING_PAPER_COUNT);
         }
     }
 

@@ -30,7 +30,7 @@ public class Highscore {
      * @return Autor del récord.
      */
     public String getAuthor() {
-        return levelPreferences.getString("author", "?");
+        return levelPreferences.getString("author", "Nadie");
     }
 
     /**

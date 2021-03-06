@@ -1,6 +1,5 @@
 package com.colegiovivas.lapandemia.screens.main;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
@@ -8,17 +7,22 @@ import com.colegiovivas.lapandemia.screens.transitions.HCenterOutTransition;
 import com.colegiovivas.lapandemia.screens.transitions.Transition;
 
 public class MainMenuScreen extends MultistateScreen {
-    static final int STAGE_OPENING = 1;
-    static final int STAGE_IDLE = 2;
-    static final int STAGE_CLOSING = 3;
+    static final int STATE_OPENING = 1;
+    static final int STATE_IDLE = 2;
 
     private final LaPandemia main;
     private final MainMenuView mainMenuView;
     private final Transition openingTransition;
     private final Music backgroundMusic;
+    private final boolean playOpeningTransition;
 
     public MainMenuScreen(LaPandemia main) {
+        this(main, false);
+    }
+
+    public MainMenuScreen(LaPandemia main, boolean playOpeningTransition) {
         this.main = main;
+        this.playOpeningTransition = playOpeningTransition;
 
         openingTransition = new HCenterOutTransition(0, 0.7f, 0);
 
@@ -27,18 +31,21 @@ public class MainMenuScreen extends MultistateScreen {
         backgroundMusic = main.assetManager.get("audio/menu-misc.mp3");
         backgroundMusic.setLooping(true);
 
-        addState(STAGE_OPENING, new OpeningState(this));
-        addState(STAGE_IDLE, new IdleState(main, this));
+        addState(STATE_OPENING, new OpeningState(this));
+        addState(STATE_IDLE, new IdleState(main, this));
 
         mainMenuView.setPlayListener(new MainMenuView.PlayListener() {
             @Override
             public void playClicked() {
                 MainMenuScreen.this.main.mapSelectionScreenChosen(MainMenuScreen.this);
-                backgroundMusic.stop();
             }
         });
 
-        setState(STAGE_OPENING);
+        setState(STATE_OPENING);
+    }
+
+    public boolean getPlayOpeningTransition() {
+        return playOpeningTransition;
     }
 
     @Override
@@ -68,5 +75,6 @@ public class MainMenuScreen extends MultistateScreen {
     @Override
     public void dispose() {
         mainMenuView.dispose();
+        openingTransition.dispose();
     }
 }

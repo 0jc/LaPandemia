@@ -47,7 +47,7 @@ public class ZoomInState implements MultistateScreen.State {
         if (camera.zoom > 1) {
             camera.zoom = Math.max(camera.zoom - delta*speed, 1);
         } else if (!gameScreen.getIntroMusic().isPlaying()) {
-            gameScreen.setState(GameScreen.STAGE_WAIT_INTRO_MUSIC);
+            gameScreen.setState(GameScreen.STATE_WAIT_INTRO_MUSIC);
         }
     }
 

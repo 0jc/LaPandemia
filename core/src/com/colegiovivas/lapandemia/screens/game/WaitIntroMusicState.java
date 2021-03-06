@@ -38,7 +38,7 @@ public class WaitIntroMusicState implements MultistateScreen.State {
         gameScreen.draw();
 
         if (!gameScreen.getIntroMusic().isPlaying()) {
-            gameScreen.setState(GameScreen.STAGE_WAIT_AFTER_ZOOM_IN);
+            gameScreen.setState(GameScreen.STATE_WAIT_AFTER_ZOOM_IN);
         }
     }
 

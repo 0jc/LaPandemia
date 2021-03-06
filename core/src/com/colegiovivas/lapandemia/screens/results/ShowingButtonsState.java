@@ -24,7 +24,7 @@ public class ShowingButtonsState implements MultistateScreen.State {
             @Override
             public void returnClicked() {
                 resultsScreen.setPlayAgain(false);
-                resultsScreen.setState(ResultsScreen.STAGE_CLOSING);
+                resultsScreen.setState(ResultsScreen.STATE_CLOSING);
             }
         });
 
@@ -32,7 +32,7 @@ public class ShowingButtonsState implements MultistateScreen.State {
             @Override
             public void retryClicked() {
                 resultsScreen.setPlayAgain(true);
-                resultsScreen.setState(ResultsScreen.STAGE_CLOSING);
+                resultsScreen.setState(ResultsScreen.STATE_CLOSING);
             }
         });
     }

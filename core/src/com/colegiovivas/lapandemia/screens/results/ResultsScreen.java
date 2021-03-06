@@ -14,15 +14,15 @@ import com.colegiovivas.lapandemia.screens.transitions.*;
  * elegido por él.
  */
 public class ResultsScreen extends MultistateScreen {
-    static final int STAGE_OPENING = 0;
-    static final int STAGE_TIME_VISIBLE = 1;
-    static final int STAGE_INCREASING_TIME = 2;
-    static final int STAGE_TIME_FINISHED_MUSIC = 3;
-    static final int STAGE_PAPER_COUNT_VISIBLE = 4;
-    static final int STAGE_INCREASING_PAPER_COUNT = 5;
-    static final int STAGE_PAPER_COUNT_FINISHED_MUSIC = 6;
-    static final int STAGE_SHOWING_BUTTONS = 7;
-    static final int STAGE_CLOSING = 8;
+    static final int STATE_OPENING = 0;
+    static final int STATE_TIME_VISIBLE = 1;
+    static final int STATE_INCREASING_TIME = 2;
+    static final int STATE_TIME_FINISHED_MUSIC = 3;
+    static final int STATE_PAPER_COUNT_VISIBLE = 4;
+    static final int STATE_INCREASING_PAPER_COUNT = 5;
+    static final int STATE_PAPER_COUNT_FINISHED_MUSIC = 6;
+    static final int STATE_SHOWING_BUTTONS = 7;
+    static final int STATE_CLOSING = 8;
 
     private final LaPandemia main;
 
@@ -87,22 +87,22 @@ public class ResultsScreen extends MultistateScreen {
 
         // Efecto sonoro que se reproduce cuando el valor de una estadística ha terminado de subir.
         Music statReachedItsValue = main.assetManager.get("audio/stat-reached-its-value.wav");
-        addState(STAGE_OPENING, new OpeningState(this));
-        addState(STAGE_TIME_VISIBLE, new TimeVisibleState(main, this));
-        addState(STAGE_INCREASING_TIME, new IncreasingTimeState(this));
-        addState(STAGE_TIME_FINISHED_MUSIC, new WaitMusicState(statReachedItsValue,
-                this, STAGE_PAPER_COUNT_VISIBLE));
-        addState(STAGE_PAPER_COUNT_VISIBLE, new PaperCountVisibleState(main, this));
-        addState(STAGE_INCREASING_PAPER_COUNT, new IncreasingPaperCountState(this));
-        addState(STAGE_PAPER_COUNT_FINISHED_MUSIC, new WaitMusicState(statReachedItsValue,
-                this, STAGE_SHOWING_BUTTONS));
-        addState(STAGE_SHOWING_BUTTONS, new ShowingButtonsState(this));
-        addState(STAGE_CLOSING, new ClosingState(this));
+        addState(STATE_OPENING, new OpeningState(this));
+        addState(STATE_TIME_VISIBLE, new TimeVisibleState(main, this));
+        addState(STATE_INCREASING_TIME, new IncreasingTimeState(this));
+        addState(STATE_TIME_FINISHED_MUSIC, new WaitMusicState(statReachedItsValue,
+                this, STATE_PAPER_COUNT_VISIBLE));
+        addState(STATE_PAPER_COUNT_VISIBLE, new PaperCountVisibleState(main, this));
+        addState(STATE_INCREASING_PAPER_COUNT, new IncreasingPaperCountState(this));
+        addState(STATE_PAPER_COUNT_FINISHED_MUSIC, new WaitMusicState(statReachedItsValue,
+                this, STATE_SHOWING_BUTTONS));
+        addState(STATE_SHOWING_BUTTONS, new ShowingButtonsState(this));
+        addState(STATE_CLOSING, new ClosingState(this));
 
         backgroundMusic = main.assetManager.get("audio/results.wav");
         highscoreMusic = main.assetManager.get("audio/claps.wav");
 
-        setState(STAGE_OPENING);
+        setState(STATE_OPENING);
     }
 
     public void draw() {

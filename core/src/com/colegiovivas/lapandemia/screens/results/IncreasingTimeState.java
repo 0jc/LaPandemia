@@ -41,7 +41,7 @@ public class IncreasingTimeState implements MultistateScreen.State {
         if (counterAnimator.isIncreasing()) {
             resultsScreen.getResultsView().setTime(counterAnimator.update(delta));
         } else {
-            resultsScreen.setState(ResultsScreen.STAGE_TIME_FINISHED_MUSIC);
+            resultsScreen.setState(ResultsScreen.STATE_TIME_FINISHED_MUSIC);
         }
     }
 

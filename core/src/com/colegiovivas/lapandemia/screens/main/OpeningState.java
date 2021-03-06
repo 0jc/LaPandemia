@@ -2,9 +2,7 @@ package com.colegiovivas.lapandemia.screens.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
-import com.colegiovivas.lapandemia.screens.game.GameScreen;
 
 public class OpeningState implements MultistateScreen.State {
     private final MainMenuScreen mainMenuScreen;
@@ -15,7 +13,9 @@ public class OpeningState implements MultistateScreen.State {
 
     @Override
     public void enter() {
-        mainMenuScreen.getOpeningTransition().start();
+        if (mainMenuScreen.getPlayOpeningTransition()) {
+            mainMenuScreen.getOpeningTransition().start();
+        }
     }
 
     @Override
@@ -37,8 +37,8 @@ public class OpeningState implements MultistateScreen.State {
 
         mainMenuScreen.draw();
 
-        if (mainMenuScreen.getOpeningTransition().isComplete()) {
-            mainMenuScreen.setState(MainMenuScreen.STAGE_IDLE);
+        if (!mainMenuScreen.getPlayOpeningTransition() || mainMenuScreen.getOpeningTransition().isComplete()) {
+            mainMenuScreen.setState(MainMenuScreen.STATE_IDLE);
         }
     }
 

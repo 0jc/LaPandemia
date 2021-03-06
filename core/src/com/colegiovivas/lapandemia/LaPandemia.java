@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.levels.LevelCatalog;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.main.MainMenuScreen;
+import com.colegiovivas.lapandemia.screens.mapselection.MapSelectionScreen;
+import com.colegiovivas.lapandemia.screens.preview.PreviewScreen;
 import com.colegiovivas.lapandemia.screens.results.ResultsScreen;
 import com.colegiovivas.lapandemia.screens.game.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
@@ -141,11 +143,31 @@ public class LaPandemia extends Game {
     public void mapSelectionScreenChosen(MainMenuScreen mainMenuScreen) {
         mainMenuScreen.dispose();
 
-        LevelInfo level = null;
-        for (LevelInfo currLevel : levelCatalog.levels()) {
-            level = currLevel;
-        }
-        setScreen(new GameScreen(this, level));
+        setScreen(new MapSelectionScreen(this, levelCatalog));
+    }
+
+    public void navigatedBackToMapSelection(PreviewScreen previewScreen) {
+        previewScreen.dispose();
+
+        setScreen(new MapSelectionScreen(this, levelCatalog));
+    }
+
+    public void previewScreenChosen(MapSelectionScreen source, LevelInfo levelInfo) {
+        source.dispose();
+
+        setScreen(new PreviewScreen(this, levelInfo));
+    }
+
+    public void navigatedBackToMain(Screen screen) {
+        screen.dispose();
+
+        setScreen(new MainMenuScreen(this));
+    }
+
+    public void mapChosen(PreviewScreen source, LevelInfo levelInfo) {
+        source.dispose();
+
+        setScreen(new GameScreen(this, levelInfo));
     }
 
     /**
@@ -171,7 +193,7 @@ public class LaPandemia extends Game {
         if (playAgain) {
             setScreen(new GameScreen(this, sourceLevel));
         } else {
-            setScreen(new MainMenuScreen(this));
+            setScreen(new MainMenuScreen(this, true));
         }
     }
 

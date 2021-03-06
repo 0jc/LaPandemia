@@ -30,15 +30,15 @@ public class GameScreen extends MultistateScreen {
      */
     static final float Y_GYROSCOPE_PAUSE_TRESHOLD = -6;
 
-    static final int STAGE_OPENING = 1;
-    static final int STAGE_ZOOM_IN = 2;
-    static final int STAGE_WAIT_INTRO_MUSIC = 3;
-    static final int STAGE_WAIT_AFTER_ZOOM_IN = 4;
-    static final int STAGE_COUNTDOWN = 5;
-    static final int STAGE_PLAYING = 6;
-    static final int STAGE_PAUSE = 7;
-    static final int STAGE_GAME_OVER_MUSIC = 8;
-    static final int STAGE_CLOSING = 9;
+    static final int STATE_OPENING = 1;
+    static final int STATE_ZOOM_IN = 2;
+    static final int STATE_WAIT_INTRO_MUSIC = 3;
+    static final int STATE_WAIT_AFTER_ZOOM_IN = 4;
+    static final int STATE_COUNTDOWN = 5;
+    static final int STATE_PLAYING = 6;
+    static final int STATE_PAUSE = 7;
+    static final int STATE_GAME_OVER_MUSIC = 8;
+    static final int STATE_CLOSING = 9;
 
     /**
      * Nivel en el que se desarrolla la partida.
@@ -116,15 +116,15 @@ public class GameScreen extends MultistateScreen {
         openingTransition = new HCenterOutTransition(0, 1.3f, 1f);
         closingTransition = new VCenterInTransition(0, 1.0f, 0.2f);
 
-        addState(STAGE_OPENING, new OpeningState(this));
-        addState(STAGE_ZOOM_IN, new ZoomInState(this, 2.5f));
-        addState(STAGE_WAIT_INTRO_MUSIC, new WaitIntroMusicState(this));
-        addState(STAGE_WAIT_AFTER_ZOOM_IN, new WaitState(this, 1f, STAGE_COUNTDOWN));
-        addState(STAGE_COUNTDOWN, new CountdownState(main, this));
-        addState(STAGE_PLAYING, new PlayingState(main, this));
-        addState(STAGE_PAUSE, new PauseState(this));
-        addState(STAGE_GAME_OVER_MUSIC, new GameOverMusicState(main, this));
-        addState(STAGE_CLOSING, new ClosingState(this));
+        addState(STATE_OPENING, new OpeningState(this));
+        addState(STATE_ZOOM_IN, new ZoomInState(this, 2.5f));
+        addState(STATE_WAIT_INTRO_MUSIC, new WaitIntroMusicState(this));
+        addState(STATE_WAIT_AFTER_ZOOM_IN, new WaitState(this, 1f, STATE_COUNTDOWN));
+        addState(STATE_COUNTDOWN, new CountdownState(main, this));
+        addState(STATE_PLAYING, new PlayingState(main, this));
+        addState(STATE_PAUSE, new PauseState(this));
+        addState(STATE_GAME_OVER_MUSIC, new GameOverMusicState(main, this));
+        addState(STATE_CLOSING, new ClosingState(this));
 
         world.getPlayerActor().setPowerupListener(new PlayerActor.PowerupListener() {
             @Override
@@ -168,7 +168,7 @@ public class GameScreen extends MultistateScreen {
 
         currentGameMusic = mapMusic;
 
-        setState(STAGE_OPENING);
+        setState(STATE_OPENING);
     }
 
     /**

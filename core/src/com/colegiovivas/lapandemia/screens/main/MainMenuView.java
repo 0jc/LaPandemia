@@ -25,7 +25,7 @@ public class MainMenuView {
 
         Skin cloudFormSkin = main.assetManager.get("cloud-form-skin/cloud-form-ui.json");
 
-        final TextButton playButton = new TextButton("Jugar", cloudFormSkin);
+        final TextButton playButton = new TextButton("Mapas", cloudFormSkin);
         TextButton settingsButton = new TextButton("Ajustes", cloudFormSkin);
         TextButton creditsButton = new TextButton("Agradecimientos", cloudFormSkin);
         Label headerLabel = new Label("LA PANDEMIA", cloudFormSkin);

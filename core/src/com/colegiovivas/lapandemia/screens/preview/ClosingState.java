@@ -1,23 +1,23 @@
-package com.colegiovivas.lapandemia.screens.game;
+package com.colegiovivas.lapandemia.screens.preview;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-/**
- * Estado en el que se está llevando a cabo la cuenta atrás.
- */
-public class CountdownState implements MultistateScreen.State {
-    private final GameScreen gameScreen;
+public class ClosingState implements MultistateScreen.State {
+    private final LaPandemia main;
+    private final PreviewScreen previewScreen;
 
-    public CountdownState(LaPandemia main, GameScreen gameScreen) {
-        this.gameScreen = gameScreen;
+    public ClosingState(LaPandemia main, PreviewScreen previewScreen) {
+        this.main = main;
+        this.previewScreen = previewScreen;
     }
 
     @Override
     public void enter() {
-        gameScreen.getCountdown().start();
+        previewScreen.getClosingTransition().start();
+        previewScreen.getBackgroundMusic().stop();
     }
 
     @Override
@@ -27,6 +27,7 @@ public class CountdownState implements MultistateScreen.State {
 
     @Override
     public void show() {
+
     }
 
     @Override
@@ -34,13 +35,12 @@ public class CountdownState implements MultistateScreen.State {
         Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        gameScreen.getCountdown().render(delta);
+        previewScreen.getClosingTransition().render(delta);
 
-        gameScreen.draw();
-        gameScreen.drawCountdown();
+        previewScreen.draw();
 
-        if (!gameScreen.getCountdown().isCountingDown()) {
-            gameScreen.setState(GameScreen.STATE_PLAYING);
+        if (previewScreen.getClosingTransition().isComplete()) {
+            previewScreen.play();
         }
     }
 
@@ -66,5 +66,6 @@ public class CountdownState implements MultistateScreen.State {
 
     @Override
     public void dispose() {
+
     }
 }

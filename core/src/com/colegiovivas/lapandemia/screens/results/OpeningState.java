@@ -42,7 +42,7 @@ public class OpeningState implements MultistateScreen.State {
         resultsScreen.getOpeningTransition().draw();
 
         if (resultsScreen.getOpeningTransition().isComplete()) {
-            resultsScreen.setState(ResultsScreen.STAGE_TIME_VISIBLE);
+            resultsScreen.setState(ResultsScreen.STATE_TIME_VISIBLE);
         }
     }
 
