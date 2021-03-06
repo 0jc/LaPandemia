@@ -140,30 +140,56 @@ public class LaPandemia extends Game {
         }
     }
 
+    /**
+     * Evento que un MainMenuScreen lanza cuando se ha elegido la opción de mostrar
+     * los mapas disponibles.
+     * @param mainMenuScreen La pantalla que ha lanzado el evento.
+     */
     public void mapSelectionScreenChosen(MainMenuScreen mainMenuScreen) {
         mainMenuScreen.dispose();
 
         setScreen(new MapSelectionScreen(this, levelCatalog));
     }
 
+    /**
+     * Evento que un PreviewScreen lanza cuando se ha elegido la opción de volver
+     * a la pantalla de selección de mapas.
+     * @param previewScreen La pantalla que ha lanzado el evento.
+     */
     public void navigatedBackToMapSelection(PreviewScreen previewScreen) {
         previewScreen.dispose();
 
         setScreen(new MapSelectionScreen(this, levelCatalog));
     }
 
+    /**
+     * Evento que un MapSelectionScreen lanza cuando se ha elegido un mapa.
+     * @param source La pantalla que ha lanzado el evento.
+     * @param levelInfo El nivel que se ha elegido.
+     */
     public void previewScreenChosen(MapSelectionScreen source, LevelInfo levelInfo) {
         source.dispose();
 
         setScreen(new PreviewScreen(this, levelInfo));
     }
 
+    /**
+     * Evento que una pantalla lanza cuando se ha elegido volver a la pantalla
+     * principal.
+     * @param screen La pantalla que ha lanzado el evento.
+     */
     public void navigatedBackToMain(Screen screen) {
         screen.dispose();
 
         setScreen(new MainMenuScreen(this));
     }
 
+    /**
+     * Evento que un PreviewScreen lanza cuando se ha elegido la opción de jugar
+     * en el nivel mostrado.
+     * @param source La pantalla que ha lanzado el evento.
+     * @param levelInfo Nivel en el que se ha elegido jugar.
+     */
     public void mapChosen(PreviewScreen source, LevelInfo levelInfo) {
         source.dispose();
 

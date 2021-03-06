@@ -343,3 +343,8 @@ uno para volver a jugar y otro para volver al menú principal.
 
 Se añaden los menús de selección de mapas y previsualización de nivel. De este
 modo es posible cargar los mapas disponibles en levels/.
+
+
+Cambios presentados el 2021/03/06
+---------------------------------
+Se añade la música de nivel elegido.

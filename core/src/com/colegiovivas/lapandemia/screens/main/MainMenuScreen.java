@@ -6,15 +6,35 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
 import com.colegiovivas.lapandemia.screens.transitions.HCenterOutTransition;
 import com.colegiovivas.lapandemia.screens.transitions.Transition;
 
+/**
+ * Pantalla principal del juego.
+ */
 public class MainMenuScreen extends MultistateScreen {
     static final int STATE_OPENING = 1;
     static final int STATE_IDLE = 2;
 
     private final LaPandemia main;
     private final MainMenuView mainMenuView;
-    private final Transition openingTransition;
+
+    /**
+     * Música de fondo. Se empieza a reproducir en esta pantalla pero son otros submenús los
+     * que deciden cuándo pararla.
+     */
     private final Music backgroundMusic;
+
+    /**
+     * True si se debe reproducir la transición inicial, openingTransition, o false en caso contrario.
+     * Se utiliza para poder transicionar de forma intuitiva desde otras pantallas con transición como
+     * la de los resultados de una partida, pero no por ejemplo al volver del menú de selección de
+     * mapas.
+     */
     private final boolean playOpeningTransition;
+
+    /**
+     * Transición que se realiza para introducir la pantalla en caso de que playOpeningTransition
+     * sea verdadero.
+     */
+    private final Transition openingTransition;
 
     public MainMenuScreen(LaPandemia main) {
         this(main, false);
@@ -32,7 +52,7 @@ public class MainMenuScreen extends MultistateScreen {
         backgroundMusic.setLooping(true);
 
         addState(STATE_OPENING, new OpeningState(this));
-        addState(STATE_IDLE, new IdleState(main, this));
+        addState(STATE_IDLE, new IdleState(this));
 
         mainMenuView.setPlayListener(new MainMenuView.PlayListener() {
             @Override

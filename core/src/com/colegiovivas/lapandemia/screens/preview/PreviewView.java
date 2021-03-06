@@ -16,12 +16,27 @@ import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
+/**
+ * Vista de la pantalla de previsualización de un mapa.
+ */
 public class PreviewView {
     private final LaPandemia main;
+
+    /**
+     * Pantalla asociada a esta vista.
+     */
     private final PreviewScreen previewScreen;
+
+    /**
+     * Nivel que se previsualiza.
+     */
     private final LevelInfo levelInfo;
+
     private final Stage stage;
 
+    /**
+     * Evento que se lanza cuando se elige la opción de jugar en el mapa.
+     */
     private PlayListener playListener;
 
     public PreviewView(LaPandemia main, PreviewScreen previewScreen, LevelInfo levelInfo) {

@@ -18,14 +18,12 @@ import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
 public class MapSelectionScreen implements Screen {
     private final LaPandemia main;
-    private final LevelCatalog levelCatalog;
     private final Stage stage;
     private final InputMultiplexer inputProcessor;
     private final InputProcessor noInput;
 
     public MapSelectionScreen(LaPandemia main, LevelCatalog levelCatalog) {
         this.main = main;
-        this.levelCatalog = levelCatalog;
 
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);

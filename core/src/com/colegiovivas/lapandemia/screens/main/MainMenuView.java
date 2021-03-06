@@ -13,9 +13,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
+/**
+ * Vista de la pantalla del menú principal.
+ */
 public class MainMenuView {
     private final Stage stage;
 
+    /**
+     * Evento que se lanza cuando se elige la opción de mostrar la pantalla de selección de mapas.
+     */
     private PlayListener playListener;
 
     public MainMenuView(LaPandemia main) {
@@ -66,10 +72,17 @@ public class MainMenuView {
         stage.addActor(table);
     }
 
+    /**
+     * Establece el evento que se lanzará al elegir la opción de mostrar la pantalla de selección de mapas.
+     * @param playListener Evento que será lanzado.
+     */
     public void setPlayListener(PlayListener playListener) {
         this.playListener = playListener;
     }
 
+    /**
+     * @return El Stage de Libgdx al que pertenece la tabla con la interfaz de usuario de la vista.
+     */
     public Stage getStage() {
         return stage;
     }
@@ -78,6 +91,9 @@ public class MainMenuView {
         void playClicked();
     }
 
+    /**
+     * Libera los recursos utilizados por la vista.
+     */
     public void dispose() {
         stage.dispose();
     }

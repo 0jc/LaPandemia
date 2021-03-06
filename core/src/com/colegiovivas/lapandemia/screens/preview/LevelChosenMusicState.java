@@ -6,21 +6,22 @@ import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
 /**
- * Estado en el que se encuentra la pantalla mientras realiza la transición para
- * empezar una partida en el mapa elegido por el usuario.
+ * Estado en el que se encuentra la pantalla mientras reproduce el sonido de que se
+ * ha elegido empezar una partida en el mapa elegido por el usuario.
  */
-public class ClosingState implements MultistateScreen.State {
+public class LevelChosenMusicState implements MultistateScreen.State {
     private final LaPandemia main;
     private final PreviewScreen previewScreen;
 
-    public ClosingState(LaPandemia main, PreviewScreen previewScreen) {
+    public LevelChosenMusicState(LaPandemia main, PreviewScreen previewScreen) {
         this.main = main;
         this.previewScreen = previewScreen;
     }
 
     @Override
     public void enter() {
-        previewScreen.getClosingTransition().start();
+        previewScreen.getBackgroundMusic().stop();
+        previewScreen.getLevelChosenMusic().play();
     }
 
     @Override
@@ -38,12 +39,10 @@ public class ClosingState implements MultistateScreen.State {
         Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        previewScreen.getClosingTransition().render(delta);
-
         previewScreen.draw();
 
-        if (previewScreen.getClosingTransition().isComplete()) {
-            previewScreen.play();
+        if (!previewScreen.getLevelChosenMusic().isPlaying()) {
+            previewScreen.setState(PreviewScreen.STATE_CLOSING);
         }
     }
 

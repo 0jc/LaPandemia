@@ -4,6 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
+/**
+ * Estado en el que se encuentra la pantalla durante la transición inicial.
+ * En caso de que se haya decidido desde MainMenuScreen que no se realizará
+ * esta transición, se salta directamente al siguiente estado.
+ */
 public class OpeningState implements MultistateScreen.State {
     private final MainMenuScreen mainMenuScreen;
 

@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
+/**
+ * Estado en el que se encuentra la pantalla mientras espera que el usuario realice
+ * una acción.
+ */
 public class IdleState implements MultistateScreen.State {
     private final LaPandemia main;
     private final PreviewScreen previewScreen;

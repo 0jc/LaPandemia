@@ -8,12 +8,10 @@ import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
 public class IdleState implements MultistateScreen.State {
-    private final LaPandemia main;
     private final MainMenuScreen mainMenuScreen;
     private final InputProcessor noInput;
 
-    public IdleState(LaPandemia main, MainMenuScreen mainMenuScreen) {
-        this.main = main;
+    public IdleState(MainMenuScreen mainMenuScreen) {
         this.mainMenuScreen = mainMenuScreen;
         noInput = new InputAdapter();
     }
