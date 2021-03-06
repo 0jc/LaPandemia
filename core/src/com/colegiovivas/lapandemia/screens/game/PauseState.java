@@ -5,12 +5,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
+import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
 /**
  * Estado en el que la partida se encuentra en pausa.
  */
 public class PauseState implements MultistateScreen.State {
+    private final LaPandemia main;
     private final GameScreen gameScreen;
 
     /**
@@ -36,7 +38,8 @@ public class PauseState implements MultistateScreen.State {
      */
     private final InputProcessor noInput;
 
-    public PauseState(GameScreen gameScreen) {
+    public PauseState(LaPandemia main, GameScreen gameScreen) {
+        this.main = main;
         this.gameScreen = gameScreen;
         this.noInput = new InputAdapter();
         this.backButtonProcessor = new InputAdapter() {
@@ -80,14 +83,14 @@ public class PauseState implements MultistateScreen.State {
         gameScreen.draw();
 
         if (pausing) {
-            if (Gdx.input.getGyroscopeY() >= GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
+            if (main.hardwareWrapper.getGyroscopeY() >= GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
                 pausing = false;
             }
         } else if (!resume){
-            if (Gdx.input.getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
+            if (main.hardwareWrapper.getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
                 resume = true;
             }
-        } else if (Gdx.input.getGyroscopeY() >= GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
+        } else if (main.hardwareWrapper.getGyroscopeY() >= GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
             resumeGame();
         }
     }

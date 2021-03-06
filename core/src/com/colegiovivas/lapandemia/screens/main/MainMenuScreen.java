@@ -68,6 +68,13 @@ public class MainMenuScreen extends MultistateScreen {
             }
         });
 
+        mainMenuView.setSettingsListener(new MainMenuView.SettingsListener() {
+            @Override
+            public void settingsClicked() {
+                MainMenuScreen.this.main.settingsScreenChosen(MainMenuScreen.this);
+            }
+        });
+
         setState(STATE_OPENING);
     }
 

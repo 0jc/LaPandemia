@@ -12,11 +12,13 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * Estado en el que el usuario está jugando la partida.
  */
 public class PlayingState implements MultistateScreen.State {
+    private final LaPandemia main;
     private final GameScreen gameScreen;
     private final InputMultiplexer inputProcessor;
     private final InputProcessor noInput;
 
     public PlayingState(LaPandemia main, GameScreen gameScreen) {
+        this.main = main;
         this.gameScreen = gameScreen;
 
         noInput = new InputAdapter();
@@ -74,7 +76,7 @@ public class PlayingState implements MultistateScreen.State {
 
         if (gameScreen.getWorld().gameIsOver()) {
             gameScreen.setState(GameScreen.STATE_GAME_OVER_MUSIC);
-        } else if (Gdx.input.getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
+        } else if (main.hardwareWrapper.getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
             pauseGame();
         }
     }

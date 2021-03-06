@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import com.colegiovivas.lapandemia.hardware.HardwareWrapper;
 import com.colegiovivas.lapandemia.levels.LevelCatalog;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.credits.CreditsScreen;
@@ -18,6 +19,7 @@ import com.colegiovivas.lapandemia.screens.preview.PreviewScreen;
 import com.colegiovivas.lapandemia.screens.results.ResultsScreen;
 import com.colegiovivas.lapandemia.screens.game.GameScreen;
 import com.colegiovivas.lapandemia.screens.LoadingScreen;
+import com.colegiovivas.lapandemia.screens.settings.SettingsScreen;
 
 /**
  * La clase principal del juego. Coordina la gestión de las pantallas y ofrece
@@ -34,6 +36,12 @@ public class LaPandemia extends Game {
      * y luego finalmente liberarlos.
      */
     public AssetManager assetManager;
+
+    /**
+     * Interfaz hacia el giroscopio y vibrador en función de la configuración establecida
+     * por el usuario.
+     */
+    public HardwareWrapper hardwareWrapper;
 
     /**
      * Fondo global para instancias de Rectangle.
@@ -111,6 +119,8 @@ public class LaPandemia extends Game {
         };
         colorPool.fill(10);
 
+        hardwareWrapper = new HardwareWrapper();
+
         setScreen(new LoadingScreen(this));
     }
 
@@ -161,6 +171,17 @@ public class LaPandemia extends Game {
         mainMenuScreen.dispose();
 
         setScreen(new CreditsScreen(this));
+    }
+
+    /**
+     * Evento que un MainScreenMenu lanza cuando se ha elegido la opción de mostrar
+     * los ajustes.
+     * @param mainMenuScreen La pantalla que ha lanzado el evento.
+     */
+    public void settingsScreenChosen(MainMenuScreen mainMenuScreen) {
+        mainMenuScreen.dispose();
+
+        setScreen(new SettingsScreen(this));
     }
 
     /**

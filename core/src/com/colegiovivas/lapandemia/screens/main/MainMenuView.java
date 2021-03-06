@@ -29,6 +29,11 @@ public class MainMenuView {
      */
     private CreditsListener creditsListener;
 
+    /**
+     * Evento que se lanza cuando se elige la opción de mostrar la pantalla de ajustes.
+     */
+    private SettingsListener settingsListener;
+
     public MainMenuView(LaPandemia main) {
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);
@@ -81,6 +86,13 @@ public class MainMenuView {
             }
         });
 
+        settingsButton.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (settingsListener != null) settingsListener.settingsClicked();
+            }
+        });
+
         stage.addActor(table);
     }
 
@@ -101,6 +113,14 @@ public class MainMenuView {
     }
 
     /**
+     * Establece el evento que se lanzará al elegir la opción de mostrar la pantalla de ajustes.
+     * @param settingsListener Evento que será lanzado.
+     */
+    public void setSettingsListener(SettingsListener settingsListener) {
+        this.settingsListener = settingsListener;
+    }
+
+    /**
      * @return El Stage de Libgdx al que pertenece la tabla con la interfaz de usuario de la vista.
      */
     public Stage getStage() {
@@ -113,6 +133,10 @@ public class MainMenuView {
 
     public interface CreditsListener {
         void creditsClicked();
+    }
+
+    public interface SettingsListener {
+        void settingsClicked();
     }
 
     /**

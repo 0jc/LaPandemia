@@ -122,7 +122,7 @@ public class GameScreen extends MultistateScreen {
         addState(STATE_WAIT_AFTER_ZOOM_IN, new WaitState(this, 1f, STATE_COUNTDOWN));
         addState(STATE_COUNTDOWN, new CountdownState(main, this));
         addState(STATE_PLAYING, new PlayingState(main, this));
-        addState(STATE_PAUSE, new PauseState(this));
+        addState(STATE_PAUSE, new PauseState(main, this));
         addState(STATE_GAME_OVER_MUSIC, new GameOverMusicState(main, this));
         addState(STATE_CLOSING, new ClosingState(this));
 

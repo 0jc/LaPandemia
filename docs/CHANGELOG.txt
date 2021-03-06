@@ -348,3 +348,11 @@ modo es posible cargar los mapas disponibles en levels/.
 Cambios presentados el 2021/03/06
 ---------------------------------
 Se añade la música de nivel elegido.
+
+Se añade la pantalla de configuración ("ajustes") e implementa HardwareWrapper,
+una clase que actúa como interfaz entre el hardware y el resto del código del
+juego para que este pueda acceder al vibrador y al giroscopio de forma transparente
+a cómo el usuario los ha configurado en la pantalla de ajustes.
+
+Con esto cuento con haber terminado el código del juego. ¡Hurra! Pero todavía
+hay que hacer los archivos JSON de los demás mapas.
