@@ -75,7 +75,6 @@ public class LoadingScreen implements Screen {
         parent.assetManager.load("audio/stat-shown.wav", Music.class);
         parent.assetManager.load("audio/claps.wav", Music.class);
         parent.assetManager.load("audio/ticking.wav", Music.class);
-        parent.assetManager.load("audio/direction-turn.wav", Music.class);
         parent.assetManager.load("audio/game-opening.wav", Music.class);
         parent.assetManager.load("audio/map.wav", Music.class);
         parent.assetManager.load("audio/game-over.wav", Music.class);

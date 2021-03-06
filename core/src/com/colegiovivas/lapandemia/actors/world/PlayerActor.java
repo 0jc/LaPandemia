@@ -53,11 +53,6 @@ public class PlayerActor extends CollisionableActor {
     private final LaPandemia game;
 
     /**
-     * Sonido que se reproduce al cambiar de dirección (actualmente desactivado).
-     */
-    private final Music turnSound;
-
-    /**
      * Sonido que se reproduce al chocar con un muro.
      */
     private final Sound wallHitSound;
@@ -173,7 +168,6 @@ public class PlayerActor extends CollisionableActor {
 
         setTouchable(Touchable.enabled);
 
-        turnSound = game.assetManager.get("audio/direction-turn.wav");
         wallHitSound = game.assetManager.get("audio/hit-wall.wav");
         fanHitSound = game.assetManager.get("audio/hit-fan.wav");
         infectionSound = game.assetManager.get("audio/infected.wav");
@@ -222,8 +216,6 @@ public class PlayerActor extends CollisionableActor {
      */
     public void turn(int xDir, int yDir) {
         if (xDir != this.xDir || yDir != this.yDir) {
-            // Actualmente, el sonido de cambio de dirección está desactivado.
-            //turnSound.play();
             setDirection(xDir, yDir);
         }
     }
