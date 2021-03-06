@@ -61,6 +61,13 @@ public class MainMenuScreen extends MultistateScreen {
             }
         });
 
+        mainMenuView.setCreditsListener(new MainMenuView.CreditsListener() {
+            @Override
+            public void creditsClicked() {
+                MainMenuScreen.this.main.creditsScreenChosen(MainMenuScreen.this);
+            }
+        });
+
         setState(STATE_OPENING);
     }
 

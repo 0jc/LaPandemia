@@ -24,6 +24,11 @@ public class MainMenuView {
      */
     private PlayListener playListener;
 
+    /**
+     * Evento que se lanza cuando se elige la opción de mostrar la pantalla de los créditos.
+     */
+    private CreditsListener creditsListener;
+
     public MainMenuView(LaPandemia main) {
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);
@@ -33,7 +38,7 @@ public class MainMenuView {
 
         final TextButton playButton = new TextButton("Mapas", cloudFormSkin);
         TextButton settingsButton = new TextButton("Ajustes", cloudFormSkin);
-        TextButton creditsButton = new TextButton("Agradecimientos", cloudFormSkin);
+        final TextButton creditsButton = new TextButton("Agradecimientos", cloudFormSkin);
         Label headerLabel = new Label("LA PANDEMIA", cloudFormSkin);
         headerLabel.setFontScaleX(1.5f);
         headerLabel.setFontScaleY(1.5f);
@@ -69,6 +74,13 @@ public class MainMenuView {
             }
         });
 
+        creditsButton.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (creditsListener != null) creditsListener.creditsClicked();
+            }
+        });
+
         stage.addActor(table);
     }
 
@@ -81,6 +93,14 @@ public class MainMenuView {
     }
 
     /**
+     * Establece el evento que se lanzará al elegir la opción de mostrar la pantalla de los créditos.
+     * @param creditsListener Evento que será lanzado.
+     */
+    public void setCreditsListener(CreditsListener creditsListener) {
+        this.creditsListener = creditsListener;
+    }
+
+    /**
      * @return El Stage de Libgdx al que pertenece la tabla con la interfaz de usuario de la vista.
      */
     public Stage getStage() {
@@ -89,6 +109,10 @@ public class MainMenuView {
 
     public interface PlayListener {
         void playClicked();
+    }
+
+    public interface CreditsListener {
+        void creditsClicked();
     }
 
     /**

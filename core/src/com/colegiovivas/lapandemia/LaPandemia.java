@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.levels.LevelCatalog;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
+import com.colegiovivas.lapandemia.screens.credits.CreditsScreen;
 import com.colegiovivas.lapandemia.screens.main.MainMenuScreen;
 import com.colegiovivas.lapandemia.screens.mapselection.MapSelectionScreen;
 import com.colegiovivas.lapandemia.screens.preview.PreviewScreen;
@@ -149,6 +150,17 @@ public class LaPandemia extends Game {
         mainMenuScreen.dispose();
 
         setScreen(new MapSelectionScreen(this, levelCatalog));
+    }
+
+    /**
+     * Evento que un MainMenuScreen lanza cuando se ha elegido la opción de mostrar
+     * los créditos.
+     * @param mainMenuScreen La pantalla que ha lanzado el evento.
+     */
+    public void creditsScreenChosen(MainMenuScreen mainMenuScreen) {
+        mainMenuScreen.dispose();
+
+        setScreen(new CreditsScreen(this));
     }
 
     /**
