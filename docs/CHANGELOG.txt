@@ -357,3 +357,8 @@ a cómo el usuario los ha configurado en la pantalla de ajustes.
 Con esto cuento con haber terminado el código del juego. ¡Hurra!
 
 Finalmente, se ha añadido un segundo nivel más grande al juego.
+
+
+Cambios presentados el 2021/03/07
+---------------------------------
+Se establecen el nombre de la aplicación y el icono del launcher.
