@@ -10,7 +10,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * Estado en el que se hace visible la estadística de la puntuación (aunque
  * todavía con su valor inicial de 0) y se reproduce el efecto sonoro relevante.
  */
-public class PaperCountVisibleState implements MultistateScreen.State {
+public class PaperCountVisibleState extends MultistateScreen.StateAdapter {
     private final ResultsScreen resultsScreen;
     private final Music statShownMusic;
 
@@ -27,16 +27,6 @@ public class PaperCountVisibleState implements MultistateScreen.State {
     }
 
     @Override
-    public void leave() {
-
-    }
-
-    @Override
-    public void show() {
-
-    }
-
-    @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0xFF, 0xFF, 0xFF, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -45,30 +35,5 @@ public class PaperCountVisibleState implements MultistateScreen.State {
         if (!statShownMusic.isPlaying()) {
             resultsScreen.setState(ResultsScreen.STATE_INCREASING_PAPER_COUNT);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

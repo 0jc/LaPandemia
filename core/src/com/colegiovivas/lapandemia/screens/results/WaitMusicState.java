@@ -9,7 +9,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * Estado de reproducción de música. Se reproduce una única vez una
  * música especificada y después se cambia a otro estado.
  */
-public class WaitMusicState implements MultistateScreen.State {
+public class WaitMusicState extends MultistateScreen.StateAdapter {
     private final ResultsScreen resultsScreen;
     /**
      * Siguiente estado al que se salta al terminarse la música.
@@ -33,16 +33,6 @@ public class WaitMusicState implements MultistateScreen.State {
     }
 
     @Override
-    public void leave() {
-
-    }
-
-    @Override
-    public void show() {
-
-    }
-
-    @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0xFF, 0xFF, 0xFF, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -51,30 +41,5 @@ public class WaitMusicState implements MultistateScreen.State {
         if (!music.isPlaying()) {
             resultsScreen.setState(nextState);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

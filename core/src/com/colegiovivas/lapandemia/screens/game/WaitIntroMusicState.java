@@ -8,26 +8,11 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * Estado en el que se espera a que la música introductoria se termine
  * de reproducir.
  */
-public class WaitIntroMusicState implements MultistateScreen.State {
+public class WaitIntroMusicState extends MultistateScreen.StateAdapter {
     private final GameScreen gameScreen;
 
     public WaitIntroMusicState(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
-    }
-
-    @Override
-    public void enter() {
-
-    }
-
-    @Override
-    public void leave() {
-
-    }
-
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -40,30 +25,5 @@ public class WaitIntroMusicState implements MultistateScreen.State {
         if (!gameScreen.getIntroMusic().isPlaying()) {
             gameScreen.setState(GameScreen.STATE_WAIT_AFTER_ZOOM_IN);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

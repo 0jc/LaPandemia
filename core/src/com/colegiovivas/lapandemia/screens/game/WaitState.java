@@ -8,7 +8,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * Estado en el que la pantalla se encuentra en espera, por motivos de
  * presentación.
  */
-public class WaitState implements MultistateScreen.State {
+public class WaitState extends MultistateScreen.StateAdapter {
     private final GameScreen gameScreen;
 
     /**
@@ -38,15 +38,6 @@ public class WaitState implements MultistateScreen.State {
     }
 
     @Override
-    public void leave() {
-
-    }
-
-    @Override
-    public void show() {
-    }
-
-    @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -57,30 +48,5 @@ public class WaitState implements MultistateScreen.State {
         if (waitedTime >= totalTime) {
             gameScreen.setState(nextState);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

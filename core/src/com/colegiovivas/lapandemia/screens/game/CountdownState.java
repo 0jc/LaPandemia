@@ -8,7 +8,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
 /**
  * Estado en el que se está llevando a cabo la cuenta atrás.
  */
-public class CountdownState implements MultistateScreen.State {
+public class CountdownState extends MultistateScreen.StateAdapter {
     private final GameScreen gameScreen;
 
     public CountdownState(LaPandemia main, GameScreen gameScreen) {
@@ -18,15 +18,6 @@ public class CountdownState implements MultistateScreen.State {
     @Override
     public void enter() {
         gameScreen.getCountdown().start();
-    }
-
-    @Override
-    public void leave() {
-
-    }
-
-    @Override
-    public void show() {
     }
 
     @Override
@@ -42,29 +33,5 @@ public class CountdownState implements MultistateScreen.State {
         if (!gameScreen.getCountdown().isCountingDown()) {
             gameScreen.setState(GameScreen.STATE_PLAYING);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
     }
 }

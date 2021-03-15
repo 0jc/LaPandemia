@@ -11,7 +11,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
 /**
  * Estado en el que la partida se encuentra en pausa.
  */
-public class PauseState implements MultistateScreen.State {
+public class PauseState extends MultistateScreen.StateAdapter {
     private final LaPandemia main;
     private final GameScreen gameScreen;
 
@@ -100,30 +100,5 @@ public class PauseState implements MultistateScreen.State {
      */
     private void resumeGame() {
         gameScreen.setState(GameScreen.STATE_PLAYING);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

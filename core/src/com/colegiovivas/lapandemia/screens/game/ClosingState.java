@@ -7,7 +7,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
 /**
  * Estado en el que se reproduce la transición final.
  */
-public class ClosingState implements MultistateScreen.State {
+public class ClosingState extends MultistateScreen.StateAdapter {
     private final GameScreen gameScreen;
 
     public ClosingState(GameScreen gameScreen) {
@@ -17,16 +17,6 @@ public class ClosingState implements MultistateScreen.State {
     @Override
     public void enter() {
         gameScreen.getClosingTransition().start();
-    }
-
-    @Override
-    public void leave() {
-
-    }
-
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -42,30 +32,5 @@ public class ClosingState implements MultistateScreen.State {
         if (gameScreen.getClosingTransition().isComplete()) {
             gameScreen.finishGame();
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

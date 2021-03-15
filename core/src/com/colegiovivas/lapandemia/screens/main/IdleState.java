@@ -7,18 +7,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
-public class IdleState implements MultistateScreen.State {
+public class IdleState extends MultistateScreen.StateAdapter {
     private final MainMenuScreen mainMenuScreen;
     private final InputProcessor noInput;
 
     public IdleState(MainMenuScreen mainMenuScreen) {
         this.mainMenuScreen = mainMenuScreen;
         noInput = new InputAdapter();
-    }
-
-    @Override
-    public void enter() {
-
     }
 
     @Override
@@ -37,30 +32,5 @@ public class IdleState implements MultistateScreen.State {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         mainMenuScreen.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

@@ -12,7 +12,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * muestra en el formulario el campo donde se pide al usuario que
  * introduzca su nombre.
  */
-public class ShowingButtonsState implements MultistateScreen.State {
+public class ShowingButtonsState extends MultistateScreen.StateAdapter {
     private final ResultsScreen resultsScreen;
     private final InputProcessor noInput;
 
@@ -64,30 +64,5 @@ public class ShowingButtonsState implements MultistateScreen.State {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         resultsScreen.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

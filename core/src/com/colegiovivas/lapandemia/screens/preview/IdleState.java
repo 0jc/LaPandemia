@@ -9,7 +9,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * Estado en el que se encuentra la pantalla mientras espera que el usuario realice
  * una acción.
  */
-public class IdleState implements MultistateScreen.State {
+public class IdleState extends MultistateScreen.StateAdapter {
     private final LaPandemia main;
     private final PreviewScreen previewScreen;
     private final InputMultiplexer inputProcessor;
@@ -35,10 +35,6 @@ public class IdleState implements MultistateScreen.State {
     }
 
     @Override
-    public void enter() {
-    }
-
-    @Override
     public void leave() {
         Gdx.input.setCatchKey(Input.Keys.BACK, false);
         Gdx.input.setInputProcessor(noInput);
@@ -56,29 +52,5 @@ public class IdleState implements MultistateScreen.State {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         previewScreen.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

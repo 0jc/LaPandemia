@@ -9,7 +9,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * Estado en el que el valor de la vista de la puntuación de la partida
  * se incrementa gradualmente hasta alcanzar su valor real.
  */
-public class IncreasingPaperCountState implements MultistateScreen.State {
+public class IncreasingPaperCountState extends MultistateScreen.StateAdapter {
     private final ResultsScreen resultsScreen;
     private final CounterAnimator counterAnimator;
 
@@ -22,16 +22,6 @@ public class IncreasingPaperCountState implements MultistateScreen.State {
     public void enter() {
         this.counterAnimator.init(0.3f, 0, resultsScreen.getPaperCount());
         resultsScreen.getResultsView().setPaperCountVisible(true);
-    }
-
-    @Override
-    public void leave() {
-
-    }
-
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -50,30 +40,5 @@ public class IncreasingPaperCountState implements MultistateScreen.State {
         } else {
             resultsScreen.setState(ResultsScreen.STATE_PAPER_COUNT_FINISHED_MUSIC);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

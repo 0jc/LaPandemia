@@ -9,7 +9,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
 /**
  * Estado en el que se reproduce la música de fin de la partida.
  */
-public class GameOverMusicState implements MultistateScreen.State {
+public class GameOverMusicState extends MultistateScreen.StateAdapter {
     private final GameScreen gameScreen;
 
     public GameOverMusicState(LaPandemia main, GameScreen gameScreen) {
@@ -21,11 +21,6 @@ public class GameOverMusicState implements MultistateScreen.State {
         gameScreen.getMapMusic().stop();
         gameScreen.getGameOverMusic().setLooping(false);
         gameScreen.getGameOverMusic().play();
-    }
-
-    @Override
-    public void leave() {
-
     }
 
     @Override
@@ -43,30 +38,5 @@ public class GameOverMusicState implements MultistateScreen.State {
         if (!gameScreen.getGameOverMusic().isPlaying()) {
             gameScreen.setState(GameScreen.STATE_CLOSING);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

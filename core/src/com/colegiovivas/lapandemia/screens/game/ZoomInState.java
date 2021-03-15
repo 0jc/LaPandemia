@@ -9,7 +9,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * Estado en el que, tras haber mostrado el mapa desde lejos, se hace zoom en
  * la dirección del personaje.
  */
-public class ZoomInState implements MultistateScreen.State {
+public class ZoomInState extends MultistateScreen.StateAdapter {
     private final GameScreen gameScreen;
     private final OrthographicCamera camera;
     /**
@@ -24,20 +24,6 @@ public class ZoomInState implements MultistateScreen.State {
     }
 
     @Override
-    public void enter() {
-    }
-
-    @Override
-    public void leave() {
-
-    }
-
-    @Override
-    public void show() {
-
-    }
-
-    @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -49,30 +35,5 @@ public class ZoomInState implements MultistateScreen.State {
         } else if (!gameScreen.getIntroMusic().isPlaying()) {
             gameScreen.setState(GameScreen.STATE_WAIT_INTRO_MUSIC);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

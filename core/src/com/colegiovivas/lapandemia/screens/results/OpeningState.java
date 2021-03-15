@@ -7,7 +7,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
 /**
  * Estado en el que se reproduce la transición inicial.
  */
-public class OpeningState implements MultistateScreen.State {
+public class OpeningState extends MultistateScreen.StateAdapter {
     private final ResultsScreen resultsScreen;
 
     public OpeningState(ResultsScreen resultsScreen) {
@@ -19,16 +19,6 @@ public class OpeningState implements MultistateScreen.State {
         resultsScreen.getBackgroundMusic().setLooping(true);
         resultsScreen.getBackgroundMusic().play();
         resultsScreen.getOpeningTransition().start();
-    }
-
-    @Override
-    public void leave() {
-
-    }
-
-    @Override
-    public void show() {
-
     }
 
     @Override
@@ -44,30 +34,5 @@ public class OpeningState implements MultistateScreen.State {
         if (resultsScreen.getOpeningTransition().isComplete()) {
             resultsScreen.setState(ResultsScreen.STATE_TIME_VISIBLE);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

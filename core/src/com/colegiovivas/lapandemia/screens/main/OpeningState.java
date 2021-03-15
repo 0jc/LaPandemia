@@ -9,7 +9,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * En caso de que se haya decidido desde MainMenuScreen que no se realizará
  * esta transición, se salta directamente al siguiente estado.
  */
-public class OpeningState implements MultistateScreen.State {
+public class OpeningState extends MultistateScreen.StateAdapter {
     private final MainMenuScreen mainMenuScreen;
 
     public OpeningState(MainMenuScreen mainMenuScreen) {
@@ -21,11 +21,6 @@ public class OpeningState implements MultistateScreen.State {
         if (mainMenuScreen.getPlayOpeningTransition()) {
             mainMenuScreen.getOpeningTransition().start();
         }
-    }
-
-    @Override
-    public void leave() {
-
     }
 
     @Override
@@ -45,30 +40,5 @@ public class OpeningState implements MultistateScreen.State {
         if (!mainMenuScreen.getPlayOpeningTransition() || mainMenuScreen.getOpeningTransition().isComplete()) {
             mainMenuScreen.setState(MainMenuScreen.STATE_IDLE);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }
