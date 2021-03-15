@@ -1,9 +1,11 @@
 package com.colegiovivas.lapandemia.screens.game;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -52,16 +54,18 @@ public class GameStats {
      */
     private boolean paused = false;
 
-    public GameStats(final LaPandemia main) {
+    public GameStats(AssetManager assetManager) {
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(800, 40, camera);
         stage = new Stage(viewport);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.fontColor = Color.WHITE;
-        labelStyle.font = main.getAssetManager().get("fonts/nice32.fnt");
+        labelStyle.font = assetManager.get("fonts/nice32.fnt");
 
-        final TextureAtlas atlas = main.getAssetManager().get("images.pack");
+        TextureRegion whitePixel = ((TextureAtlas)assetManager.get("images.pack")).findRegion("ui-whitepixel");
+
+        final TextureAtlas atlas = assetManager.get("images.pack");
         Image maskIcon = new Image(atlas.findRegion("ui-mask"));
         Image paperIcon = new Image(atlas.findRegion("ui-toiletpaper"));
         Image runningTimeIcon = new Image(atlas.findRegion("timer"));
@@ -83,7 +87,7 @@ public class GameStats {
         table.setFillParent(true);
         table.padRight(20);
         table.padLeft(20);
-        table.setBackground(new MonochromaticDrawable(main, Color.BLACK));
+        table.setBackground(new MonochromaticDrawable(whitePixel, Color.BLACK));
 
         table.add(runningTimeIcon);
         table.add(runningTimeLabel).padLeft(10).padRight(30);

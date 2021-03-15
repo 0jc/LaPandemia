@@ -12,7 +12,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
 public class GameOverMusicState extends MultistateScreen.StateAdapter {
     private final GameScreen gameScreen;
 
-    public GameOverMusicState(LaPandemia main, GameScreen gameScreen) {
+    public GameOverMusicState(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
 

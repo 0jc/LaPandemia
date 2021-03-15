@@ -1,8 +1,12 @@
 package com.colegiovivas.lapandemia.screens.preview;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -20,47 +24,28 @@ import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
  * Vista de la pantalla de previsualización de un mapa.
  */
 public class PreviewView {
-    private final LaPandemia main;
-
-    /**
-     * Pantalla asociada a esta vista.
-     */
-    private final PreviewScreen previewScreen;
-
-    /**
-     * Nivel que se previsualiza.
-     */
-    private final LevelInfo levelInfo;
-
     private final Stage stage;
+    private final TextButton startButton;
 
-    /**
-     * Evento que se lanza cuando se elige la opción de jugar en el mapa.
-     */
-    private PlayListener playListener;
-
-    public PreviewView(LaPandemia main, PreviewScreen previewScreen, LevelInfo levelInfo) {
-        this.main = main;
-        this.previewScreen = previewScreen;
-        this.levelInfo = levelInfo;
-
+    public PreviewView(AssetManager assetManager, LevelInfo levelInfo) {
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin cloudFormSkin = main.getAssetManager().get("cloud-form-skin/cloud-form-ui.json");
+        Skin cloudFormSkin = assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        TextureRegion whitePixel = ((TextureAtlas)assetManager.get("images.pack")).findRegion("ui-whitepixel");
         Label levelNameLabel = new Label(levelInfo.getName(), cloudFormSkin, "title");
         Label scoreLabel = new Label("Rollos de papel: " + levelInfo.getHighscore().getScore(), cloudFormSkin);
         Label authorLabel = new Label("Autor: " + levelInfo.getHighscore().getAuthor(), cloudFormSkin);
-        TextButton startButton = new TextButton("COMENZAR", cloudFormSkin);
+        startButton = new TextButton("COMENZAR", cloudFormSkin);
 
         Table table = new Table();
-        table.setBackground(new MonochromaticDrawable(main, Color.SKY));
+        table.setBackground(new MonochromaticDrawable(whitePixel, Color.SKY));
         table.setFillParent(true);
         table.left().top();
 
         Table levelNameTable = new Table();
-        levelNameTable.setBackground(new MonochromaticDrawable(main, Color.OLIVE));
+        levelNameTable.setBackground(new MonochromaticDrawable(whitePixel, Color.OLIVE));
         table.add(levelNameTable).pad(10).expandX().fillX().row();
 
         levelNameTable.pad(10);
@@ -68,7 +53,7 @@ public class PreviewView {
 
         Table statsTable = new Table();
         statsTable.center();
-        statsTable.setBackground(new MonochromaticDrawable(main, Color.WHITE));
+        statsTable.setBackground(new MonochromaticDrawable(whitePixel, Color.WHITE));
         table.add(statsTable).padLeft(10).padRight(10).padBottom(10).expand().fill().row();
 
         statsTable.add(scoreLabel).expandX().padBottom(10).row();
@@ -79,25 +64,14 @@ public class PreviewView {
         startButtonTable.add(startButton).expandX().fillX();
 
         stage.addActor(table);
-
-        startButton.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (playListener != null) playListener.playClicked();
-            }
-        });
     }
 
-    public void setPlayListener(PlayListener playListener) {
-        this.playListener = playListener;
+    public void addStartListener(EventListener eventListener) {
+        startButton.addListener(eventListener);
     }
 
     public Stage getStage() {
         return stage;
-    }
-
-    public interface PlayListener {
-        void playClicked();
     }
 
     public void dispose() {

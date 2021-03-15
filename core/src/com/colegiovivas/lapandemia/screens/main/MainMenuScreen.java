@@ -1,6 +1,8 @@
 package com.colegiovivas.lapandemia.screens.main;
 
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 import com.colegiovivas.lapandemia.screens.transitions.HCenterOutTransition;
@@ -46,7 +48,7 @@ public class MainMenuScreen extends MultistateScreen {
 
         openingTransition = new HCenterOutTransition(0, 0.7f, 0);
 
-        mainMenuView = new MainMenuView(main);
+        mainMenuView = new MainMenuView(main.getAssetManager());
 
         backgroundMusic = main.getAssetManager().get("audio/menu-misc.mp3");
         backgroundMusic.setLooping(true);
@@ -54,24 +56,24 @@ public class MainMenuScreen extends MultistateScreen {
         addState(STATE_OPENING, new OpeningState(this));
         addState(STATE_IDLE, new IdleState(this));
 
-        mainMenuView.setPlayListener(new MainMenuView.PlayListener() {
+        mainMenuView.addPlayListener(new ClickListener() {
             @Override
-            public void playClicked() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 MainMenuScreen.this.main.mapSelectionScreenChosen(MainMenuScreen.this);
             }
         });
 
-        mainMenuView.setCreditsListener(new MainMenuView.CreditsListener() {
+        mainMenuView.addSettingsListener(new ClickListener() {
             @Override
-            public void creditsClicked() {
-                MainMenuScreen.this.main.creditsScreenChosen(MainMenuScreen.this);
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                MainMenuScreen.this.main.settingsScreenChosen(MainMenuScreen.this);
             }
         });
 
-        mainMenuView.setSettingsListener(new MainMenuView.SettingsListener() {
+        mainMenuView.addCreditsListener(new ClickListener() {
             @Override
-            public void settingsClicked() {
-                MainMenuScreen.this.main.settingsScreenChosen(MainMenuScreen.this);
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                MainMenuScreen.this.main.creditsScreenChosen(MainMenuScreen.this);
             }
         });
 

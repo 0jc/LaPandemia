@@ -1,5 +1,6 @@
 package com.colegiovivas.lapandemia.screens.game;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -56,7 +57,7 @@ public class Countdown {
      */
     private float postFadeWaitedTime = 0;
 
-    public Countdown(LaPandemia main) {
+    public Countdown(AssetManager assetManager) {
         OrthographicCamera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(800, 480, camera);
         stage = new Stage(viewport);
@@ -66,7 +67,7 @@ public class Countdown {
 
         images = new Image[4];
         Array<TextureAtlas.AtlasRegion> regions
-                = ((TextureAtlas)main.getAssetManager().get("images.pack")).findRegions("countdown");
+                = ((TextureAtlas)assetManager.get("images.pack")).findRegions("countdown");
         for (int i = 0; i <= 3; i++) {
             images[i] = new Image(regions.get(i));
             images[i].setPosition(-images[i].getWidth()/2, -images[i].getHeight()/2);
@@ -74,8 +75,8 @@ public class Countdown {
             stage.addActor(images[i]);
         }
 
-        numberBeep = main.getAssetManager().get("audio/countdown-beep-number.wav");
-        goBeep = main.getAssetManager().get("audio/countdown-beep-go.wav");
+        numberBeep = assetManager.get("audio/countdown-beep-number.wav");
+        goBeep = assetManager.get("audio/countdown-beep-go.wav");
     }
 
     /**

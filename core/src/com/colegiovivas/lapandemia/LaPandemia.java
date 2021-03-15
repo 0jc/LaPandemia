@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
@@ -12,6 +11,8 @@ import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.hardware.HardwareWrapper;
 import com.colegiovivas.lapandemia.levels.LevelCatalog;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
+import com.colegiovivas.lapandemia.pools.ActorArrayPool;
+import com.colegiovivas.lapandemia.pools.RectanglePool;
 import com.colegiovivas.lapandemia.screens.credits.CreditsScreen;
 import com.colegiovivas.lapandemia.screens.main.MainMenuScreen;
 import com.colegiovivas.lapandemia.screens.mapselection.MapSelectionScreen;
@@ -30,15 +31,18 @@ import com.colegiovivas.lapandemia.screens.settings.SettingsScreen;
  * y mejorar así el rendimiento del juego.
  */
 public class LaPandemia extends Game {
+    /**
+     * El gestor de assets (recursos como imágenes y música). Permite cargar una
+     * única vez dichos recursos, acceder a ellos fácilmente cuando es necesario
+     * y luego finalmente liberarlos.
+     */
     private AssetManager assetManager;
 
+    /**
+     * Interfaz hacia el giroscopio y vibrador en función de la configuración establecida
+     * por el usuario.
+     */
     private HardwareWrapper hardwareWrapper;
-
-    private Pool<Rectangle> rectPool;
-
-    private Pool<Array<Actor>> actorArrayPool;
-
-    private Pool<Color> colorPool;
 
     /**
      * La pantalla a la que saltar después de cargar los recursos. Si es null, se
@@ -54,52 +58,16 @@ public class LaPandemia extends Game {
      */
     private LevelCatalog levelCatalog;
 
+    /**
+     * Inicializa una instancia de la aplicación.
+     * @see Game#create()
+     */
     @Override
     public void create() {
         Gdx.app.log("LaPandemia", "create()");
 
         levelCatalog = new LevelCatalog();
         setAssetManager(new AssetManager());
-
-        abstract class PoolableRectangle extends Rectangle implements Pool.Poolable {}
-        setRectPool(new Pool<Rectangle>() {
-            @Override
-            protected PoolableRectangle newObject() {
-                return new PoolableRectangle() {
-                    @Override
-                    public void reset() {
-                        set(0, 0, 0, 0);
-                    }
-                };
-            }
-        });
-
-        abstract class PoolableArray<T> extends Array<T> implements Pool.Poolable {}
-        setActorArrayPool(new Pool<Array<Actor>>() {
-            @Override
-            protected PoolableArray<Actor> newObject() {
-                return new PoolableArray<Actor>() {
-                    @Override
-                    public void reset() {
-                        clear();
-                    }
-                };
-            }
-        });
-
-        abstract class PoolableColor extends Color implements Pool.Poolable {}
-        setColorPool(new Pool<Color>() {
-            @Override
-            protected Color newObject() {
-                return new PoolableColor() {
-                    @Override
-                    public void reset() {
-                        set(0, 0, 0, 1);
-                    }
-                };
-            }
-        });
-        getColorPool().fill(10);
 
         setHardwareWrapper(new HardwareWrapper());
 
@@ -243,66 +211,33 @@ public class LaPandemia extends Game {
         super.dispose();
         if (getScreen() != null) getScreen().dispose();
         getAssetManager().dispose();
-        getRectPool().clear();
-        getActorArrayPool().clear();
-        getColorPool().clear();
     }
 
     /**
-     * El gestor de assets (recursos como imágenes y música). Permite cargar una
-     * única vez dichos recursos, acceder a ellos fácilmente cuando es necesario
-     * y luego finalmente liberarlos.
+     * @return {@link #assetManager}
      */
     public AssetManager getAssetManager() {
         return assetManager;
     }
 
+    /**
+     * @param assetManager El nuevo valor para {@link #assetManager}.
+     */
     public void setAssetManager(AssetManager assetManager) {
         this.assetManager = assetManager;
     }
 
     /**
-     * Interfaz hacia el giroscopio y vibrador en función de la configuración establecida
-     * por el usuario.
+     * @return {@link #hardwareWrapper}
      */
     public HardwareWrapper getHardwareWrapper() {
         return hardwareWrapper;
     }
 
+    /**
+     * @param hardwareWrapper El nuevo valor para {@link #hardwareWrapper}.
+     */
     public void setHardwareWrapper(HardwareWrapper hardwareWrapper) {
         this.hardwareWrapper = hardwareWrapper;
-    }
-
-    /**
-     * Fondo global para instancias de Rectangle.
-     */
-    public Pool<Rectangle> getRectPool() {
-        return rectPool;
-    }
-
-    public void setRectPool(Pool<Rectangle> rectPool) {
-        this.rectPool = rectPool;
-    }
-
-    /**
-     * Fondo global para instancias de Array&lt;Actor&gt;.
-     */
-    public Pool<Array<Actor>> getActorArrayPool() {
-        return actorArrayPool;
-    }
-
-    public void setActorArrayPool(Pool<Array<Actor>> actorArrayPool) {
-        this.actorArrayPool = actorArrayPool;
-    }
-
-    /**
-     * Fondo global para instancias de Color.
-     */
-    public Pool<Color> getColorPool() {
-        return colorPool;
-    }
-
-    public void setColorPool(Pool<Color> colorPool) {
-        this.colorPool = colorPool;
     }
 }

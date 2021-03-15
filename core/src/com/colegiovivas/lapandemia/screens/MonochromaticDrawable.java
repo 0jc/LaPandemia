@@ -2,9 +2,8 @@ package com.colegiovivas.lapandemia.screens;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
-import com.colegiovivas.lapandemia.LaPandemia;
 
 /**
  * Drawable de Libgdx que dibuja en un único color. Útil para pintar
@@ -19,37 +18,37 @@ import com.colegiovivas.lapandemia.LaPandemia;
  */
 public class MonochromaticDrawable extends BaseDrawable {
     /**
-     * Clase principal, para poder obtener el píxel blanco.
+     * Píxel blanco que se necesita para dibujar del color especificado.
      */
-    private final LaPandemia main;
-
-    private final TextureAtlas.AtlasRegion whitePixel;
+    private final TextureRegion whitePixel;
 
     /**
      * Color con el que el Drawable dibuja.
      */
-    private Color color;
+    private Color newColor;
 
-    public void setColor(Color color) {
-        this.color = color;
+    /**
+     * @param newColor El nuevo valor para {@link #newColor}.
+     */
+    public void setNewColor(Color newColor) {
+        this.newColor = newColor;
     }
 
-    public MonochromaticDrawable(LaPandemia main, Color color) {
-        this.main = main;
-        whitePixel = ((TextureAtlas)main.getAssetManager().get("images.pack")).findRegion("ui-whitepixel");
-        this.color = color;
+    /**
+     * Prepara los recursos necesarios para poder dibujar.
+     * @param whitePixel El valor para {@link #whitePixel}.
+     * @param newColor El valor para {@link #newColor}.
+     */
+    public MonochromaticDrawable(TextureRegion whitePixel, Color newColor) {
+        this.whitePixel = whitePixel;
+        this.newColor = newColor;
     }
 
     @Override
     public void draw(Batch batch, float x, float y, float width, float height) {
-        Color savedBatchColor = main.getColorPool().obtain();
-        try {
-            savedBatchColor.set(batch.getColor());
-            batch.setColor(color);
-            batch.draw(whitePixel, x, y, width, height);
-            batch.setColor(savedBatchColor);
-        } finally {
-            main.getColorPool().free(savedBatchColor);
-        }
+        Color batchColor = batch.getColor();
+        batch.setColor(newColor);
+        batch.draw(whitePixel, x, y, width, height);
+        batch.setColor(batchColor);
     }
 }

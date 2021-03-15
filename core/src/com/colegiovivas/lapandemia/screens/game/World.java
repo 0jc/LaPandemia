@@ -1,5 +1,6 @@
 package com.colegiovivas.lapandemia.screens.game;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
@@ -15,6 +16,7 @@ import com.colegiovivas.lapandemia.actors.world.*;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionDispatcher;
 import com.colegiovivas.lapandemia.actors.world.generator.ActorGenerator;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
+import com.colegiovivas.lapandemia.hardware.HardwareWrapper;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.levels.json.LevelJson;
 import com.colegiovivas.lapandemia.levels.json.FanActorJsonEntry;
@@ -89,7 +91,7 @@ public class World implements ZoomGestureListener.ZoomListener {
      */
     private boolean paused = false;
 
-    public World(LaPandemia main, LevelInfo level) {
+    public World(AssetManager assetManager, HardwareWrapper hardwareWrapper, LevelInfo level) {
         OrthographicCamera worldCamera = new OrthographicCamera();
         Viewport worldViewport = new StretchViewport(800, 480, worldCamera);
         stage = new WorldStage(worldViewport);
@@ -97,11 +99,11 @@ public class World implements ZoomGestureListener.ZoomListener {
         rootGroup = new Group();
         stage.addActor(rootGroup);
 
-        collisionDispatcher = new CollisionDispatcher(main, rootGroup);
+        collisionDispatcher = new CollisionDispatcher(rootGroup);
 
-        setUpMap(main, level);
+        setUpMap(assetManager, hardwareWrapper, level);
 
-        HealthActor healthActor = new HealthActor(main);
+        HealthActor healthActor = new HealthActor(assetManager);
         healthActor.setWorld(this);
         playerActor.setHealthActor(healthActor);
         healthActor.setPlayerActor(playerActor);
@@ -113,10 +115,11 @@ public class World implements ZoomGestureListener.ZoomListener {
     /**
      * Carga un mapa de juego, añadiendo actores, calculando parámetros como el zoom
      * máximo y creando los generadores de actores.
-     * @param main La clase principal de la aplicación.
+     * @param assetManager ...
+     * @param hardwareWrapper ...
      * @param level El mapa para cargar.
      */
-    private void setUpMap(LaPandemia main, LevelInfo level) {
+    private void setUpMap(AssetManager assetManager, HardwareWrapper hardwareWrapper, LevelInfo level) {
         Json json = new Json();
         json.setTypeName(null);
         json.setUsePrototypes(false);
@@ -133,7 +136,7 @@ public class World implements ZoomGestureListener.ZoomListener {
         rootGroup.addActor(powerups);
         rootGroup.addActor(worldTop);
 
-        playerActor = new PlayerActor(main);
+        playerActor = new PlayerActor(assetManager, hardwareWrapper);
         playerActor.setWorld(this);
         playerActor.setPosition(levelJson.playerState.pos[0], levelJson.playerState.pos[1]);
         playerActor.setCollisionDispatcher(collisionDispatcher);
@@ -141,14 +144,15 @@ public class World implements ZoomGestureListener.ZoomListener {
         worldTop.addActor(playerActor);
 
         for (FanActorJsonEntry fanActorJsonEntry : levelJson.fans) {
-            FanActor fanActor = new FanActor(main, fanActorJsonEntry.sprite, fanActorJsonEntry.frameDuration);
+            FanActor fanActor = new FanActor(assetManager, fanActorJsonEntry.sprite,
+                    fanActorJsonEntry.frameDuration);
             fanActor.setWorld(this);
             fanActor.setPosition(fanActorJsonEntry.pos[0], fanActorJsonEntry.pos[1]);
             fanActor.setCollisionDispatcher(collisionDispatcher);
             worldTop.addActor(fanActor);
         }
         for (WallActorJsonEntry wallActorJsonEntry : levelJson.walls) {
-            WallActor wallActor = new WallActor(main, wallActorJsonEntry.sprite);
+            WallActor wallActor = new WallActor(assetManager, wallActorJsonEntry.sprite);
             wallActor.setWorld(this);
             wallActor.setPosition(wallActorJsonEntry.pos[0], wallActorJsonEntry.pos[1]);
             wallActor.setSize(wallActorJsonEntry.size[0], wallActorJsonEntry.size[1]);
@@ -157,10 +161,10 @@ public class World implements ZoomGestureListener.ZoomListener {
         }
 
         actorGenerators = new Array<>();
-        actorGenerators.add(new ActorGenerator(VirusActor.class, ActorId.VIRUS, worldTop, 48, 48, 1.25f, 1000, 120f, main, this));
-        actorGenerators.add(new ActorGenerator(MaskActor.class, ActorId.MASK, powerups, 48, 48, 10, 3, 30f, main, this));
-        actorGenerators.add(new ActorGenerator(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10, 30f, main, this));
-        actorGenerators.add(new ActorGenerator(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 90, 1, 30f, main, this));
+        actorGenerators.add(new ActorGenerator(VirusActor.class, ActorId.VIRUS, worldTop, 48, 48, 1.25f, 1000, 120f, assetManager, this));
+        actorGenerators.add(new ActorGenerator(MaskActor.class, ActorId.MASK, powerups, 48, 48, 10, 3, 30f, assetManager, this));
+        actorGenerators.add(new ActorGenerator(PaperActor.class, ActorId.PAPER, powerups, 48, 48, 5, 10, 30f, assetManager, this));
+        actorGenerators.add(new ActorGenerator(NeedleActor.class, ActorId.NEEDLE, powerups, 22, 64, 90, 1, 30f, assetManager, this));
 
         maxZoom = Math.min(width /stage.getViewport().getWorldWidth(),
                 height /stage.getViewport().getWorldHeight());
@@ -306,6 +310,7 @@ public class World implements ZoomGestureListener.ZoomListener {
         }
 
         stage.dispose();
+        collisionDispatcher.dispose();
     }
 
     private class WorldStage extends Stage {

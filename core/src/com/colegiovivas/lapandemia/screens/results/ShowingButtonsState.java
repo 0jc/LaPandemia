@@ -4,6 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
 /**
@@ -20,17 +24,17 @@ public class ShowingButtonsState extends MultistateScreen.StateAdapter {
         this.resultsScreen = resultsScreen;
         noInput = new InputAdapter();
 
-        resultsScreen.getResultsView().setReturnListener(new ResultsView.ReturnListener() {
+        resultsScreen.getResultsView().addReturnListener(new ClickListener() {
             @Override
-            public void returnClicked() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 resultsScreen.setPlayAgain(false);
                 resultsScreen.setState(ResultsScreen.STATE_CLOSING);
             }
         });
 
-        resultsScreen.getResultsView().setRetryListener(new ResultsView.RetryListener() {
+        resultsScreen.getResultsView().addRetryListener(new ClickListener() {
             @Override
-            public void retryClicked() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 resultsScreen.setPlayAgain(true);
                 resultsScreen.setState(ResultsScreen.STATE_CLOSING);
             }

@@ -1,12 +1,14 @@
 package com.colegiovivas.lapandemia.screens.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.ActorId;
 import com.colegiovivas.lapandemia.actors.world.PlayerActor;
+import com.colegiovivas.lapandemia.hardware.HardwareWrapper;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 import com.colegiovivas.lapandemia.screens.transitions.HCenterOutTransition;
@@ -110,9 +112,11 @@ public class GameScreen extends MultistateScreen {
         this.main = main;
         this.level = level;
 
-        world = new World(main, level);
-        stats = new GameStats(main);
-        countdown = new Countdown(main);
+        AssetManager assetManager = main.getAssetManager();
+
+        world = new World(assetManager, main.getHardwareWrapper(), level);
+        stats = new GameStats(assetManager);
+        countdown = new Countdown(assetManager);
         openingTransition = new HCenterOutTransition(0, 1.3f, 1f);
         closingTransition = new VCenterInTransition(0, 1.0f, 0.2f);
 
@@ -120,10 +124,10 @@ public class GameScreen extends MultistateScreen {
         addState(STATE_ZOOM_IN, new ZoomInState(this, (world.getMaxZoom() - 1)/0.35f));
         addState(STATE_WAIT_INTRO_MUSIC, new WaitIntroMusicState(this));
         addState(STATE_WAIT_AFTER_ZOOM_IN, new WaitState(this, 1f, STATE_COUNTDOWN));
-        addState(STATE_COUNTDOWN, new CountdownState(main, this));
-        addState(STATE_PLAYING, new PlayingState(main, this));
-        addState(STATE_PAUSE, new PauseState(main, this));
-        addState(STATE_GAME_OVER_MUSIC, new GameOverMusicState(main, this));
+        addState(STATE_COUNTDOWN, new CountdownState(this));
+        addState(STATE_PLAYING, new PlayingState(this));
+        addState(STATE_PAUSE, new PauseState(this));
+        addState(STATE_GAME_OVER_MUSIC, new GameOverMusicState(this));
         addState(STATE_CLOSING, new ClosingState(this));
 
         world.getPlayerActor().setPowerupListener(new PlayerActor.PowerupListener() {
@@ -169,6 +173,14 @@ public class GameScreen extends MultistateScreen {
         currentGameMusic = mapMusic;
 
         setState(STATE_OPENING);
+    }
+
+    public HardwareWrapper getHardwareWrapper() {
+        return main.getHardwareWrapper();
+    }
+
+    public AssetManager getAssetManager() {
+        return main.getAssetManager();
     }
 
     /**

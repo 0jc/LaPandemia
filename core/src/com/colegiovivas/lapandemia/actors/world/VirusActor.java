@@ -1,6 +1,7 @@
 package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -30,8 +31,6 @@ public class VirusActor extends GenerableActor {
      * Tiempo máximo que el virus espera antes de cambiar de dirección.
      */
     private static final float MAX_DIR_TICK = 1.5f;
-
-    private final LaPandemia game;
 
     /**
      * Animación que realiza el virus.
@@ -85,11 +84,9 @@ public class VirusActor extends GenerableActor {
      */
     private float untraveledY;
 
-    public VirusActor(final LaPandemia game) {
-        this.game = game;
-
+    public VirusActor(AssetManager assetManager) {
         animation = new Animation<TextureRegion>(0.2f,
-                ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegions("virus"));
+                ((TextureAtlas)assetManager.get("images.pack")).findRegions("virus"));
 
         setTouchable(Touchable.enabled);
         untraveledX = 0;

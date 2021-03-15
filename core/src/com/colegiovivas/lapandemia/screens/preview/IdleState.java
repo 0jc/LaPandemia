@@ -10,13 +10,11 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * una acción.
  */
 public class IdleState extends MultistateScreen.StateAdapter {
-    private final LaPandemia main;
     private final PreviewScreen previewScreen;
     private final InputMultiplexer inputProcessor;
     private final InputProcessor noInput;
 
-    public IdleState(LaPandemia main, final PreviewScreen previewScreen) {
-        this.main = main;
+    public IdleState(final PreviewScreen previewScreen) {
         this.previewScreen = previewScreen;
         noInput = new InputAdapter();
         inputProcessor = new InputMultiplexer();

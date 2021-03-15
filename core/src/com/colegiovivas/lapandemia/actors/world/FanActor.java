@@ -1,6 +1,7 @@
 package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -18,17 +19,14 @@ public class FanActor extends CollisionableActor {
      */
     private final Animation<TextureRegion> animation;
 
-    private final LaPandemia game;
-
     /**
      * Tiempo transcurrido desde el principio de la existencia del actor.
      */
     private float elapsedTime;
 
-    public FanActor(final LaPandemia game, String regionName, float frameDuration) {
-        this.game = game;
+    public FanActor(AssetManager assetManager, String regionName, float frameDuration) {
         this.animation = new Animation<TextureRegion>(frameDuration,
-                ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegions(regionName));
+                ((TextureAtlas)assetManager.get("images.pack")).findRegions(regionName));
 
         setWidth(64);
         setHeight(64);

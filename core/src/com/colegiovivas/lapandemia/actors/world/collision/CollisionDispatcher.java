@@ -4,22 +4,27 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.LaPandemia;
+import com.colegiovivas.lapandemia.pools.ActorArrayPool;
+import com.colegiovivas.lapandemia.pools.RectanglePool;
 
 /**
  * Gestor de colisiones entre actores de un mismo mundo.
  */
 public class CollisionDispatcher {
-    private final LaPandemia game;
-
     /**
      * Grupo compuesto por subgrupos donde se buscan actores colisionables.
      */
     private final Group worldGroup;
 
-    public CollisionDispatcher(LaPandemia game, Group worldGroup) {
-        this.game = game;
+    private final Pool<Array<Actor>> actorArrayPool;
+    private final Pool<Rectangle> rectPool;
+
+    public CollisionDispatcher(Group worldGroup) {
         this.worldGroup = worldGroup;
+        actorArrayPool = new ActorArrayPool();
+        rectPool = new RectanglePool(3, 3);
     }
 
     /**
@@ -41,13 +46,13 @@ public class CollisionDispatcher {
         int yDir = yDisplacement == 0 ? 0 : yDisplacement < 0 ? -1 : 1;
 
         // Rectángulo del PlayerActor tras moverse a la siguiente posición.
-        Rectangle rBefore = game.getRectPool().obtain();
+        Rectangle rBefore = rectPool.obtain();
         // Rectángulo del PlayerActor tras moverse a la siguiente posición.
-        Rectangle rAfter = game.getRectPool().obtain();
+        Rectangle rAfter = rectPool.obtain();
         // Rectángulo de otro actor para comprobar si hay colisión con rAfter.
-        Rectangle rOther = game.getRectPool().obtain();
+        Rectangle rOther = rectPool.obtain();
 
-        Array<Actor> collidedActors = game.getActorArrayPool().obtain();
+        Array<Actor> collidedActors = actorArrayPool.obtain();
         Integer minBumpDistance = null;
         try {
             rBefore.set(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
@@ -114,10 +119,10 @@ public class CollisionDispatcher {
                 ((CollisionableActor)collidedActor).collidedBy(actor);
             }
         } finally {
-            game.getRectPool().free(rBefore);
-            game.getRectPool().free(rAfter);
-            game.getRectPool().free(rOther);
-            game.getActorArrayPool().free(collidedActors);
+            rectPool.free(rBefore);
+            rectPool.free(rAfter);
+            rectPool.free(rOther);
+            actorArrayPool.free(collidedActors);
         }
     }
 
@@ -163,5 +168,10 @@ public class CollisionDispatcher {
         } else {
             return (int)Math.abs(collidedActor.getY() - (collidingActor.getY() + collidingActor.getHeight()));
         }
+    }
+
+    public void dispose() {
+        actorArrayPool.clear();
+        rectPool.clear();
     }
 }

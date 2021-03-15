@@ -3,22 +3,20 @@ package com.colegiovivas.lapandemia.screens.game;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.input.GestureDetector;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.gestures.MovePlayerGestureListener;
 import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
+import com.colegiovivas.lapandemia.hardware.HardwareWrapper;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
 /**
  * Estado en el que el usuario está jugando la partida.
  */
 public class PlayingState extends MultistateScreen.StateAdapter {
-    private final LaPandemia main;
     private final GameScreen gameScreen;
     private final InputMultiplexer inputProcessor;
     private final InputProcessor noInput;
 
-    public PlayingState(LaPandemia main, GameScreen gameScreen) {
-        this.main = main;
+    public PlayingState(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
 
         noInput = new InputAdapter();
@@ -76,7 +74,7 @@ public class PlayingState extends MultistateScreen.StateAdapter {
 
         if (gameScreen.getWorld().gameIsOver()) {
             gameScreen.setState(GameScreen.STATE_GAME_OVER_MUSIC);
-        } else if (main.getHardwareWrapper().getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
+        } else if (gameScreen.getHardwareWrapper().getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
             pauseGame();
         }
     }

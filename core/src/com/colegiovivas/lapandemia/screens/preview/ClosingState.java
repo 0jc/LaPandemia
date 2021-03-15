@@ -10,11 +10,9 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * empezar una partida en el mapa elegido por el usuario.
  */
 public class ClosingState extends MultistateScreen.StateAdapter {
-    private final LaPandemia main;
     private final PreviewScreen previewScreen;
 
-    public ClosingState(LaPandemia main, PreviewScreen previewScreen) {
-        this.main = main;
+    public ClosingState(PreviewScreen previewScreen) {
         this.previewScreen = previewScreen;
     }
 

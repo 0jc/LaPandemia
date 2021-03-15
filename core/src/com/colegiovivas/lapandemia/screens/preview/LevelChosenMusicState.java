@@ -10,11 +10,9 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
  * ha elegido empezar una partida en el mapa elegido por el usuario.
  */
 public class LevelChosenMusicState extends MultistateScreen.StateAdapter {
-    private final LaPandemia main;
     private final PreviewScreen previewScreen;
 
-    public LevelChosenMusicState(LaPandemia main, PreviewScreen previewScreen) {
-        this.main = main;
+    public LevelChosenMusicState(PreviewScreen previewScreen) {
         this.previewScreen = previewScreen;
     }
 

@@ -1,10 +1,13 @@
 package com.colegiovivas.lapandemia.screens.settings;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -18,7 +21,7 @@ import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 /**
  * Pantalla de ajustes.
  */
-public class SettingsScreen implements Screen {
+public class SettingsScreen extends ScreenAdapter {
     private final LaPandemia main;
     private final Stage stage;
     private final InputMultiplexer inputProcessor;
@@ -31,7 +34,9 @@ public class SettingsScreen implements Screen {
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin cloudFormSkin = main.getAssetManager().get("cloud-form-skin/cloud-form-ui.json");
+        AssetManager assetManager = main.getAssetManager();
+        Skin cloudFormSkin = assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        TextureRegion whitePixel = ((TextureAtlas)assetManager.get("images.pack")).findRegion("ui-whitepixel");
 
         Label topTextLabel = new Label("Ajustes", cloudFormSkin);
         final CheckBox gyroscopeCheckBox = new CheckBox("", cloudFormSkin);
@@ -39,11 +44,11 @@ public class SettingsScreen implements Screen {
 
         Table outerTable = new Table();
         outerTable.setFillParent(true);
-        outerTable.setBackground(new MonochromaticDrawable(main, Color.SKY));
+        outerTable.setBackground(new MonochromaticDrawable(whitePixel, Color.SKY));
         outerTable.pad(10).top();
 
         Table headerTable = new Table();
-        headerTable.setBackground(new MonochromaticDrawable(main, Color.LIME));
+        headerTable.setBackground(new MonochromaticDrawable(whitePixel, Color.LIME));
         headerTable.pad(10);
 
         headerTable.add(topTextLabel).expandX().left().row();
@@ -51,7 +56,7 @@ public class SettingsScreen implements Screen {
         outerTable.add(headerTable).expandX().fillX().row();
 
         Table formTable = new Table();
-        formTable.setBackground(new MonochromaticDrawable(main, Color.WHITE));
+        formTable.setBackground(new MonochromaticDrawable(whitePixel, Color.WHITE));
 
         formTable.add(new Label("Uso del giroscopio:", cloudFormSkin)).padRight(20);
         if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Gyroscope)) {
@@ -124,16 +129,6 @@ public class SettingsScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
     }
 
     @Override

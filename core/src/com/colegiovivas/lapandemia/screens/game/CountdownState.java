@@ -11,7 +11,7 @@ import com.colegiovivas.lapandemia.screens.MultistateScreen;
 public class CountdownState extends MultistateScreen.StateAdapter {
     private final GameScreen gameScreen;
 
-    public CountdownState(LaPandemia main, GameScreen gameScreen) {
+    public CountdownState(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
 

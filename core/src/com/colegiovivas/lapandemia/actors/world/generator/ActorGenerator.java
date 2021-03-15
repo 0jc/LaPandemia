@@ -1,6 +1,7 @@
 package com.colegiovivas.lapandemia.actors.world.generator;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,6 +12,8 @@ import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.ActorId;
 import com.colegiovivas.lapandemia.actors.world.PlayerActor;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
+import com.colegiovivas.lapandemia.pools.ActorArrayPool;
+import com.colegiovivas.lapandemia.pools.RectanglePool;
 import com.colegiovivas.lapandemia.screens.game.World;
 
 /**
@@ -41,7 +44,7 @@ public class ActorGenerator {
     /**
      * Número máximo de actores de este tipo que pueden existir simultáneamente.
      */
-    private final Integer maxCount;
+    private final int maxCount;
 
     /**
      * Fondo de donde se obtienen los actores.
@@ -63,7 +66,8 @@ public class ActorGenerator {
      */
     private final Group destGroup;
 
-    private final LaPandemia game;
+    private final ActorArrayPool actorArrayPool;
+    private final RectanglePool rectPool;
 
     /**
      * Controlador del mundo al que pertenecen los actores generados.
@@ -82,7 +86,7 @@ public class ActorGenerator {
 
     public ActorGenerator(final Class<? extends GenerableActor> generableActorClass, ActorId actorId,
                           Group destGroup, float width, float height, float tick, int maxCount, Float ttl,
-                          final LaPandemia game, final World world)
+                          final AssetManager assetManager, World world)
     {
         this.actorId = actorId;
         this.destGroup = destGroup;
@@ -91,13 +95,15 @@ public class ActorGenerator {
         this.height = height;
         this.maxCount = maxCount;
         this.ttl = ttl;
-        this.game = game;
         this.world = world;
-        this.generableActorPool = new Pool<GenerableActor>() {
+
+        actorArrayPool = new ActorArrayPool();
+        rectPool = new RectanglePool(2, 2);
+        this.generableActorPool = new Pool<GenerableActor>(maxCount, maxCount) {
             @Override
             protected GenerableActor newObject() {
                 try {
-                    return generableActorClass.getDeclaredConstructor(LaPandemia.class).newInstance(game);
+                    return generableActorClass.getDeclaredConstructor(AssetManager.class).newInstance(assetManager);
                 } catch (Exception e) {
                     Gdx.app.error("LaPandemia", "ActorGenerator: " + e.getMessage());
                 }
@@ -105,7 +111,6 @@ public class ActorGenerator {
                 return null;
             }
         };
-        generableActorPool.fill(maxCount);
     }
 
     /**
@@ -130,13 +135,13 @@ public class ActorGenerator {
      * @param delta Tiempo en segundos transcurrido desde la última actualización.
      */
     public void render(float delta) {
-        if (maxCount != null && count == maxCount) {
+        if (count == maxCount) {
             lastActorTime = 0;
         } else {
             lastActorTime += delta;
             if (lastActorTime >= tick) {
-                Rectangle rect = game.getRectPool().obtain();
-                Array<Actor> overlappedActors = game.getActorArrayPool().obtain();
+                Rectangle rect = rectPool.obtain();
+                Array<Actor> overlappedActors = actorArrayPool.obtain();
                 rect.set(0, 0, width, height);
                 try {
                     if (tryAssignCoords(rect, overlappedActors)) {
@@ -155,8 +160,8 @@ public class ActorGenerator {
                         }
                     }
                 } finally {
-                    game.getRectPool().free(rect);
-                    game.getActorArrayPool().free(overlappedActors);
+                    rectPool.free(rect);
+                    actorArrayPool.free(overlappedActors);
                 }
             }
         }
@@ -175,7 +180,7 @@ public class ActorGenerator {
         outCoords.x = MathUtils.random(32, (int)world.getWidth() - 32 - 64);
         outCoords.y = MathUtils.random(32, (int)world.getHeight() - 32 - 64);
 
-        Rectangle actorRect = game.getRectPool().obtain();
+        Rectangle actorRect = rectPool.obtain();
         try {
             for (Actor currGroup : world.getRootGroup().getChildren()) {
                 if (currGroup instanceof Group) {
@@ -207,7 +212,7 @@ public class ActorGenerator {
                 }
             }
         } finally {
-            game.getRectPool().free(actorRect);
+            rectPool.free(actorRect);
         }
         return true;
     }
@@ -217,5 +222,7 @@ public class ActorGenerator {
      */
     public void dispose() {
         generableActorPool.clear();
+        actorArrayPool.clear();
+        rectPool.clear();
     }
 }

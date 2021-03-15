@@ -1,6 +1,10 @@
 package com.colegiovivas.lapandemia.screens.preview;
 
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
@@ -31,18 +35,18 @@ public class PreviewScreen extends MultistateScreen {
         backgroundMusic = main.getAssetManager().get("audio/menu-misc.mp3");
         levelChosenMusic = main.getAssetManager().get("audio/level-chosen.wav");
 
-        previewView = new PreviewView(main, this, levelInfo);
+        previewView = new PreviewView(main.getAssetManager(), levelInfo);
 
-        previewView.setPlayListener(new PreviewView.PlayListener() {
+        previewView.addStartListener(new ClickListener() {
             @Override
-            public void playClicked() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 setState(STATE_LEVEL_CHOSEN_MUSIC);
             }
         });
 
-        addState(STATE_IDLE, new IdleState(main, this));
-        addState(STATE_LEVEL_CHOSEN_MUSIC, new LevelChosenMusicState(main, this));
-        addState(STATE_CLOSING, new ClosingState(main, this));
+        addState(STATE_IDLE, new IdleState(this));
+        addState(STATE_LEVEL_CHOSEN_MUSIC, new LevelChosenMusicState(this));
+        addState(STATE_CLOSING, new ClosingState(this));
 
         setState(STATE_IDLE);
     }

@@ -1,10 +1,13 @@
 package com.colegiovivas.lapandemia.screens.mapselection;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -16,7 +19,7 @@ import com.colegiovivas.lapandemia.levels.LevelCatalog;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
-public class MapSelectionScreen implements Screen {
+public class MapSelectionScreen extends ScreenAdapter {
     private final LaPandemia main;
     private final Stage stage;
     private final InputMultiplexer inputProcessor;
@@ -29,18 +32,20 @@ public class MapSelectionScreen implements Screen {
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin cloudFormSkin = main.getAssetManager().get("cloud-form-skin/cloud-form-ui.json");
+        AssetManager assetManager = main.getAssetManager();
+        Skin cloudFormSkin = assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        TextureRegion whitePixel = ((TextureAtlas)assetManager.get("images.pack")).findRegion("ui-whitepixel");
 
         Table outerTable = new Table();
         outerTable.setFillParent(true);
-        outerTable.setBackground(new MonochromaticDrawable(main, Color.SKY));
+        outerTable.setBackground(new MonochromaticDrawable(whitePixel, Color.SKY));
 
         Label headerLabel = new Label("Elige un mapa", cloudFormSkin);
         headerLabel.setFontScaleX(1.5f);
         headerLabel.setFontScaleY(1.5f);
 
         Table headerTable = new Table();
-        headerTable.setBackground(new MonochromaticDrawable(main, Color.OLIVE));
+        headerTable.setBackground(new MonochromaticDrawable(whitePixel, Color.OLIVE));
         headerTable.add(headerLabel).expandX().pad(10).row();
 
         outerTable.add(headerTable).expandX().fillX().row();
@@ -110,16 +115,6 @@ public class MapSelectionScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
     }
 
     @Override

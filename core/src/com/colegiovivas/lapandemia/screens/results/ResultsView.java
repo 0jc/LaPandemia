@@ -1,8 +1,11 @@
 package com.colegiovivas.lapandemia.screens.results;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -17,8 +20,6 @@ import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
  * los resultados de la partida.
  */
 public class ResultsView {
-    private final LaPandemia main;
-
     /**
      * Stage de Libgdx que contiene la tabla en la que se organiza la interfaz.
      */
@@ -69,25 +70,13 @@ public class ResultsView {
      */
     private final TextButton retryButton;
 
-    /**
-     * Evento que se lanza cuando el usuario pulsa el botón de volver.
-     * Configurable mediante setter.
-     */
-    private ReturnListener returnListener;
-
-    /**
-     * Evento que se lanza cuando el usuario pulsa el botón de reintentar. Configurable mediante setter.
-     */
-    private RetryListener retryListener;
-
-    public ResultsView(LaPandemia main, LevelInfo level) {
-        this.main = main;
-
+    public ResultsView(AssetManager assetManager, LevelInfo level) {
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin cloudFormSkin = main.getAssetManager().get("cloud-form-skin/cloud-form-ui.json");
+        Skin cloudFormSkin = assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        TextureRegion whitePixel = ((TextureAtlas)assetManager.get("images.pack")).findRegion("ui-whitepixel");
 
         levelNameLabel = new Label(level.getName(), cloudFormSkin, "title");
         timeLeftLabel = new Label("Tiempo de juego:", cloudFormSkin);
@@ -105,13 +94,13 @@ public class ResultsView {
         // La forma estándar de crear interfaces de usuario en Libgdx es mediante tablas,
         // que se pueden anidar entre ellas.
         Table table = new Table();
-        table.setBackground(new MonochromaticDrawable(main, Color.CYAN));
+        table.setBackground(new MonochromaticDrawable(whitePixel, Color.CYAN));
         table.setFillParent(true);
         table.setDebug(debug);
         table.left().top();
 
         Table levelNameTable = new Table();
-        levelNameTable.setBackground(new MonochromaticDrawable(main, Color.MAROON));
+        levelNameTable.setBackground(new MonochromaticDrawable(whitePixel, Color.MAROON));
         levelNameTable.setDebug(debug);
         table.add(levelNameTable).pad(10).expandX().fillX().row();
 
@@ -119,7 +108,7 @@ public class ResultsView {
         levelNameTable.add(levelNameLabel).expandX().left();
 
         Table statsTable = new Table();
-        statsTable.setBackground(new MonochromaticDrawable(main, Color.WHITE));
+        statsTable.setBackground(new MonochromaticDrawable(whitePixel, Color.WHITE));
         statsTable.setDebug(debug);
         table.add(statsTable).padLeft(10).padRight(10).padBottom(10).expand().fill().row();
 
@@ -139,20 +128,6 @@ public class ResultsView {
 
         buttonsTable.add(returnButton).expandX().fillX().padRight(10);
         buttonsTable.add(retryButton).expandX().fillX().padLeft(10).row();
-
-        returnButton.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (returnListener != null) returnListener.returnClicked();
-            }
-        });
-
-        retryButton.addListener(new ClickListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (retryListener != null) retryListener.retryClicked();
-            }
-        });
 
         stage.addActor(table);
 
@@ -175,7 +150,7 @@ public class ResultsView {
      * @param color color de fondo que se establece.
      */
     public void setTitleColor(Color color) {
-        ((MonochromaticDrawable)((Table)levelNameLabel.getParent()).getBackground()).setColor(color);
+        ((MonochromaticDrawable)((Table)levelNameLabel.getParent()).getBackground()).setNewColor(color);
     }
 
     /**
@@ -237,20 +212,12 @@ public class ResultsView {
         paperRightLabel.setText(paperCount);
     }
 
-    /**
-     * Establece un listener para informar de eventos de click en el botón de volver.
-     * @param returnListener Evento que será lanzado.
-     */
-    public void setReturnListener(ReturnListener returnListener) {
-        this.returnListener = returnListener;
+    public void addReturnListener(EventListener eventListener) {
+        returnButton.addListener(eventListener);
     }
 
-    /**
-     * Establece un listener para informar de eventos de click en el botón de reintentar.
-     * @param retryListener Evento que será lanzado.
-     */
-    public void setRetryListener(RetryListener retryListener) {
-        this.retryListener = retryListener;
+    public void addRetryListener(EventListener eventListener) {
+        retryButton.addListener(eventListener);
     }
 
     /**
@@ -266,13 +233,5 @@ public class ResultsView {
      */
     public String getNickname() {
         return nickField.getText();
-    }
-
-    public interface ReturnListener {
-        void returnClicked();
-    }
-
-    public interface RetryListener {
-        void retryClicked();
     }
 }

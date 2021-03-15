@@ -23,6 +23,9 @@ public abstract class MultistateScreen implements Screen {
      */
     private Integer currentStateId;
 
+    /**
+     * Inicializa los recursos necesarios para la gestión de estados.
+     */
     public MultistateScreen() {
         states = new ArrayMap<>();
     }
@@ -134,7 +137,17 @@ public abstract class MultistateScreen implements Screen {
         void leave();
     }
 
-    public static class StateAdapter implements State {
+    /**
+     * Adaptador de State, para evitar tener que implementar métodos vacíos.
+     */
+    public static abstract class StateAdapter implements State {
+        /**
+         * Inicializa el estado.
+         */
+        public StateAdapter() {
+
+        }
+
         @Override
         public void enter() {
 

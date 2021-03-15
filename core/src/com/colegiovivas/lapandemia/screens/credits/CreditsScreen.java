@@ -1,10 +1,10 @@
 package com.colegiovivas.lapandemia.screens.credits;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
-public class CreditsScreen implements Screen {
+public class CreditsScreen extends ScreenAdapter {
     private final LaPandemia main;
     private final Stage stage;
     private final InputMultiplexer inputProcessor;
@@ -28,7 +28,9 @@ public class CreditsScreen implements Screen {
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin cloudFormSkin = main.getAssetManager().get("cloud-form-skin/cloud-form-ui.json");
+        AssetManager assetManager = main.getAssetManager();
+        Skin cloudFormSkin = assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        TextureRegion whitePixel = ((TextureAtlas)assetManager.get("images.pack")).findRegion("ui-whitepixel");
 
         String topText = "Algunos de los recursos visuales y auditivos presentes en este juego"
                 + " han sido producidos por terceras personas bajo una licencia Creative Commons,"
@@ -46,11 +48,11 @@ public class CreditsScreen implements Screen {
 
         Table outerTable = new Table();
         outerTable.setFillParent(true);
-        outerTable.setBackground(new MonochromaticDrawable(main, Color.SKY));
+        outerTable.setBackground(new MonochromaticDrawable(whitePixel, Color.SKY));
         outerTable.pad(10).top();
 
         Table headerTable = new Table();
-        headerTable.setBackground(new MonochromaticDrawable(main, Color.SALMON));
+        headerTable.setBackground(new MonochromaticDrawable(whitePixel, Color.SALMON));
         headerTable.pad(10);
 
         headerTable.add(topTextLabel).expandX().width(360).row();
@@ -66,7 +68,7 @@ public class CreditsScreen implements Screen {
         scrollPane.setScrollingDisabled(true, false);
 
         Table scrollPaneTable = new Table();
-        scrollPaneTable.setBackground(new MonochromaticDrawable(main, Color.CYAN));
+        scrollPaneTable.setBackground(new MonochromaticDrawable(whitePixel, Color.CYAN));
         scrollPaneTable.add(scrollPane).center();
 
         outerTable.add(scrollPaneTable).expand().fill().padTop(10).row();
@@ -107,16 +109,6 @@ public class CreditsScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
     }
 
     @Override

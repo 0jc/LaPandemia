@@ -80,7 +80,7 @@ public class ResultsScreen extends MultistateScreen {
         this.level = level;
         this.paperCount = paperCount;
         this.runningTime = runningTime;
-        this.resultsView = new ResultsView(main, level);
+        this.resultsView = new ResultsView(main.getAssetManager(), level);
 
         openingTransition = new LeftOutTransition(0, 0.7f, 0);
         closingTransition = new HCenterInTransition(0, 0.7f, 0.5f);
