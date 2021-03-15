@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.hardware.HardwareWrapper;
 import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
-import com.colegiovivas.lapandemia.screens.credits.CreditsScreen;
 
 /**
  * Pantalla de ajustes.
@@ -32,7 +31,7 @@ public class SettingsScreen implements Screen {
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin cloudFormSkin = main.assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        Skin cloudFormSkin = main.getAssetManager().get("cloud-form-skin/cloud-form-ui.json");
 
         Label topTextLabel = new Label("Ajustes", cloudFormSkin);
         final CheckBox gyroscopeCheckBox = new CheckBox("", cloudFormSkin);
@@ -88,7 +87,7 @@ public class SettingsScreen implements Screen {
             }
         });
 
-        final HardwareWrapper hardwareWrapper = main.hardwareWrapper;
+        final HardwareWrapper hardwareWrapper = main.getHardwareWrapper();
         vibratorCheckBox.setChecked(hardwareWrapper.getVibratorEnabled());
         gyroscopeCheckBox.setChecked(hardwareWrapper.getGyroscopeEnabled());
 

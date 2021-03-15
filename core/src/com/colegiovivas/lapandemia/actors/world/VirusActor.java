@@ -89,7 +89,7 @@ public class VirusActor extends GenerableActor {
         this.game = game;
 
         animation = new Animation<TextureRegion>(0.2f,
-                ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("virus"));
+                ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegions("virus"));
 
         setTouchable(Touchable.enabled);
         untraveledX = 0;

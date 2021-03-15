@@ -160,11 +160,11 @@ public class GameScreen extends MultistateScreen {
             }
         });
 
-        introMusic = main.assetManager.get("audio/game-opening.wav");
-        gameOverMusic = main.assetManager.get("audio/game-over.wav");
-        mapMusic = main.assetManager.get("audio/map.wav");
-        invincibleMusic = main.assetManager.get("audio/ticking.wav");
-        pauseSound = main.assetManager.get("audio/pause.wav");
+        introMusic = main.getAssetManager().get("audio/game-opening.wav");
+        gameOverMusic = main.getAssetManager().get("audio/game-over.wav");
+        mapMusic = main.getAssetManager().get("audio/map.wav");
+        invincibleMusic = main.getAssetManager().get("audio/ticking.wav");
+        pauseSound = main.getAssetManager().get("audio/pause.wav");
 
         currentGameMusic = mapMusic;
 

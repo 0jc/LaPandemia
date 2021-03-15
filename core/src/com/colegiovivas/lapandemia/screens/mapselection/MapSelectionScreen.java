@@ -29,7 +29,7 @@ public class MapSelectionScreen implements Screen {
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin cloudFormSkin = main.assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        Skin cloudFormSkin = main.getAssetManager().get("cloud-form-skin/cloud-form-ui.json");
 
         Table outerTable = new Table();
         outerTable.setFillParent(true);

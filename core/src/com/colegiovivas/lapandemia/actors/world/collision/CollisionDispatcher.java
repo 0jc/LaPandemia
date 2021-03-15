@@ -1,6 +1,5 @@
 package com.colegiovivas.lapandemia.actors.world.collision;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -42,13 +41,13 @@ public class CollisionDispatcher {
         int yDir = yDisplacement == 0 ? 0 : yDisplacement < 0 ? -1 : 1;
 
         // Rectángulo del PlayerActor tras moverse a la siguiente posición.
-        Rectangle rBefore = game.rectPool.obtain();
+        Rectangle rBefore = game.getRectPool().obtain();
         // Rectángulo del PlayerActor tras moverse a la siguiente posición.
-        Rectangle rAfter = game.rectPool.obtain();
+        Rectangle rAfter = game.getRectPool().obtain();
         // Rectángulo de otro actor para comprobar si hay colisión con rAfter.
-        Rectangle rOther = game.rectPool.obtain();
+        Rectangle rOther = game.getRectPool().obtain();
 
-        Array<Actor> collidedActors = game.actorArrayPool.obtain();
+        Array<Actor> collidedActors = game.getActorArrayPool().obtain();
         Integer minBumpDistance = null;
         try {
             rBefore.set(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
@@ -115,10 +114,10 @@ public class CollisionDispatcher {
                 ((CollisionableActor)collidedActor).collidedBy(actor);
             }
         } finally {
-            game.rectPool.free(rBefore);
-            game.rectPool.free(rAfter);
-            game.rectPool.free(rOther);
-            game.actorArrayPool.free(collidedActors);
+            game.getRectPool().free(rBefore);
+            game.getRectPool().free(rAfter);
+            game.getRectPool().free(rOther);
+            game.getActorArrayPool().free(collidedActors);
         }
     }
 

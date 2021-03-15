@@ -28,7 +28,7 @@ public class FanActor extends CollisionableActor {
     public FanActor(final LaPandemia game, String regionName, float frameDuration) {
         this.game = game;
         this.animation = new Animation<TextureRegion>(frameDuration,
-                ((TextureAtlas)game.assetManager.get("images.pack")).findRegions(regionName));
+                ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegions(regionName));
 
         setWidth(64);
         setHeight(64);

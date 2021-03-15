@@ -76,7 +76,7 @@ public class PlayingState extends MultistateScreen.StateAdapter {
 
         if (gameScreen.getWorld().gameIsOver()) {
             gameScreen.setState(GameScreen.STATE_GAME_OVER_MUSIC);
-        } else if (main.hardwareWrapper.getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
+        } else if (main.getHardwareWrapper().getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
             pauseGame();
         }
     }

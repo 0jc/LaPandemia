@@ -87,7 +87,7 @@ public class ResultsView {
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin cloudFormSkin = main.assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        Skin cloudFormSkin = main.getAssetManager().get("cloud-form-skin/cloud-form-ui.json");
 
         levelNameLabel = new Label(level.getName(), cloudFormSkin, "title");
         timeLeftLabel = new Label("Tiempo de juego:", cloudFormSkin);

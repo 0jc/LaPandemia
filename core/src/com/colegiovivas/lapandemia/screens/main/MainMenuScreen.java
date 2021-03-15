@@ -48,7 +48,7 @@ public class MainMenuScreen extends MultistateScreen {
 
         mainMenuView = new MainMenuView(main);
 
-        backgroundMusic = main.assetManager.get("audio/menu-misc.mp3");
+        backgroundMusic = main.getAssetManager().get("audio/menu-misc.mp3");
         backgroundMusic.setLooping(true);
 
         addState(STATE_OPENING, new OpeningState(this));

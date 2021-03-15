@@ -36,20 +36,20 @@ public class MonochromaticDrawable extends BaseDrawable {
 
     public MonochromaticDrawable(LaPandemia main, Color color) {
         this.main = main;
-        whitePixel = ((TextureAtlas)main.assetManager.get("images.pack")).findRegion("ui-whitepixel");
+        whitePixel = ((TextureAtlas)main.getAssetManager().get("images.pack")).findRegion("ui-whitepixel");
         this.color = color;
     }
 
     @Override
     public void draw(Batch batch, float x, float y, float width, float height) {
-        Color savedBatchColor = main.colorPool.obtain();
+        Color savedBatchColor = main.getColorPool().obtain();
         try {
             savedBatchColor.set(batch.getColor());
             batch.setColor(color);
             batch.draw(whitePixel, x, y, width, height);
             batch.setColor(savedBatchColor);
         } finally {
-            main.colorPool.free(savedBatchColor);
+            main.getColorPool().free(savedBatchColor);
         }
     }
 }

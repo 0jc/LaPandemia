@@ -3,13 +3,11 @@ package com.colegiovivas.lapandemia.screens.game;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -61,9 +59,9 @@ public class GameStats {
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.fontColor = Color.WHITE;
-        labelStyle.font = main.assetManager.get("fonts/nice32.fnt");
+        labelStyle.font = main.getAssetManager().get("fonts/nice32.fnt");
 
-        final TextureAtlas atlas = main.assetManager.get("images.pack");
+        final TextureAtlas atlas = main.getAssetManager().get("images.pack");
         Image maskIcon = new Image(atlas.findRegion("ui-mask"));
         Image paperIcon = new Image(atlas.findRegion("ui-toiletpaper"));
         Image runningTimeIcon = new Image(atlas.findRegion("timer"));

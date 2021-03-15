@@ -3,7 +3,6 @@ package com.colegiovivas.lapandemia.actors.world;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.WorldActor;
@@ -40,7 +39,7 @@ public class HealthActor extends WorldActor {
 
     public HealthActor(final LaPandemia game) {
         this.game = game;
-        this.textures = ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("health");
+        this.textures = ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegions("health");
         health = 4;
         showMaxFor = 0;
         show = true;

@@ -1,12 +1,9 @@
 package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 
@@ -24,7 +21,7 @@ public class WallActor extends CollisionableActor {
 
     public WallActor(final LaPandemia game, String regionName) {
         this.game = game;
-        this.texture = ((TextureAtlas)game.assetManager.get("images.pack")).findRegion(regionName);
+        this.texture = ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegion(regionName);
 
         elapsedTime = 0;
 

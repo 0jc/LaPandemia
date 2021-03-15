@@ -66,7 +66,7 @@ public class Countdown {
 
         images = new Image[4];
         Array<TextureAtlas.AtlasRegion> regions
-                = ((TextureAtlas)main.assetManager.get("images.pack")).findRegions("countdown");
+                = ((TextureAtlas)main.getAssetManager().get("images.pack")).findRegions("countdown");
         for (int i = 0; i <= 3; i++) {
             images[i] = new Image(regions.get(i));
             images[i].setPosition(-images[i].getWidth()/2, -images[i].getHeight()/2);
@@ -74,8 +74,8 @@ public class Countdown {
             stage.addActor(images[i]);
         }
 
-        numberBeep = main.assetManager.get("audio/countdown-beep-number.wav");
-        goBeep = main.assetManager.get("audio/countdown-beep-go.wav");
+        numberBeep = main.getAssetManager().get("audio/countdown-beep-number.wav");
+        goBeep = main.getAssetManager().get("audio/countdown-beep-go.wav");
     }
 
     /**

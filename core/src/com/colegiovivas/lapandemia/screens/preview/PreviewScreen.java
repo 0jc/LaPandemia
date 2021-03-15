@@ -4,7 +4,6 @@ import com.badlogic.gdx.audio.Music;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
-import com.colegiovivas.lapandemia.screens.transitions.HCenterOutTransition;
 import com.colegiovivas.lapandemia.screens.transitions.TopInTransition;
 import com.colegiovivas.lapandemia.screens.transitions.Transition;
 
@@ -29,8 +28,8 @@ public class PreviewScreen extends MultistateScreen {
         this.levelInfo = levelInfo;
 
         closingTransition = new TopInTransition(0.4f, 1f, 0.2f);
-        backgroundMusic = main.assetManager.get("audio/menu-misc.mp3");
-        levelChosenMusic = main.assetManager.get("audio/level-chosen.wav");
+        backgroundMusic = main.getAssetManager().get("audio/menu-misc.mp3");
+        levelChosenMusic = main.getAssetManager().get("audio/level-chosen.wav");
 
         previewView = new PreviewView(main, this, levelInfo);
 

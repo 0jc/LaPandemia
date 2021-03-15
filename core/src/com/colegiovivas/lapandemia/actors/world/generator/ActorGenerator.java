@@ -135,8 +135,8 @@ public class ActorGenerator {
         } else {
             lastActorTime += delta;
             if (lastActorTime >= tick) {
-                Rectangle rect = game.rectPool.obtain();
-                Array<Actor> overlappedActors = game.actorArrayPool.obtain();
+                Rectangle rect = game.getRectPool().obtain();
+                Array<Actor> overlappedActors = game.getActorArrayPool().obtain();
                 rect.set(0, 0, width, height);
                 try {
                     if (tryAssignCoords(rect, overlappedActors)) {
@@ -155,8 +155,8 @@ public class ActorGenerator {
                         }
                     }
                 } finally {
-                    game.rectPool.free(rect);
-                    game.actorArrayPool.free(overlappedActors);
+                    game.getRectPool().free(rect);
+                    game.getActorArrayPool().free(overlappedActors);
                 }
             }
         }
@@ -175,7 +175,7 @@ public class ActorGenerator {
         outCoords.x = MathUtils.random(32, (int)world.getWidth() - 32 - 64);
         outCoords.y = MathUtils.random(32, (int)world.getHeight() - 32 - 64);
 
-        Rectangle actorRect = game.rectPool.obtain();
+        Rectangle actorRect = game.getRectPool().obtain();
         try {
             for (Actor currGroup : world.getRootGroup().getChildren()) {
                 if (currGroup instanceof Group) {
@@ -207,7 +207,7 @@ public class ActorGenerator {
                 }
             }
         } finally {
-            game.rectPool.free(actorRect);
+            game.getRectPool().free(actorRect);
         }
         return true;
     }

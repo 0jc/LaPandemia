@@ -1,7 +1,6 @@
 package com.colegiovivas.lapandemia.actors.world;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -156,11 +155,11 @@ public class PlayerActor extends CollisionableActor {
         health = MAX_HEALTH;
 
         defaultAnimation = new Animation<TextureRegion>(1f,
-                ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("player-default"));
+                ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegions("player-default"));
         invincibleAnimation = new Animation<TextureRegion>(0.2f,
-                ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("player-invincible"));
+                ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegions("player-invincible"));
         deadAnimation = new Animation<TextureRegion>(1f,
-                ((TextureAtlas)game.assetManager.get("images.pack")).findRegions("player-dead"));
+                ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegions("player-dead"));
 
         maskCount = 0;
         paperCount = 0;
@@ -168,12 +167,12 @@ public class PlayerActor extends CollisionableActor {
 
         setTouchable(Touchable.enabled);
 
-        wallHitSound = game.assetManager.get("audio/hit-wall.wav");
-        fanHitSound = game.assetManager.get("audio/hit-fan.wav");
-        infectionSound = game.assetManager.get("audio/infected.wav");
-        maskSound = game.assetManager.get("audio/mask-collected.wav");
-        paperSound = game.assetManager.get("audio/toilet-paper-collected.wav");
-        virusKilledSound = game.assetManager.get("audio/virus-killed.wav");
+        wallHitSound = game.getAssetManager().get("audio/hit-wall.wav");
+        fanHitSound = game.getAssetManager().get("audio/hit-fan.wav");
+        infectionSound = game.getAssetManager().get("audio/infected.wav");
+        maskSound = game.getAssetManager().get("audio/mask-collected.wav");
+        paperSound = game.getAssetManager().get("audio/toilet-paper-collected.wav");
+        virusKilledSound = game.getAssetManager().get("audio/virus-killed.wav");
     }
 
     public int getPaperCount() {
@@ -348,7 +347,7 @@ public class PlayerActor extends CollisionableActor {
     private void infected() {
         if (invincibilityTimeLeft == 0) {
             infectionSound.play();
-            game.hardwareWrapper.vibrate(100);
+            game.getHardwareWrapper().vibrate(100);
             maskCount--;
             powerupListener.updateCount(ActorId.MASK, maskCount);
         } else {

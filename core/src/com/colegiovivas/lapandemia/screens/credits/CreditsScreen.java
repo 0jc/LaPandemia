@@ -28,7 +28,7 @@ public class CreditsScreen implements Screen {
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin cloudFormSkin = main.assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        Skin cloudFormSkin = main.getAssetManager().get("cloud-form-skin/cloud-form-ui.json");
 
         String topText = "Algunos de los recursos visuales y auditivos presentes en este juego"
                 + " han sido producidos por terceras personas bajo una licencia Creative Commons,"

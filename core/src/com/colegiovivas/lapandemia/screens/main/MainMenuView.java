@@ -39,7 +39,7 @@ public class MainMenuView {
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin cloudFormSkin = main.assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        Skin cloudFormSkin = main.getAssetManager().get("cloud-form-skin/cloud-form-ui.json");
 
         final TextButton playButton = new TextButton("Mapas", cloudFormSkin);
         TextButton settingsButton = new TextButton("Ajustes", cloudFormSkin);
@@ -47,7 +47,7 @@ public class MainMenuView {
         Label headerLabel = new Label("LA PANDEMIA", cloudFormSkin);
         headerLabel.setFontScaleX(1.5f);
         headerLabel.setFontScaleY(1.5f);
-        TextureAtlas atlas = main.assetManager.get("images.pack");
+        TextureAtlas atlas = main.getAssetManager().get("images.pack");
         Image virusImage = new Image(atlas.findRegion("main-menu-virus"));
         Image playerImage = new Image(atlas.findRegion("main-menu-player"));
 

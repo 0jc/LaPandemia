@@ -83,14 +83,14 @@ public class PauseState extends MultistateScreen.StateAdapter {
         gameScreen.draw();
 
         if (pausing) {
-            if (main.hardwareWrapper.getGyroscopeY() >= GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
+            if (main.getHardwareWrapper().getGyroscopeY() >= GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
                 pausing = false;
             }
         } else if (!resume){
-            if (main.hardwareWrapper.getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
+            if (main.getHardwareWrapper().getGyroscopeY() < GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
                 resume = true;
             }
-        } else if (main.hardwareWrapper.getGyroscopeY() >= GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
+        } else if (main.getHardwareWrapper().getGyroscopeY() >= GameScreen.Y_GYROSCOPE_PAUSE_TRESHOLD) {
             resumeGame();
         }
     }

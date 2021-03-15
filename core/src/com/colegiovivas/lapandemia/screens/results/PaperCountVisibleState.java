@@ -16,7 +16,7 @@ public class PaperCountVisibleState extends MultistateScreen.StateAdapter {
 
     public PaperCountVisibleState(LaPandemia main, ResultsScreen resultsScreen) {
         this.resultsScreen = resultsScreen;
-        statShownMusic = main.assetManager.get("audio/stat-shown.wav");
+        statShownMusic = main.getAssetManager().get("audio/stat-shown.wav");
     }
 
     @Override

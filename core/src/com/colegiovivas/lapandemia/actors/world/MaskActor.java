@@ -21,7 +21,7 @@ public class MaskActor extends GenerableActor {
 
     public MaskActor(final LaPandemia game) {
         this.game = game;
-        this.texture = ((TextureAtlas)game.assetManager.get("images.pack")).findRegion("mask");
+        this.texture = ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegion("mask");
 
         setTouchable(Touchable.enabled);
     }

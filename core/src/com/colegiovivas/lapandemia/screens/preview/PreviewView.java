@@ -48,7 +48,7 @@ public class PreviewView {
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        Skin cloudFormSkin = main.assetManager.get("cloud-form-skin/cloud-form-ui.json");
+        Skin cloudFormSkin = main.getAssetManager().get("cloud-form-skin/cloud-form-ui.json");
         Label levelNameLabel = new Label(levelInfo.getName(), cloudFormSkin, "title");
         Label scoreLabel = new Label("Rollos de papel: " + levelInfo.getHighscore().getScore(), cloudFormSkin);
         Label authorLabel = new Label("Autor: " + levelInfo.getHighscore().getAuthor(), cloudFormSkin);

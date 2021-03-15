@@ -21,7 +21,7 @@ public class PaperActor extends GenerableActor {
 
     public PaperActor(final LaPandemia game) {
         this.game = game;
-        this.texture = ((TextureAtlas)game.assetManager.get("images.pack")).findRegion("toiletpaper");
+        this.texture = ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegion("toiletpaper");
 
         setTouchable(Touchable.enabled);
     }

@@ -86,7 +86,7 @@ public class ResultsScreen extends MultistateScreen {
         closingTransition = new HCenterInTransition(0, 0.7f, 0.5f);
 
         // Efecto sonoro que se reproduce cuando el valor de una estadística ha terminado de subir.
-        Music statReachedItsValue = main.assetManager.get("audio/stat-reached-its-value.wav");
+        Music statReachedItsValue = main.getAssetManager().get("audio/stat-reached-its-value.wav");
         addState(STATE_OPENING, new OpeningState(this));
         addState(STATE_TIME_VISIBLE, new TimeVisibleState(main, this));
         addState(STATE_INCREASING_TIME, new IncreasingTimeState(this));
@@ -99,8 +99,8 @@ public class ResultsScreen extends MultistateScreen {
         addState(STATE_SHOWING_BUTTONS, new ShowingButtonsState(this));
         addState(STATE_CLOSING, new ClosingState(this));
 
-        backgroundMusic = main.assetManager.get("audio/results.wav");
-        highscoreMusic = main.assetManager.get("audio/claps.wav");
+        backgroundMusic = main.getAssetManager().get("audio/results.wav");
+        highscoreMusic = main.getAssetManager().get("audio/claps.wav");
 
         setState(STATE_OPENING);
     }

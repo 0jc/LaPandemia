@@ -21,7 +21,7 @@ public class NeedleActor extends GenerableActor {
 
     public NeedleActor(final LaPandemia game) {
         this.game = game;
-        this.texture = ((TextureAtlas)game.assetManager.get("images.pack")).findRegion("needle");
+        this.texture = ((TextureAtlas)game.getAssetManager().get("images.pack")).findRegion("needle");
 
         setTouchable(Touchable.enabled);
     }
