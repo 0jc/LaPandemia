@@ -25,14 +25,13 @@ public class MapSelectionScreen extends ScreenAdapter {
     private final InputMultiplexer inputProcessor;
     private final InputProcessor noInput;
 
-    public MapSelectionScreen(LaPandemia main, LevelCatalog levelCatalog) {
+    public MapSelectionScreen(LaPandemia main, LevelCatalog levelCatalog, AssetManager assetManager) {
         this.main = main;
 
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        AssetManager assetManager = main.getAssetManager();
         Skin cloudFormSkin = assetManager.get("cloud-form-skin/cloud-form-ui.json");
         TextureRegion whitePixel = ((TextureAtlas)assetManager.get("images.pack")).findRegion("ui-whitepixel");
 

@@ -10,24 +10,24 @@ class CounterAnimator {
     /**
      * Tiempo total de recorrido.
      */
-    private float totalTime;
+    private final float totalTime;
 
     /**
      * Valor inicial del contador.
      */
-    private float startValue;
+    private final float startValue;
 
     /**
      * Valor final del contador.
      */
-    private float endValue;
+    private final float endValue;
 
     /**
      * Tiempo actual que se lleva reproduciendo la animación.
      */
     private float currentTime;
 
-    public void init(float totalTime, float startValue, float endValue) {
+    public CounterAnimator(float totalTime, float startValue, float endValue) {
         this.totalTime = totalTime;
         this.startValue = startValue;
         this.endValue = endValue;

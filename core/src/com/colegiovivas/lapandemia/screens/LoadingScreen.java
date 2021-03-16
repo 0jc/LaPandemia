@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -26,6 +27,7 @@ public class LoadingScreen implements Screen {
      */
     private final SpriteBatch batch;
     private final LaPandemia main;
+    private final AssetManager assetManager;
     private final Viewport viewport;
     private final OrthographicCamera camera;
     private final GlyphLayout loadingTitleLayout;
@@ -37,8 +39,9 @@ public class LoadingScreen implements Screen {
      */
     private static final float LINE_SPACING = 40;
 
-    public LoadingScreen(final LaPandemia main) {
+    public LoadingScreen(LaPandemia main, AssetManager assetManager) {
         this.main = main;
+        this.assetManager = assetManager;
 
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(800, 480, camera);
@@ -54,48 +57,48 @@ public class LoadingScreen implements Screen {
 
         // Lo imprescindible para poder mostrar esta misma pantalla.
         // finishLoading() se asegura de cargar todos estos recursos antes de devolver.
-        main.getAssetManager().load("fonts/nice32.fnt", BitmapFont.class);
-        main.getAssetManager().finishLoading();
+        assetManager.load("fonts/nice32.fnt", BitmapFont.class);
+        assetManager.finishLoading();
 
         // Todos los demás recursos se irán cargando después gradualmente.
-        main.getAssetManager().load("images.pack", TextureAtlas.class);
-        main.getAssetManager().load("audio/countdown-beep-number.wav", Sound.class);
-        main.getAssetManager().load("audio/countdown-beep-go.wav", Sound.class);
-        main.getAssetManager().load("audio/hit-fan.wav", Sound.class);
-        main.getAssetManager().load("audio/hit-wall.wav", Sound.class);
-        main.getAssetManager().load("audio/infected.wav", Sound.class);
-        main.getAssetManager().load("audio/mask-collected.wav", Sound.class);
-        main.getAssetManager().load("audio/toilet-paper-collected.wav", Sound.class);
-        main.getAssetManager().load("audio/pause.wav", Sound.class);
-        main.getAssetManager().load("audio/virus-killed.wav", Sound.class);
-        main.getAssetManager().load("audio/stat-reached-its-value.wav", Music.class);
-        main.getAssetManager().load("audio/stat-shown.wav", Music.class);
-        main.getAssetManager().load("audio/claps.wav", Music.class);
-        main.getAssetManager().load("audio/ticking.wav", Music.class);
-        main.getAssetManager().load("audio/game-opening.wav", Music.class);
-        main.getAssetManager().load("audio/map.wav", Music.class);
-        main.getAssetManager().load("audio/game-over.wav", Music.class);
-        main.getAssetManager().load("audio/results.wav", Music.class);
-        main.getAssetManager().load("audio/menu-misc.mp3", Music.class);
-        main.getAssetManager().load("audio/level-chosen.wav", Music.class);
-        main.getAssetManager().load("cloud-form-skin/cloud-form-ui.json", Skin.class);
+        assetManager.load("images.pack", TextureAtlas.class);
+        assetManager.load("audio/countdown-beep-number.wav", Sound.class);
+        assetManager.load("audio/countdown-beep-go.wav", Sound.class);
+        assetManager.load("audio/hit-fan.wav", Sound.class);
+        assetManager.load("audio/hit-wall.wav", Sound.class);
+        assetManager.load("audio/infected.wav", Sound.class);
+        assetManager.load("audio/mask-collected.wav", Sound.class);
+        assetManager.load("audio/toilet-paper-collected.wav", Sound.class);
+        assetManager.load("audio/pause.wav", Sound.class);
+        assetManager.load("audio/virus-killed.wav", Sound.class);
+        assetManager.load("audio/stat-reached-its-value.wav", Music.class);
+        assetManager.load("audio/stat-shown.wav", Music.class);
+        assetManager.load("audio/claps.wav", Music.class);
+        assetManager.load("audio/ticking.wav", Music.class);
+        assetManager.load("audio/game-opening.wav", Music.class);
+        assetManager.load("audio/map.wav", Music.class);
+        assetManager.load("audio/game-over.wav", Music.class);
+        assetManager.load("audio/results.wav", Music.class);
+        assetManager.load("audio/menu-misc.mp3", Music.class);
+        assetManager.load("audio/level-chosen.wav", Music.class);
+        assetManager.load("cloud-form-skin/cloud-form-ui.json", Skin.class);
 
         loadingTitleLayout.setText(
-                (BitmapFont)main.getAssetManager().get("fonts/nice32.fnt"), "Cargando...");
+                (BitmapFont)assetManager.get("fonts/nice32.fnt"), "Cargando...");
     }
 
     @Override
     public void render(float delta) {
-        if (main.getAssetManager().update()) {
+        if (assetManager.update()) {
             // Todos los recursos han sido cargados ya.
             main.resourcesLoaded(this);
             return;
         }
 
-        BitmapFont nice32 = (BitmapFont)main.getAssetManager().get("fonts/nice32.fnt");
+        BitmapFont nice32 = (BitmapFont)assetManager.get("fonts/nice32.fnt");
 
         loadedPercentLayout.setText(
-                nice32, String.format("%.0f%%", main.getAssetManager().getProgress() * 100));
+                nice32, String.format("%.0f%%", assetManager.getProgress() * 100));
 
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

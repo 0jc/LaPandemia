@@ -362,3 +362,11 @@ Finalmente, se ha añadido un segundo nivel más grande al juego.
 Cambios presentados el 2021/03/07
 ---------------------------------
 Se establecen el nombre de la aplicación y el icono del launcher.
+
+
+Cambios presentados el 2021/03/17
+---------------------------------
+Se añaden algunos JavaDocs, aunque no todos los que hacen falta todavía, y reestructura
+la gestión de los estados de las pantallas, de modo que ahora es mucho más escueta y
+simple y hay 21 archivos .java menos en core/ (que han pasado a ser clases anónimas que
+hacen lo mismo pero son más breves).

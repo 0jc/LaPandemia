@@ -42,11 +42,6 @@ public abstract class Transition {
      */
     private float totalTime;
 
-    /**
-     * True si la transición se está reproduciendo o false en caso contrario.
-     */
-    private boolean playing = false;
-
     public Transition(float prewait, float duration, float postwait) {
         this.prewait = prewait;
         this.duration = duration;
@@ -54,6 +49,7 @@ public abstract class Transition {
         camera = new OrthographicCamera();
         viewport = new StretchViewport(800, 480, camera);
         shapeRenderer = new ShapeRenderer();
+        totalTime = 0;
 
         camera.translate(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2);
     }
@@ -66,9 +62,7 @@ public abstract class Transition {
     protected abstract void draw(float progress);
 
     public void draw() {
-        if (playing) {
-            draw(MathUtils.clamp(totalTime - prewait, 0, duration)/duration);
-        }
+        draw(MathUtils.clamp(totalTime - prewait, 0, duration)/duration);
     }
 
     /**
@@ -77,9 +71,7 @@ public abstract class Transition {
      * @param delta Tiempo transcurrido desde el anterior frame.
      */
     public void render(float delta) {
-        if (playing) {
-            totalTime += delta;
-        }
+        totalTime += delta;
     }
 
     /**
@@ -88,21 +80,6 @@ public abstract class Transition {
      */
     public boolean isComplete() {
         return totalTime >= prewait + duration + postwait;
-    }
-
-    /**
-     * Resetea el estado de la transición y comienza su reproducción.
-     */
-    public void start() {
-        totalTime = 0;
-        playing = true;
-    }
-
-    /**
-     * Frena la reproducción de la transición.
-     */
-    public void stop() {
-        playing = false;
     }
 
     /**

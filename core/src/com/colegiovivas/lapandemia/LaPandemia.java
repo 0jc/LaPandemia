@@ -4,15 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
 import com.colegiovivas.lapandemia.hardware.HardwareWrapper;
 import com.colegiovivas.lapandemia.levels.LevelCatalog;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
-import com.colegiovivas.lapandemia.pools.ActorArrayPool;
-import com.colegiovivas.lapandemia.pools.RectanglePool;
 import com.colegiovivas.lapandemia.screens.credits.CreditsScreen;
 import com.colegiovivas.lapandemia.screens.main.MainMenuScreen;
 import com.colegiovivas.lapandemia.screens.mapselection.MapSelectionScreen;
@@ -67,11 +61,10 @@ public class LaPandemia extends Game {
         Gdx.app.log("LaPandemia", "create()");
 
         levelCatalog = new LevelCatalog();
-        setAssetManager(new AssetManager());
+        assetManager = new AssetManager();
+        hardwareWrapper = new HardwareWrapper();
 
-        setHardwareWrapper(new HardwareWrapper());
-
-        setScreen(new LoadingScreen(this));
+        setScreen(new LoadingScreen(this, assetManager));
     }
 
     @Override
@@ -83,7 +76,7 @@ public class LaPandemia extends Game {
     @Override
     public void resume() {
         super.resume();
-        setScreen(new LoadingScreen(this));
+        setScreen(new LoadingScreen(this, assetManager));
     }
 
     /**
@@ -97,7 +90,7 @@ public class LaPandemia extends Game {
             setScreen(nextScreen);
             nextScreen = null;
         } else {
-            setScreen(new MainMenuScreen(this));
+            setScreen(new MainMenuScreen(this, assetManager));
         }
     }
 
@@ -109,7 +102,7 @@ public class LaPandemia extends Game {
     public void mapSelectionScreenChosen(MainMenuScreen mainMenuScreen) {
         mainMenuScreen.dispose();
 
-        setScreen(new MapSelectionScreen(this, levelCatalog));
+        setScreen(new MapSelectionScreen(this, levelCatalog, assetManager));
     }
 
     /**
@@ -120,7 +113,7 @@ public class LaPandemia extends Game {
     public void creditsScreenChosen(MainMenuScreen mainMenuScreen) {
         mainMenuScreen.dispose();
 
-        setScreen(new CreditsScreen(this));
+        setScreen(new CreditsScreen(this, assetManager));
     }
 
     /**
@@ -131,7 +124,7 @@ public class LaPandemia extends Game {
     public void settingsScreenChosen(MainMenuScreen mainMenuScreen) {
         mainMenuScreen.dispose();
 
-        setScreen(new SettingsScreen(this));
+        setScreen(new SettingsScreen(this, hardwareWrapper, assetManager));
     }
 
     /**
@@ -142,7 +135,7 @@ public class LaPandemia extends Game {
     public void navigatedBackToMapSelection(PreviewScreen previewScreen) {
         previewScreen.dispose();
 
-        setScreen(new MapSelectionScreen(this, levelCatalog));
+        setScreen(new MapSelectionScreen(this, levelCatalog, assetManager));
     }
 
     /**
@@ -153,7 +146,7 @@ public class LaPandemia extends Game {
     public void previewScreenChosen(MapSelectionScreen source, LevelInfo levelInfo) {
         source.dispose();
 
-        setScreen(new PreviewScreen(this, levelInfo));
+        setScreen(new PreviewScreen(this, levelInfo, assetManager));
     }
 
     /**
@@ -164,7 +157,7 @@ public class LaPandemia extends Game {
     public void navigatedBackToMain(Screen screen) {
         screen.dispose();
 
-        setScreen(new MainMenuScreen(this));
+        setScreen(new MainMenuScreen(this, assetManager));
     }
 
     /**
@@ -176,7 +169,7 @@ public class LaPandemia extends Game {
     public void mapChosen(PreviewScreen source, LevelInfo levelInfo) {
         source.dispose();
 
-        setScreen(new GameScreen(this, levelInfo));
+        setScreen(new GameScreen(this, levelInfo, hardwareWrapper, assetManager));
     }
 
     /**
@@ -189,7 +182,7 @@ public class LaPandemia extends Game {
     public void gameOver(GameScreen gameScreen, LevelInfo level, int paperCount, float runningTime) {
         gameScreen.dispose();
 
-        setScreen(new ResultsScreen(this, level, paperCount, runningTime));
+        setScreen(new ResultsScreen(this, level, assetManager, paperCount, runningTime));
     }
 
     /**
@@ -200,9 +193,9 @@ public class LaPandemia extends Game {
         resultsScreen.dispose();
 
         if (playAgain) {
-            setScreen(new GameScreen(this, sourceLevel));
+            setScreen(new GameScreen(this, sourceLevel, hardwareWrapper, assetManager));
         } else {
-            setScreen(new MainMenuScreen(this, true));
+            setScreen(new MainMenuScreen(this, assetManager, true));
         }
     }
 
@@ -210,34 +203,34 @@ public class LaPandemia extends Game {
     public void dispose() {
         super.dispose();
         if (getScreen() != null) getScreen().dispose();
-        getAssetManager().dispose();
+        assetManager.dispose();
     }
 
     /**
      * @return {@link #assetManager}
      */
-    public AssetManager getAssetManager() {
+    public AssetManager getAssetManagerOld() {
         return assetManager;
     }
 
     /**
      * @param assetManager El nuevo valor para {@link #assetManager}.
      */
-    public void setAssetManager(AssetManager assetManager) {
+    public void setAssetManagerOld(AssetManager assetManager) {
         this.assetManager = assetManager;
     }
 
     /**
      * @return {@link #hardwareWrapper}
      */
-    public HardwareWrapper getHardwareWrapper() {
+    public HardwareWrapper getHardwareWrapperOld() {
         return hardwareWrapper;
     }
 
     /**
      * @param hardwareWrapper El nuevo valor para {@link #hardwareWrapper}.
      */
-    public void setHardwareWrapper(HardwareWrapper hardwareWrapper) {
+    public void setHardwareWrapperOld(HardwareWrapper hardwareWrapper) {
         this.hardwareWrapper = hardwareWrapper;
     }
 }

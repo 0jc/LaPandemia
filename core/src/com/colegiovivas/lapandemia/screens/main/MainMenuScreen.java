@@ -1,6 +1,11 @@
 package com.colegiovivas.lapandemia.screens.main;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -11,106 +16,114 @@ import com.colegiovivas.lapandemia.screens.transitions.Transition;
 /**
  * Pantalla principal del juego.
  */
-public class MainMenuScreen extends MultistateScreen {
-    static final int STATE_OPENING = 1;
-    static final int STATE_IDLE = 2;
+public class MainMenuScreen extends MultistateScreen<MainMenuScreen.States> {
+    public enum States { OPENING, IDLE }
 
-    private final LaPandemia main;
     private final MainMenuView mainMenuView;
 
-    /**
-     * Música de fondo. Se empieza a reproducir en esta pantalla pero son otros submenús los
-     * que deciden cuándo pararla.
-     */
-    private final Music backgroundMusic;
-
-    /**
-     * True si se debe reproducir la transición inicial, openingTransition, o false en caso contrario.
-     * Se utiliza para poder transicionar de forma intuitiva desde otras pantallas con transición como
-     * la de los resultados de una partida, pero no por ejemplo al volver del menú de selección de
-     * mapas.
-     */
-    private final boolean playOpeningTransition;
-
-    /**
-     * Transición que se realiza para introducir la pantalla en caso de que playOpeningTransition
-     * sea verdadero.
-     */
-    private final Transition openingTransition;
-
-    public MainMenuScreen(LaPandemia main) {
-        this(main, false);
+    public MainMenuScreen(LaPandemia main, AssetManager assetManager) {
+        this(main, assetManager, false);
     }
 
-    public MainMenuScreen(LaPandemia main, boolean playOpeningTransition) {
-        this.main = main;
-        this.playOpeningTransition = playOpeningTransition;
+    public MainMenuScreen(final LaPandemia main, AssetManager assetManager, final boolean playTransition) {
+        mainMenuView = new MainMenuView(assetManager);
 
-        openingTransition = new HCenterOutTransition(0, 0.7f, 0);
-
-        mainMenuView = new MainMenuView(main.getAssetManager());
-
-        backgroundMusic = main.getAssetManager().get("audio/menu-misc.mp3");
+        final InputProcessor noInput = new InputAdapter();
+        final Music backgroundMusic = assetManager.get("audio/menu-misc.mp3");
         backgroundMusic.setLooping(true);
 
-        addState(STATE_OPENING, new OpeningState(this));
-        addState(STATE_IDLE, new IdleState(this));
+        addState(States.OPENING, new StateAdapter() {
+            private final Transition transition = new HCenterOutTransition(0, 0.7f, 0);
+
+            @Override
+            public void show() {
+                backgroundMusic.play();
+            }
+
+            @Override
+            public void render(float delta) {
+                transition.render(delta);
+
+                mainMenuView.getStage().draw();
+                transition.draw();
+
+                if (transition.isComplete()) {
+                    setState(States.IDLE);
+                }
+            }
+
+            @Override
+            public void resize(int width, int height) {
+                transition.getViewport().update(width, height);
+            }
+
+            @Override
+            public void dispose() {
+                transition.dispose();
+            }
+        });
+
+        addState(States.IDLE, new StateAdapter() {
+            @Override
+            public void show() {
+                backgroundMusic.play();
+                Gdx.input.setInputProcessor(mainMenuView.getStage());
+            }
+
+            @Override
+            public void leave() {
+                Gdx.input.setInputProcessor(noInput);
+            }
+
+            @Override
+            public void render(float delta) {
+                mainMenuView.getStage().draw();
+            }
+        });
 
         mainMenuView.addPlayListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                MainMenuScreen.this.main.mapSelectionScreenChosen(MainMenuScreen.this);
+                main.mapSelectionScreenChosen(MainMenuScreen.this);
             }
         });
 
         mainMenuView.addSettingsListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                MainMenuScreen.this.main.settingsScreenChosen(MainMenuScreen.this);
+                main.settingsScreenChosen(MainMenuScreen.this);
             }
         });
 
         mainMenuView.addCreditsListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                MainMenuScreen.this.main.creditsScreenChosen(MainMenuScreen.this);
+                main.creditsScreenChosen(MainMenuScreen.this);
             }
         });
 
-        setState(STATE_OPENING);
-    }
-
-    public boolean getPlayOpeningTransition() {
-        return playOpeningTransition;
+        setState(playTransition ? States.OPENING : States.IDLE);
     }
 
     @Override
     public void resize(int width, int height) {
-        openingTransition.getViewport().update(width, height);
         mainMenuView.getStage().getViewport().update(width, height);
+
         super.resize(width, height);
     }
 
-    public void draw() {
-        mainMenuView.getStage().draw();
-        openingTransition.draw();
-    }
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-    public MainMenuView getMainMenuView() {
-        return mainMenuView;
-    }
-
-    public Transition getOpeningTransition() {
-        return openingTransition;
-    }
-
-    public Music getBackgroundMusic() {
-        return backgroundMusic;
+        super.render(delta);
     }
 
     @Override
     public void dispose() {
         mainMenuView.dispose();
-        openingTransition.dispose();
+
+        super.dispose();
     }
 }

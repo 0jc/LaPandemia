@@ -12,16 +12,16 @@ import java.util.Iterator;
  * cuenta atrás se puede considerar un estado de la pantalla distinto a la fase
  * en la que el personaje ya puede moverse o a cuando la partida está pausada.
  */
-public abstract class MultistateScreen implements Screen {
+public abstract class MultistateScreen<T extends Enum<T>> implements Screen {
     /**
      * Estados disponibles para la pantalla en función de su ID numérica única.
      */
-    private final ArrayMap<Integer, State> states;
+    private final ArrayMap<T, State> states;
 
     /**
      * ID del estado actualmente activo.
      */
-    private Integer currentStateId;
+    private T currentStateId;
 
     /**
      * Inicializa los recursos necesarios para la gestión de estados.
@@ -37,7 +37,9 @@ public abstract class MultistateScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        getCurrentState().resize(width, height);
+        for (State state : states.values()) {
+            state.resize(width, height);
+        }
     }
 
     @Override
@@ -65,7 +67,7 @@ public abstract class MultistateScreen implements Screen {
      * pantalla original, si existía una, como a la nueva.
      * @param stateId ID del estado al que se quiere cambiar.
      */
-    public void setState(int stateId) {
+    public void setState(T stateId) {
         if (!states.containsKey(stateId)) {
             throw new IllegalArgumentException();
         }
@@ -85,7 +87,7 @@ public abstract class MultistateScreen implements Screen {
      * @param id ID mediante la que se identificará a state.
      * @param state Estado que será añadido.
      */
-    public void addState(int id, State state) {
+    public void addState(T id, State state) {
         if (states.containsKey(id) || state == null) {
             throw new IllegalArgumentException();
         }

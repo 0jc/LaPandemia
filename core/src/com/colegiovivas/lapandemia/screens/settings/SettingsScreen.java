@@ -27,14 +27,13 @@ public class SettingsScreen extends ScreenAdapter {
     private final InputMultiplexer inputProcessor;
     private final InputProcessor noInput;
 
-    public SettingsScreen(LaPandemia main) {
+    public SettingsScreen(LaPandemia main, final HardwareWrapper hardwareWrapper, AssetManager assetManager) {
         this.main = main;
 
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
 
-        AssetManager assetManager = main.getAssetManager();
         Skin cloudFormSkin = assetManager.get("cloud-form-skin/cloud-form-ui.json");
         TextureRegion whitePixel = ((TextureAtlas)assetManager.get("images.pack")).findRegion("ui-whitepixel");
 
@@ -92,7 +91,6 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        final HardwareWrapper hardwareWrapper = main.getHardwareWrapper();
         vibratorCheckBox.setChecked(hardwareWrapper.getVibratorEnabled());
         gyroscopeCheckBox.setChecked(hardwareWrapper.getGyroscopeEnabled());
 

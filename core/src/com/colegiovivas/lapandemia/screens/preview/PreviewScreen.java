@@ -1,8 +1,12 @@
 package com.colegiovivas.lapandemia.screens.preview;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.colegiovivas.lapandemia.LaPandemia;
@@ -15,104 +19,124 @@ import com.colegiovivas.lapandemia.screens.transitions.Transition;
  * Pantalla que muestra los datos del récord en un nivel e incluye un botón para
  * empezar una partida en él.
  */
-public class PreviewScreen extends MultistateScreen {
-    static final int STATE_IDLE = 0;
-    static final int STATE_LEVEL_CHOSEN_MUSIC = 1;
-    static final int STATE_CLOSING = 2;
+public class PreviewScreen extends MultistateScreen<PreviewScreen.States> {
+    public enum States { IDLE, LEVEL_CHOSEN, CLOSING }
 
-    private final LaPandemia main;
-    private final LevelInfo levelInfo;
     private final PreviewView previewView;
-    private final Transition closingTransition;
-    private final Music backgroundMusic;
-    private final Music levelChosenMusic;
 
-    public PreviewScreen(LaPandemia main, LevelInfo levelInfo) {
-        this.main = main;
-        this.levelInfo = levelInfo;
+    public PreviewScreen(final LaPandemia main, final LevelInfo levelInfo, AssetManager assetManager) {
+        previewView = new PreviewView(assetManager, levelInfo);
 
-        closingTransition = new TopInTransition(0.4f, 1f, 0.2f);
-        backgroundMusic = main.getAssetManager().get("audio/menu-misc.mp3");
-        levelChosenMusic = main.getAssetManager().get("audio/level-chosen.wav");
+        final Music backgroundMusic = assetManager.get("audio/menu-misc.mp3");
+        final Music levelChosenMusic = assetManager.get("audio/level-chosen.wav");
 
-        previewView = new PreviewView(main.getAssetManager(), levelInfo);
+        final InputAdapter noInput = new InputAdapter();
+
+        final InputMultiplexer inputProcessor = new InputMultiplexer();
+        inputProcessor.addProcessor(previewView.getStage());
+        inputProcessor.addProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    main.navigatedBackToMapSelection(PreviewScreen.this);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        addState(States.IDLE, new StateAdapter() {
+            @Override
+            public void show() {
+                Gdx.input.setCatchKey(Input.Keys.BACK, true);
+                Gdx.input.setInputProcessor(inputProcessor);
+            }
+
+            @Override
+            public void leave() {
+                Gdx.input.setCatchKey(Input.Keys.BACK, false);
+                Gdx.input.setInputProcessor(noInput);
+            }
+
+            @Override
+            public void render(float delta) {
+                previewView.getStage().draw();
+            }
+        });
+
+        addState(States.LEVEL_CHOSEN, new StateAdapter() {
+            @Override
+            public void enter() {
+                backgroundMusic.stop();
+                levelChosenMusic.play();
+            }
+
+            @Override
+            public void render(float delta) {
+                previewView.getStage().draw();
+
+                if (!levelChosenMusic.isPlaying()) {
+                    setState(States.CLOSING);
+                }
+            }
+        });
+
+        addState(States.CLOSING, new StateAdapter() {
+            private final Transition transition = new TopInTransition(0.4f, 1f, 0.2f);
+
+            @Override
+            public void resize(int width, int height) {
+                transition.getViewport().update(width, height);
+            }
+
+            @Override
+            public void render(float delta) {
+                transition.render(delta);
+
+                previewView.getStage().draw();
+                transition.draw();
+
+                if (transition.isComplete()) {
+                    main.mapChosen(PreviewScreen.this, levelInfo);
+                }
+            }
+
+            @Override
+            public void dispose() {
+                transition.dispose();
+            }
+        });
 
         previewView.addStartListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                setState(STATE_LEVEL_CHOSEN_MUSIC);
+                setState(States.LEVEL_CHOSEN);
             }
         });
 
-        addState(STATE_IDLE, new IdleState(this));
-        addState(STATE_LEVEL_CHOSEN_MUSIC, new LevelChosenMusicState(this));
-        addState(STATE_CLOSING, new ClosingState(this));
-
-        setState(STATE_IDLE);
+        setState(States.IDLE);
     }
 
-    /**
-     * @return La música que se está reproduciendo de fondo (lanzada desde el menú principal).
-     */
-    public Music getBackgroundMusic() {
-        return backgroundMusic;
-    }
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-    /**
-     * @return La música que se reproduce al elegir jugar en el nivel.
-     */
-    public Music getLevelChosenMusic() {
-        return levelChosenMusic;
-    }
-
-    /**
-     * @return La transición que se reproduce al elegir empezar la partida.
-     */
-    public Transition getClosingTransition() {
-        return closingTransition;
-    }
-
-    /**
-     * @return La vista de la pantalla.
-     */
-    public PreviewView getPreviewView() {
-        return previewView;
+        super.render(delta);
     }
 
     @Override
     public void resize(int width, int height) {
-        closingTransition.getViewport().update(width, height);
         previewView.getStage().getViewport().update(width, height);
-        super.resize(width, height);
-    }
 
-    /**
-     * Dibuja el estado actual de la pantalla.
-     */
-    public void draw() {
-        previewView.getStage().draw();
-        closingTransition.draw();
+        super.resize(width, height);
     }
 
     @Override
     public void dispose() {
         previewView.dispose();
-        closingTransition.dispose();
-    }
 
-    /**
-     * Transfiere el control de vuelta a la clase principal para volver al menú de
-     * selección de mapa.
-     */
-    public void back() {
-        main.navigatedBackToMapSelection(this);
-    }
-
-    /**
-     * Transfiere el control de vuelta a la clase principal para volver al menú de
-     * selección de mapa.
-     */
-    public void play() {
-        main.mapChosen(this, levelInfo);
+        super.dispose();
     }
 }

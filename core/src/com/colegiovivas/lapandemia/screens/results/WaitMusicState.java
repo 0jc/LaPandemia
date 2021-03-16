@@ -1,29 +1,21 @@
 package com.colegiovivas.lapandemia.screens.results;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.GL20;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 
 /**
  * Estado de reproducción de música. Se reproduce una única vez una
  * música especificada y después se cambia a otro estado.
  */
-public class WaitMusicState extends MultistateScreen.StateAdapter {
-    private final ResultsScreen resultsScreen;
-    /**
-     * Siguiente estado al que se salta al terminarse la música.
-     */
-    private final int nextState;
-    /**
-     * Música que se reproduce.
-     */
+public abstract class WaitMusicState<T extends ResultsScreen.States> extends MultistateScreen.StateAdapter {
     private final Music music;
+    private final ResultsScreen resultsScreen;
+    private final T nextState;
 
-    public WaitMusicState(Music music, ResultsScreen resultsScreen, int nextState) {
+    public WaitMusicState(Music music, ResultsScreen resultsScreen, T nextState) {
+        this.music = music;
         this.resultsScreen = resultsScreen;
         this.nextState = nextState;
-        this.music = music;
     }
 
     @Override
@@ -34,12 +26,11 @@ public class WaitMusicState extends MultistateScreen.StateAdapter {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0xFF, 0xFF, 0xFF, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        resultsScreen.draw();
+        renderPlayingMusic(delta);
         if (!music.isPlaying()) {
             resultsScreen.setState(nextState);
         }
     }
+
+    public abstract void renderPlayingMusic(float delta);
 }

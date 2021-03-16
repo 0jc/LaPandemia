@@ -1,17 +1,22 @@
 package com.colegiovivas.lapandemia.screens.game;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.input.GestureDetector;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.ActorId;
 import com.colegiovivas.lapandemia.actors.world.PlayerActor;
+import com.colegiovivas.lapandemia.gestures.MovePlayerGestureListener;
+import com.colegiovivas.lapandemia.gestures.ZoomGestureListener;
 import com.colegiovivas.lapandemia.hardware.HardwareWrapper;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.MultistateScreen;
 import com.colegiovivas.lapandemia.screens.transitions.HCenterOutTransition;
+import com.colegiovivas.lapandemia.screens.transitions.Transition;
 import com.colegiovivas.lapandemia.screens.transitions.VCenterInTransition;
 
 /**
@@ -19,7 +24,19 @@ import com.colegiovivas.lapandemia.screens.transitions.VCenterInTransition;
  * interfaz en el borde superior con estadísticas de la partida y otra información
  * relevante para el usuario.
  */
-public class GameScreen extends MultistateScreen {
+public class GameScreen extends MultistateScreen<GameScreen.States> {
+    public enum States {
+        OPENING,
+        ZOOMING_IN,
+        WAITING_INTRO_MUSIC,
+        PAUSING_BEFORE_COUNTDOWN,
+        COUNTDOWN,
+        PLAYING,
+        PAUSED,
+        GAME_OVER_MUSIC,
+        CLOSING
+    }
+
     /**
      * Altura de la banda informativa superior.
      */
@@ -32,103 +49,55 @@ public class GameScreen extends MultistateScreen {
      */
     static final float Y_GYROSCOPE_PAUSE_TRESHOLD = -6;
 
-    static final int STATE_OPENING = 1;
-    static final int STATE_ZOOM_IN = 2;
-    static final int STATE_WAIT_INTRO_MUSIC = 3;
-    static final int STATE_WAIT_AFTER_ZOOM_IN = 4;
-    static final int STATE_COUNTDOWN = 5;
-    static final int STATE_PLAYING = 6;
-    static final int STATE_PAUSE = 7;
-    static final int STATE_GAME_OVER_MUSIC = 8;
-    static final int STATE_CLOSING = 9;
+    private Music currentGameMusic;
 
-    /**
-     * Nivel en el que se desarrolla la partida.
-     */
-    private final LevelInfo level;
-
-    /**
-     * Clase principal de la aplicación.
-     */
-    private final LaPandemia main;
-
-    /**
-     * Controlador del mundo de la partida.
-     */
     private final World world;
-
-    /**
-     * Controlador de las estadísticas de la partida.
-     */
     private final GameStats stats;
-
-    /**
-     * Controlador de la cuenta atrás de la partida.
-     */
     private final Countdown countdown;
 
-    /**
-     * Transición inicial.
-     */
-    private final HCenterOutTransition openingTransition;
-
-    /**
-     * Transición final.
-     */
-    private final VCenterInTransition closingTransition;
-
-    /**
-     * Música introductoria.
-     */
-    private final Music introMusic;
-
-    /**
-     * Música que se reproduce al final de la partida.
-     */
-    private final Music gameOverMusic;
-
-    /**
-     * Música que se reproduce durante la partida.
-     */
-    private final Music mapMusic;
-
-    /**
-     * Música que se reproduce mientras el jugador es invencible.
-     */
-    private final Music invincibleMusic;
-
-    /**
-     * Sonido que se reproduce cuando se entra en el modo de pausa.
-     */
-    private final Sound pauseSound;
-
-    /**
-     * Música que se está reproduciendo actualmente durante la partida
-     * (la habitual de mapa o la de invencibilidad).
-     */
-    private Music  currentGameMusic;
-
-    public GameScreen(LaPandemia main, LevelInfo level) {
-        this.main = main;
-        this.level = level;
-
-        AssetManager assetManager = main.getAssetManager();
-
-        world = new World(assetManager, main.getHardwareWrapper(), level);
+    public GameScreen(final LaPandemia main, final LevelInfo level, final HardwareWrapper hardwareWrapper,
+                      final AssetManager assetManager)
+    {
+        world = new World(assetManager, hardwareWrapper, level);
         stats = new GameStats(assetManager);
         countdown = new Countdown(assetManager);
-        openingTransition = new HCenterOutTransition(0, 1.3f, 1f);
-        closingTransition = new VCenterInTransition(0, 1.0f, 0.2f);
+        final Music introMusic = assetManager.get("audio/game-opening.wav");
+        final Music gameOverMusic = assetManager.get("audio/game-over.wav");
+        final Music mapMusic = assetManager.get("audio/map.wav");
+        final Music invincibleMusic = assetManager.get("audio/ticking.wav");
+        final Sound pauseSound = assetManager.get("audio/pause.wav");
+        final OrthographicCamera camera = (OrthographicCamera)world.getStage().getCamera();
 
-        addState(STATE_OPENING, new OpeningState(this));
-        addState(STATE_ZOOM_IN, new ZoomInState(this, (world.getMaxZoom() - 1)/0.35f));
-        addState(STATE_WAIT_INTRO_MUSIC, new WaitIntroMusicState(this));
-        addState(STATE_WAIT_AFTER_ZOOM_IN, new WaitState(this, 1f, STATE_COUNTDOWN));
-        addState(STATE_COUNTDOWN, new CountdownState(this));
-        addState(STATE_PLAYING, new PlayingState(this));
-        addState(STATE_PAUSE, new PauseState(this));
-        addState(STATE_GAME_OVER_MUSIC, new GameOverMusicState(this));
-        addState(STATE_CLOSING, new ClosingState(this));
+        final InputProcessor noInput = new InputAdapter();
+        final InputProcessor pausedInputProcessor = new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    setState(States.PLAYING);
+                    return true;
+                }
+
+                return false;
+            }
+        };
+        final InputMultiplexer playingInputProcessor = new InputMultiplexer();
+        // ZoomGestureListener debe ir antes de MovePlayerGestureListener, ya que el primero
+        // decide quién de los dos debe procesar los gestos tap.
+        playingInputProcessor.addProcessor(new GestureDetector(new ZoomGestureListener(world)));
+        playingInputProcessor.addProcessor(new GestureDetector(new MovePlayerGestureListener(world.getPlayerActor())));
+        playingInputProcessor.addProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    setState(States.PAUSED);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        currentGameMusic = mapMusic;
 
         world.getPlayerActor().setPowerupListener(new PlayerActor.PowerupListener() {
             @Override
@@ -164,93 +133,230 @@ public class GameScreen extends MultistateScreen {
             }
         });
 
-        introMusic = main.getAssetManager().get("audio/game-opening.wav");
-        gameOverMusic = main.getAssetManager().get("audio/game-over.wav");
-        mapMusic = main.getAssetManager().get("audio/map.wav");
-        invincibleMusic = main.getAssetManager().get("audio/ticking.wav");
-        pauseSound = main.getAssetManager().get("audio/pause.wav");
+        addState(States.OPENING, new StateAdapter() {
+            private final Transition transition = new HCenterOutTransition(0, 1.3f, 1f);
 
-        currentGameMusic = mapMusic;
+            @Override
+            public void enter() {
+                camera.zoom = world.getMaxZoom();
+                introMusic.setLooping(false);
+                introMusic.play();
+            }
 
-        setState(STATE_OPENING);
-    }
+            @Override
+            public void resize(int width, int height) {
+                transition.getViewport().update(width, height);
+            }
 
-    public HardwareWrapper getHardwareWrapper() {
-        return main.getHardwareWrapper();
-    }
+            @Override
+            public void render(float delta) {
+                transition.render(delta);
 
-    public AssetManager getAssetManager() {
-        return main.getAssetManager();
-    }
+                draw();
+                transition.draw();
 
-    /**
-     * @return Controlador del mundo.
-     */
-    public World getWorld() {
-        return world;
-    }
+                if (transition.isComplete()) {
+                    setState(States.ZOOMING_IN);
+                }
+            }
 
-    /**
-     * @return Controlador de las estadísticas.
-     */
-    public GameStats getStats() {
-        return stats;
-    }
+            @Override
+            public void dispose() {
+                transition.dispose();
+            }
+        });
 
-    /**
-     * @return Controlador de la cuenta atrás.
-     */
-    public Countdown getCountdown() {
-        return countdown;
-    }
+        addState(States.ZOOMING_IN, new StateAdapter() {
+            private final float SPEED = (world.getMaxZoom() - 1)/0.35f;
 
-    /**
-     * @return Transición inicial.
-     */
-    public HCenterOutTransition getOpeningTransition() {
-        return openingTransition;
-    }
+            @Override
+            public void render(float delta) {
+                draw();
 
-    /**
-     * @return Transición final.
-     */
-    public VCenterInTransition getClosingTransition() {
-        return closingTransition;
-    }
+                if (camera.zoom > 1) {
+                    camera.zoom = Math.max(camera.zoom - delta * SPEED, 1);
+                } else {
+                    setState(States.WAITING_INTRO_MUSIC);
+                }
+            }
+        });
 
-    /**
-     * @return Música introductoria.
-     */
-    public Music getIntroMusic() {
-        return introMusic;
-    }
+        addState(States.WAITING_INTRO_MUSIC, new StateAdapter() {
+            @Override
+            public void render(float delta) {
+                draw();
 
-    /**
-     * @return Música que se reproduce al final de la partida.
-     */
-    public Music getGameOverMusic() {
-        return gameOverMusic;
-    }
+                if (!introMusic.isPlaying()) {
+                    setState(States.PAUSING_BEFORE_COUNTDOWN);
+                }
+            }
+        });
 
-    /**
-     * @return Música que se reproduce durante la partida.
-     */
-    public Music getMapMusic() {
-        return mapMusic;
-    }
+        addState(States.PAUSING_BEFORE_COUNTDOWN, new StateAdapter() {
+            private float waitedTime = 0;
 
-    /**
-     * @return Sonido que se reproduce al pausar la partida.
-     */
-    public Sound getPauseSound() {
-        return pauseSound;
-    }
+            @Override
+            public void render(float delta) {
+                draw();
 
-    /**
-     * @return Música que se está reproduciendo actualmente en la partida.
-     */
-    public Music getCurrentGameMusic() {
-        return currentGameMusic;
+                waitedTime += delta;
+                if (waitedTime >= 1f) {
+                    setState(States.COUNTDOWN);
+                }
+            }
+        });
+
+        addState(States.COUNTDOWN, new StateAdapter() {
+            @Override
+            public void enter() {
+                countdown.start();
+            }
+
+            @Override
+            public void render(float delta) {
+                countdown.render(delta);
+
+                draw();
+                drawCountdown();
+
+                if (!countdown.isCountingDown()) {
+                    setState(States.PLAYING);
+                }
+            }
+        });
+
+        addState(States.PLAYING, new StateAdapter() {
+            @Override
+            public void enter() {
+                currentGameMusic.setLooping(true);
+                currentGameMusic.play();
+                world.setPaused(false);
+                stats.setPaused(false);
+
+                Gdx.input.setCatchKey(Input.Keys.BACK, true);
+            }
+
+            @Override
+            public void leave() {
+                currentGameMusic.pause();
+                Gdx.input.setInputProcessor(noInput);
+            }
+
+            @Override
+            public void show() {
+                Gdx.input.setInputProcessor(playingInputProcessor);
+            }
+
+            @Override
+            public void render(float delta) {
+                world.render(delta);
+                stats.render(delta);
+                countdown.render(delta);
+
+                draw();
+                drawCountdown();
+
+                if (world.gameIsOver()) {
+                    setState(States.GAME_OVER_MUSIC);
+                } else if (hardwareWrapper.getGyroscopeY() < Y_GYROSCOPE_PAUSE_TRESHOLD) {
+                    setState(States.PAUSED);
+                }
+            }
+        });
+
+        addState(States.PAUSED, new StateAdapter() {
+            private boolean pausing;
+            private boolean resume;
+
+            @Override
+            public void enter() {
+                pausing = true;
+                resume = false;
+                world.setPaused(true);
+                stats.setPaused(true);
+
+                pauseSound.play();
+            }
+
+            @Override
+            public void leave() {
+                pauseSound.stop();
+                Gdx.input.setInputProcessor(noInput);
+            }
+
+            @Override
+            public void show() {
+                Gdx.input.setInputProcessor(pausedInputProcessor);
+            }
+
+            @Override
+            public void render(float delta) {
+                draw();
+
+                if (pausing) {
+                    if (hardwareWrapper.getGyroscopeY() >= Y_GYROSCOPE_PAUSE_TRESHOLD) {
+                        pausing = false;
+                    }
+                } else if (!resume){
+                    if (hardwareWrapper.getGyroscopeY() < Y_GYROSCOPE_PAUSE_TRESHOLD) {
+                        resume = true;
+                    }
+                } else if (hardwareWrapper.getGyroscopeY() >= Y_GYROSCOPE_PAUSE_TRESHOLD) {
+                    setState(States.PLAYING);
+                }
+            }
+        });
+
+        addState(States.GAME_OVER_MUSIC, new StateAdapter() {
+            @Override
+            public void enter() {
+                currentGameMusic.stop();
+                gameOverMusic.setLooping(false);
+                gameOverMusic.play();
+            }
+
+            @Override
+            public void show() {
+                Gdx.input.setCatchKey(Input.Keys.BACK, false);
+            }
+
+            @Override
+            public void render(float delta) {
+                draw();
+
+                if (!gameOverMusic.isPlaying()) {
+                    setState(States.CLOSING);
+                }
+            }
+        });
+
+        addState(States.CLOSING, new StateAdapter() {
+            private final Transition transition = new VCenterInTransition(0, 1.0f, 0.2f);
+
+            @Override
+            public void resize(int width, int height) {
+                transition.getViewport().update(width, height);
+            }
+
+            @Override
+            public void render(float delta) {
+                transition.render(delta);
+
+                draw();
+                transition.draw();
+
+                if (transition.isComplete()) {
+                    main.gameOver(GameScreen.this, level, world.getPaperCount(), world.getRunningTime());
+                }
+            }
+
+            @Override
+            public void dispose() {
+                transition.dispose();
+            }
+        });
+
+        setState(States.OPENING);
     }
 
     /**
@@ -276,14 +382,13 @@ public class GameScreen extends MultistateScreen {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
-    /**
-     * Transfiere el control de vuelta a la clase principal.
-     */
-    public void finishGame() {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0xFF, 0x88, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        main.gameOver(this, level, world.getPaperCount(), world.getRunningTime());
+        super.render(delta);
     }
 
     @Override
@@ -291,18 +396,16 @@ public class GameScreen extends MultistateScreen {
         world.getStage().getViewport().update(width, height);
         stats.getStage().getViewport().update(width, height);
         countdown.getStage().getViewport().update(width, height);
-        openingTransition.getViewport().update(width, height);
-        closingTransition.getViewport().update(width, height);
+
         super.resize(width, height);
     }
 
     @Override
     public void dispose() {
-        super.dispose();
         world.dispose();
         stats.getStage().dispose();
         countdown.getStage().dispose();
-        openingTransition.dispose();
-        closingTransition.dispose();
+
+        super.dispose();
     }
 }
