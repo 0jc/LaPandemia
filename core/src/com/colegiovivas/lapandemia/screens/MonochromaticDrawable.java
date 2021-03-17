@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 
 /**
- * Drawable de Libgdx que dibuja en un único color. Útil para pintar
- * fácilmente interfaces de usuario mediante tablas, entre otras cosas
- * si solo se desea plantear una interfaz simple y funcional sin tener
- * que recurrir a skins para todos los elementos de la pantalla.
+ * Drawable que dibuja en un único color. Útil para pintar fácilmente
+ * interfaces de usuario mediante tablas, entre otras cosas si solo se
+ * desea plantear una interfaz simple y funcional sin recurrir a skins
+ * para todos los elementos de la pantalla.
  *
  * La técnica en la que se inspira viene explicada en varios hilos en
  * StackOverflow y requiere tener a mano una imagen en blanco. Curiosamente
@@ -23,7 +23,7 @@ public class MonochromaticDrawable extends BaseDrawable {
     private final TextureRegion whitePixel;
 
     /**
-     * Color con el que el Drawable dibuja.
+     * Color con el que se desea dibujar.
      */
     private Color newColor;
 

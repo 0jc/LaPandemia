@@ -7,24 +7,40 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
 /**
- * Vista de la pantalla del menú principal.
+ * Vista de {@link MainMenuScreen}.
  */
 public class MainMenuView {
+    /**
+     * Stage que contiene la interfaz de la vista.
+     */
     private final Stage stage;
+
+    /**
+     * Botón de mostrar el menú de selección de mapas.
+     */
     private final TextButton playButton;
+
+    /**
+     * Botón de mostrar el menú de ajustes.
+     */
     private final TextButton settingsButton;
+
+    /**
+     * Botón de mostrar el menú de los créditos.
+     */
     private final TextButton creditsButton;
 
+    /**
+     * Inicializa la pantalla.
+     * @param assetManager Gestor de recursos de la aplicación, necesario para renderizar la pantalla.
+     */
     public MainMenuView(AssetManager assetManager) {
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);
@@ -67,20 +83,32 @@ public class MainMenuView {
         stage.addActor(table);
     }
 
+    /**
+     * Añade un EventListener a {@link #playButton}.
+     * @param eventListener Listener que se añade a {@link #playButton}.
+     */
     public void addPlayListener(EventListener eventListener) {
         playButton.addListener(eventListener);
     }
 
+    /**
+     * Añade un EventListener a {@link #settingsButton}.
+     * @param eventListener Listener que se añade a {@link #settingsButton}.
+     */
     public void addSettingsListener(EventListener eventListener) {
         settingsButton.addListener(eventListener);
     }
 
+    /**
+     * Añade un EventListener a {@link #creditsButton}.
+     * @param eventListener Listener que se añade a {@link #creditsButton}.
+     */
     public void addCreditsListener(EventListener eventListener) {
         creditsButton.addListener(eventListener);
     }
 
     /**
-     * @return El Stage de Libgdx al que pertenece la tabla con la interfaz de usuario de la vista.
+     * @return {@link #stage}
      */
     public Stage getStage() {
         return stage;

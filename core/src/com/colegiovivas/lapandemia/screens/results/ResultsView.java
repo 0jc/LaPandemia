@@ -8,20 +8,17 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
 /**
- * Vista del formulario que ocupa toda la pantalla en el que se muestran
- * los resultados de la partida.
+ * Vista de {@link ResultsScreen}.
  */
 public class ResultsView {
     /**
-     * Stage de Libgdx que contiene la tabla en la que se organiza la interfaz.
+     * Stage con la interfaz de la vista.
      */
     private final Stage stage;
 
@@ -70,6 +67,11 @@ public class ResultsView {
      */
     private final TextButton retryButton;
 
+    /**
+     * Inicializa la vista.
+     * @param assetManager Gestor de recursos de la aplicación, necesario para renderizar la interfaz.
+     * @param level Nivel en el que se ha jugado la partida.
+     */
     public ResultsView(AssetManager assetManager, LevelInfo level) {
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);
@@ -212,17 +214,24 @@ public class ResultsView {
         paperRightLabel.setText(paperCount);
     }
 
+    /**
+     * Añade un EventListener a {@link #returnButton}.
+     * @param eventListener Listener que se añade a {@link #returnButton}.
+     */
     public void addReturnListener(EventListener eventListener) {
         returnButton.addListener(eventListener);
     }
 
+    /**
+     * Añade un EventListener a {@link #retryButton}.
+     * @param eventListener Listener que se añade a {@link #retryButton}.
+     */
     public void addRetryListener(EventListener eventListener) {
         retryButton.addListener(eventListener);
     }
 
     /**
-     * @return El Stage de Libgdx en el que está contenida la tabla. Es necesario para
-     * mostrarla en pantalla, capturar la entrada de datos, etc.
+     * @return {@link #stage}
      */
     public Stage getStage() {
         return stage;

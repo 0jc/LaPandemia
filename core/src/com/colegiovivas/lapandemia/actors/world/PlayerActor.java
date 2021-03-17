@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.hardware.HardwareWrapper;
 
@@ -51,6 +50,9 @@ public class PlayerActor extends CollisionableActor {
      */
     private final Animation<TextureRegion> deadAnimation;
 
+    /**
+     * Interfaz hacia los sensores hardware tal y como han sido configurados por el usuario.
+     */
     private final HardwareWrapper hardwareWrapper;
 
     /**
@@ -148,6 +150,11 @@ public class PlayerActor extends CollisionableActor {
      */
     private boolean fanCollisionSeen;
 
+    /**
+     * Inicializa el actor.
+     * @param assetManager Gestor de recursos de la aplicación.
+     * @param hardwareWrapper Valor para {@link #hardwareWrapper}.
+     */
     public PlayerActor(AssetManager assetManager, HardwareWrapper hardwareWrapper) {
         this.hardwareWrapper = hardwareWrapper;
 
@@ -178,18 +185,30 @@ public class PlayerActor extends CollisionableActor {
         virusKilledSound = assetManager.get("audio/virus-killed.wav");
     }
 
+    /**
+     * @return {@link #paperCount}
+     */
     public int getPaperCount() {
         return paperCount;
     }
 
+    /**
+     * @param healthActor Valor para {@link #healthActor}.
+     */
     public void setHealthActor(HealthActor healthActor) {
         this.healthActor = healthActor;
     }
 
+    /**
+     * @param powerupListener Valor para {@link #powerupListener}.
+     */
     public void setPowerupListener(PowerupListener powerupListener) {
         this.powerupListener = powerupListener;
     }
 
+    /**
+     * @param invincibilityListener Valor para {@link #invincibilityListener}.
+     */
     public void setInvincibilityListener(InvincibilityListener invincibilityListener) {
         this.invincibilityListener = invincibilityListener;
     }
@@ -358,6 +377,9 @@ public class PlayerActor extends CollisionableActor {
         }
     }
 
+    /**
+     * Evento de variación en un contador de algún powerup.
+     */
     public interface PowerupListener {
         /**
          * Notifica de un cambio en el número total de powerups de un tipo recolectados.
@@ -367,6 +389,9 @@ public class PlayerActor extends CollisionableActor {
         void updateCount(ActorId powerupId, int total);
     }
 
+    /**
+     * Evento de cambio de estado entre invencible y no invencible.
+     */
     public interface InvincibilityListener {
         /**
          * Notifica de un cambio en el tiempo de invencibilidad originado por la

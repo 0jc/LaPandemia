@@ -14,17 +14,36 @@ import com.colegiovivas.lapandemia.screens.transitions.HCenterOutTransition;
 import com.colegiovivas.lapandemia.screens.transitions.Transition;
 
 /**
- * Pantalla principal del juego.
+ * Pantalla principal del juego que se muestra, entre otras situaciones, al iniciar la aplicación.
  */
 public class MainMenuScreen extends MultistateScreen<MainMenuScreen.States> {
+    /**
+     * Estados en los que se puede encontrar la pantalla.
+     */
     public enum States { OPENING, IDLE }
 
+    /**
+     * Vista de la pantalla.
+     */
     private final MainMenuView mainMenuView;
 
+    /**
+     * Inicializa la pantalla.
+     * @param main Clase principal a la que se notifica del submenú elegido.
+     * @param assetManager Gestor de recursos de la aplicación, necesario para renderizar la pantalla.
+     */
     public MainMenuScreen(LaPandemia main, AssetManager assetManager) {
         this(main, assetManager, false);
     }
 
+    /**
+     * Inicializa la pantalla.
+     * @param main Clase principal a la que se notifica del submenú elegido.
+     * @param assetManager Gestor de recursos de la aplicación, necesario para renderizar la pantalla.
+     * @param playTransition True si y solo si se debe realizar la transición inicial. Esto es deseable
+     *                       cuando la pantalla previa también había realizado una transición, para no
+     *                       hacer la presentación demasiado brusca.
+     */
     public MainMenuScreen(final LaPandemia main, AssetManager assetManager, final boolean playTransition) {
         mainMenuView = new MainMenuView(assetManager);
 

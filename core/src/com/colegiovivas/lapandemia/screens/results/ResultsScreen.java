@@ -19,6 +19,9 @@ import com.colegiovivas.lapandemia.screens.transitions.*;
  * elegido por él.
  */
 public class ResultsScreen extends MultistateScreen<ResultsScreen.States> {
+    /**
+     * Estados en los que se puede encontrar la pantalla.
+     */
     public enum States {
         OPENING,
         TIME_SHOWN_MUSIC,
@@ -38,8 +41,21 @@ public class ResultsScreen extends MultistateScreen<ResultsScreen.States> {
      */
     private final ResultsView resultsView;
 
+    /**
+     * True si el usuario ha elegido volver a jugar una partida en el mismo mapa o false si ha
+     * elegido volver al menú principal.
+     */
     private boolean playAgain;
 
+    /**
+     * Inicializa la pantalla.
+     * @param main Clase principal a la que se notifica de la acción tomada por el usuario: o bien
+     *             jugar otra partida en el mismo mapa o volver al menú principal.
+     * @param level Nivel en el que se ha jugado la partida.
+     * @param assetManager Gestor de recursos de la aplicación.
+     * @param paperCount Número de rollos de papel higiénico recolectados por el jugador.
+     * @param runningTime Tiempo total de juego que se mostraba en el marcador al perder la partida.
+     */
     public ResultsScreen(final LaPandemia main, final LevelInfo level, final AssetManager assetManager,
                          final int paperCount, final float runningTime)
     {
@@ -273,6 +289,8 @@ public class ResultsScreen extends MultistateScreen<ResultsScreen.States> {
     }
 
     /**
+     * @param paperCount Número de rollos de papel que el usuario ha obtenido.
+     * @param level Nivel en el que el usuario ha jugado la partida.
      * @return True si y solo si la puntuación del usuario constituye un nuevo récord.
      */
     private static boolean isNewHighscore(int paperCount, LevelInfo level) {

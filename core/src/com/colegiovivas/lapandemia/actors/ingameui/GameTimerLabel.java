@@ -11,16 +11,16 @@ public class GameTimerLabel extends Label {
      */
     private float seconds;
 
+    /**
+     * Inicializa la etiqueta.
+     * @param style Estilo de la etiqueta.
+     */
     public GameTimerLabel(LabelStyle style) {
         super("", style);
         seconds = 0;
         updateText();
     }
 
-    /**
-     * Actualizar el estado del contador.
-     * @param delta Segundos transcurridos desde la última actualización.
-     */
     @Override
     public void act(float delta) {
         super.act(delta);

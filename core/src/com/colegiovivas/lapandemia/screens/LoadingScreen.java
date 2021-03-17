@@ -1,9 +1,6 @@
 package com.colegiovivas.lapandemia.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -21,24 +18,57 @@ import com.colegiovivas.lapandemia.LaPandemia;
  * Una vez se ha completado la carga, se notifica a la clase principal para que
  * determine a qué pantalla cambiar.
  */
-public class LoadingScreen implements Screen {
+public class LoadingScreen extends ScreenAdapter {
     /**
-     * Batch de Libgdx que se utiliza para dibujar en pantalla el porcentaje de carga.
+     * Batch que se utiliza para dibujar en pantalla el porcentaje de carga.
      */
     private final SpriteBatch batch;
+
+    /**
+     * Pantalla principal a la que se notifica cuando los recursos han sido cargados.
+     */
     private final LaPandemia main;
+
+    /**
+     * Gestor de recursos que se carga completamente con todos los recursos del juego.
+     */
     private final AssetManager assetManager;
+
+    /**
+     * Viewport de la cámara de la pantalla.
+     */
     private final Viewport viewport;
+
+    /**
+     * Cámara que muestra la interfaz de la pantalla.
+     */
     private final OrthographicCamera camera;
+
+    /**
+     * Layout de texto que se utiliza para mostrar el texto "Cargando...".
+     */
     private final GlyphLayout loadingTitleLayout;
+
+    /**
+     * Layout de texto que se utiliza para mostrar el porcentaje de carga de los recursos.
+     */
     private final GlyphLayout loadedPercentLayout;
+
+    /**
+     * Procesador de entrada de datos que se establece para no capturar datos.
+     */
     private final InputProcessor noInput;
 
     /**
      * Espacio entre el texto "Cargando..." y el porcentaje de carga.
      */
-    private static final float LINE_SPACING = 40;
+    private static final float LINE_SEP = 40;
 
+    /**
+     * Prepara los recursos necesarios para el funcionamiento de la pantalla.
+     * @param main Valor para {@link #main}.
+     * @param assetManager Valor para {@link #assetManager}.
+     */
     public LoadingScreen(LaPandemia main, AssetManager assetManager) {
         this.main = main;
         this.assetManager = assetManager;
@@ -113,30 +143,18 @@ public class LoadingScreen implements Screen {
                 batch,
                 loadingTitleLayout,
                 -loadingTitleLayout.width / 2,
-                -loadingTitleLayout.height + (LINE_SPACING + loadedPercentLayout.height) / 2);
+                -loadingTitleLayout.height + (LINE_SEP + loadedPercentLayout.height) / 2);
         nice32.draw(
                 batch,
                 loadedPercentLayout,
                 -loadedPercentLayout.width / 2,
-                -(loadingTitleLayout.height + LINE_SPACING + loadedPercentLayout.height) / 2);
+                -(loadingTitleLayout.height + LINE_SEP + loadedPercentLayout.height) / 2);
         batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void hide() {
     }
 
     @Override

@@ -15,15 +15,31 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
+/**
+ * Pantalla de los créditos.
+ */
 public class CreditsScreen extends ScreenAdapter {
-    private final LaPandemia main;
+    /**
+     * Stage que contiene la interfaz de la pantalla.
+     */
     private final Stage stage;
+
+    /**
+     * Procesador de la entrada de datos para capturar los eventos de {@link #stage} y el de retroceso.
+     */
     private final InputMultiplexer inputProcessor;
+
+    /**
+     * Procesador para la no entrada de datos.
+     */
     private final InputProcessor noInput;
 
-    public CreditsScreen(LaPandemia main, AssetManager assetManager) {
-        this.main = main;
-
+    /**
+     * Inicializa la pantalla.
+     * @param main Clase principal a la que se transfiere el control una vez se vuelve atrás.
+     * @param assetManager Gestor de recursos de la aplicación, necesario para renderizar la pantalla.
+     */
+    public CreditsScreen(final LaPandemia main, AssetManager assetManager) {
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
@@ -81,7 +97,7 @@ public class CreditsScreen extends ScreenAdapter {
             @Override
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.BACK) {
-                    CreditsScreen.this.main.navigatedBackToMain(CreditsScreen.this);
+                    main.navigatedBackToMain(CreditsScreen.this);
                     return true;
                 }
 
@@ -121,6 +137,9 @@ public class CreditsScreen extends ScreenAdapter {
         stage.dispose();
     }
 
+    /**
+     * @return El texto de los créditos.
+     */
     private String getCreditsText() {
         return "Tema de fondo durante las partidas:\n" +
                 "Kevin Macleod - Merry Go\n" +

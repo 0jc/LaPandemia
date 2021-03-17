@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 
 /**
@@ -24,6 +23,12 @@ public class FanActor extends CollisionableActor {
      */
     private float elapsedTime;
 
+    /**
+     * Inicializa el actor.
+     * @param assetManager Gestor de recursos de la aplicación.
+     * @param regionName Nombre del sprite del actor indicado en el archivo JSON del mapa.
+     * @param frameDuration Valor frameDuration indicado en el archivo JSON del mapa.
+     */
     public FanActor(AssetManager assetManager, String regionName, float frameDuration) {
         this.animation = new Animation<TextureRegion>(frameDuration,
                 ((TextureAtlas)assetManager.get("images.pack")).findRegions(regionName));

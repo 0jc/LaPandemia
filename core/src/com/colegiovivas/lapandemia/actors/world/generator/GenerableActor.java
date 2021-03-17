@@ -57,11 +57,6 @@ public abstract class GenerableActor extends CollisionableActor implements Pool.
         this.ttl = ttl;
     }
 
-    /**
-     * Actualiza el estado del actor, posiblemente eliminándolo por haber caducado.
-     * Si el tiempo de vida no ha finalizado, tan solo se delega en actWithinTTL().
-     * @param delta Tiempo en segundos transcurrido desde la última actualización.
-     */
     @Override
     public final void act(float delta) {
         age += delta;
@@ -80,13 +75,6 @@ public abstract class GenerableActor extends CollisionableActor implements Pool.
     public void actWithinTTL(float delta) {
     }
 
-    /**
-     * Dibuja el actor en pantalla, excepto en caso de estar en la fase invisible del parpadeo
-     * final por la que los actores temporales pasan antes de desaparecer. En caso de no estar
-     * en esa fase, simplemente se delega en drawNotBlinking().
-     * @param batch Batch de Libgdx con el que se dibuja.
-     * @param parentAlpha Valor alpha de Libgdx del elemento padre del batch.
-     */
     @Override
     public final void draw(Batch batch, float parentAlpha) {
         if (ttl == null || ttl - age > BLINK_PERIOD || Math.ceil((ttl - age)/BLINK_TICK) % 2 == 1) {

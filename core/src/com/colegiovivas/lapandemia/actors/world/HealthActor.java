@@ -5,7 +5,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.WorldActor;
 
 /**
@@ -37,6 +36,10 @@ public class HealthActor extends WorldActor {
      */
     private float showMaxFor;
 
+    /**
+     * Inicializa el actor.
+     * @param assetManager Gestor de recursos de la aplicación.
+     */
     public HealthActor(AssetManager assetManager) {
         this.textures = ((TextureAtlas)assetManager.get("images.pack")).findRegions("health");
         health = 4;

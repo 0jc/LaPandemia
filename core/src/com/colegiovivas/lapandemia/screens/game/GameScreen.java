@@ -25,6 +25,9 @@ import com.colegiovivas.lapandemia.screens.transitions.VCenterInTransition;
  * relevante para el usuario.
  */
 public class GameScreen extends MultistateScreen<GameScreen.States> {
+    /**
+     * Estados en los que se puede encontrar la pantalla.
+     */
     public enum States {
         OPENING,
         ZOOMING_IN,
@@ -49,12 +52,36 @@ public class GameScreen extends MultistateScreen<GameScreen.States> {
      */
     static final float Y_GYROSCOPE_PAUSE_TRESHOLD = -6;
 
+    /**
+     * Música que se está reproduciendo durante la fase de juego. Se pausa y reanuda al
+     * entrar en estado de pausa. Su valor cambia entre la música propia del mapa y la
+     * de invencibilidad.
+     */
     private Music currentGameMusic;
 
+    /**
+     * Mundo en el que se está desarrollando la partida. Contiene información como qué
+     * actores existen en él, generadores de actores, un detector de colisiones, etc.
+     */
     private final World world;
+
+    /**
+     * Vista de las estadísticas de la partida que se muestran en la barra superior.
+     */
     private final GameStats stats;
+
+    /**
+     * Vista de la cuenta atrás.
+     */
     private final Countdown countdown;
 
+    /**
+     * Inicializa la pantalla.
+     * @param main Clase principal a la que se transfiere el control una vez terminada la partida.
+     * @param level Nivel en el que se jugará la partida.
+     * @param hardwareWrapper Interfaz hacia los sensores hardware tal y como los configuró el usuario.
+     * @param assetManager Gestor de recursos de la aplicación.
+     */
     public GameScreen(final LaPandemia main, final LevelInfo level, final HardwareWrapper hardwareWrapper,
                       final AssetManager assetManager)
     {
@@ -207,11 +234,6 @@ public class GameScreen extends MultistateScreen<GameScreen.States> {
         });
 
         addState(States.COUNTDOWN, new StateAdapter() {
-            @Override
-            public void enter() {
-                countdown.start();
-            }
-
             @Override
             public void render(float delta) {
                 countdown.render(delta);

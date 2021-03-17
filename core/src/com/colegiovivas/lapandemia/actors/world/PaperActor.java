@@ -18,6 +18,10 @@ public class PaperActor extends GenerableActor {
      */
     private final TextureAtlas.AtlasRegion texture;
 
+    /**
+     * Inicializa el actor.
+     * @param assetManager Gestor de recursos utilizado por la aplicación.
+     */
     public PaperActor(AssetManager assetManager) {
         this.texture = ((TextureAtlas)assetManager.get("images.pack")).findRegion("toiletpaper");
 

@@ -3,9 +3,15 @@ package com.colegiovivas.lapandemia.screens.transitions;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
- * Transición de dos rectángulos separándose desde el centro sobre el eje vertical.
+ * Transición de dos rectángulos acercándose hacia el centro por el eje vertical.
  */
 public class VCenterInTransition extends Transition {
+    /**
+     * Inicializa la transición.
+     * @param prewait Valor para {@link Transition#prewait}.
+     * @param duration Valor para {@link Transition#duration}.
+     * @param postwait Valor para {@link Transition#postwait}.
+     */
     public VCenterInTransition(float prewait, float duration, float postwait) {
         super(prewait, duration, postwait);
     }

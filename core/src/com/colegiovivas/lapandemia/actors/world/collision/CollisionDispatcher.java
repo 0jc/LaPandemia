@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.pools.ActorArrayPool;
 import com.colegiovivas.lapandemia.pools.RectanglePool;
 
@@ -18,9 +17,20 @@ public class CollisionDispatcher {
      */
     private final Group worldGroup;
 
+    /**
+     * Fondo de instancias de Array&lt;Actor&gt;.
+     */
     private final Pool<Array<Actor>> actorArrayPool;
+
+    /**
+     * Fondo de instancias de Rectangle.
+     */
     private final Pool<Rectangle> rectPool;
 
+    /**
+     * Inicializa el gestor de colisiones.
+     * @param worldGroup Grupo raíz del mundo en el que existen los actores procesados.
+     */
     public CollisionDispatcher(Group worldGroup) {
         this.worldGroup = worldGroup;
         actorArrayPool = new ActorArrayPool();
@@ -126,10 +136,6 @@ public class CollisionDispatcher {
         }
     }
 
-    // Obtener la cantidad mínima de píxeles que collidingActor debe recorrer para colisionar
-    // con collidedActor, dada la dirección actual de collidingActor. Tras realizarse el
-    // desplazamiento, los actores se mostrarían el uno justo al lado del otro sin superponerse.
-
     /**
      * Devuelve la cantidad mínima de píxeles que collidingActor debe recorrer para colisionar
      * con collidedActor, dada la dirección actual de collidingActor. Tras realizarse el
@@ -170,6 +176,9 @@ public class CollisionDispatcher {
         }
     }
 
+    /**
+     * Libera los recursos utilizados.
+     */
     public void dispose() {
         actorArrayPool.clear();
         rectPool.clear();

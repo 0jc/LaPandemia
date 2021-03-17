@@ -1,11 +1,9 @@
 package com.colegiovivas.lapandemia.actors.world;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 
 /**
@@ -17,6 +15,11 @@ public class WallActor extends CollisionableActor {
      */
     private final TextureAtlas.AtlasRegion texture;
 
+    /**
+     * Inicializa el actor.
+     * @param assetManager Gestor de recursos de la aplicación.
+     * @param regionName Nombre del sprite del patrón del muro indicado en el archivo JSON del mapa.
+     */
     public WallActor(AssetManager assetManager, String regionName) {
         this.texture = ((TextureAtlas)assetManager.get("images.pack")).findRegion(regionName);
 

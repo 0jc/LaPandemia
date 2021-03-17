@@ -10,10 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.colegiovivas.lapandemia.LaPandemia;
 
 /**
- * Controlador de la cuenta atrás.
+ * Vista de la cuenta atrás.
  */
 public class Countdown {
     /**
@@ -27,8 +26,7 @@ public class Countdown {
     private static final float FADE_OUT_DURATION = 1.0f;
 
     /**
-     * Stage de Libgdx donde se contienen los actores que representan a los números que
-     * se muestran en pantalla.
+     * Stage que contiene los actores para los números que se van mostrando en pantalla.
      */
     private final Stage stage;
 
@@ -50,13 +48,17 @@ public class Countdown {
     /**
      * Número actual que está siendo mostrado o -1 si la cuenta atrás no está en reproducción.
      */
-    private int countdownNum = -1;
+    private int countdownNum = 3;
 
     /**
-     * Tiempo que se ha esperado para completar DELAY_AFTER_FADE.
+     * Tiempo que se ha esperado para completar {@link #DELAY_AFTER_FADE}.
      */
     private float postFadeWaitedTime = 0;
 
+    /**
+     * Inicializa la vista.
+     * @param assetManager Gestor de recursos de la aplicación, necesario para la renderización de la vista.
+     */
     public Countdown(AssetManager assetManager) {
         OrthographicCamera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(800, 480, camera);
@@ -80,7 +82,7 @@ public class Countdown {
     }
 
     /**
-     * Actualizar el estado de la cuenta atrás.
+     * Actualiza el estado de la cuenta atrás.
      * @param delta Segundos que han transcurrido desde la última actualización.
      */
     public void render(float delta) {
@@ -108,55 +110,17 @@ public class Countdown {
     }
 
     /**
-     * @return El Stage que contiene los actores que se utilizan para mostrar la cuenta atrás.
+     * @return {@link #stage}
      */
     public Stage getStage() {
         return stage;
     }
 
     /**
-     * @return True si y solo si se está reproduciendo la cuenta atrás (incluyendo el "¡YA!").
-     */
-    public boolean isPlaying() {
-        return countdownNum > -1;
-    }
-
-    /**
-     * @return True si y solo si se está contando hasta 0 (más estricto que isPlaying(),
+     * @return True si y solo si se está contando hasta 0, no incluido (es decir,
      * excluyéndose el "¡YA!").
      */
     public boolean isCountingDown() {
         return countdownNum > 0;
-    }
-
-    /**
-     * Inicia la reproducción de la cuenta atrás.
-     */
-    public void start() {
-        if (countdownNum != -1) {
-            resetNum(countdownNum);
-        }
-
-        countdownNum = 3;
-    }
-
-    /**
-     * Establece el número de la cuenta atrás actual, de modo que se reproduce toda su
-     * animación. Se incluye el "¡YA!".
-     * @param num Índice del actor en images.
-     */
-    private void setNum(int num) {
-        images[num].setVisible(true);
-        images[num].addAction(Actions.fadeOut(FADE_OUT_DURATION));
-    }
-
-    /**
-     * Se restablece el estado de un actor que ha sido mostrado en pantalla durante la
-     * cuenta atrás.
-     * @param num Índice del actor en images.
-     */
-    private void resetNum(int num) {
-        images[num].setVisible(false);
-        images[num].getColor().a = 1;
     }
 }

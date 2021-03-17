@@ -7,7 +7,7 @@ import com.badlogic.gdx.files.FileHandle;
  */
 public class LevelInfo {
     /**
-     * ID del nivel. Se utiliza para distinguirlo de los demás niveles internamente.
+     * ID del nivel. Se utiliza para distinguirlo internamente del resto.
      */
     private final int id;
 
@@ -26,6 +26,12 @@ public class LevelInfo {
      */
     private final Highscore highscore;
 
+    /**
+     * Establece y carga información sobre un mapa del juego.
+     * @param id Valor para {@link #id}.
+     * @param name Valor para {@link #name}.
+     * @param levelJsonFile Valor para {@link #levelJsonFile}.
+     */
     public LevelInfo(int id, String name, FileHandle levelJsonFile) {
         this.id = id;
         this.name = name;
@@ -34,28 +40,28 @@ public class LevelInfo {
     }
 
     /**
-     * @return La ID del nivel.
+     * @return {@link #id}
      */
     public int getId() {
         return id;
     }
 
     /**
-     * @return El nombre del nivel.
+     * @return {@link #name}
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @return El archivo JSON con la especificación del nivel.
+     * @return {@link #levelJsonFile}
      */
     public FileHandle getLevelJsonFile() {
         return levelJsonFile;
     }
 
     /**
-     * @return La interfaz para leer y escribir los datos de la mejor marca del nivel.
+     * @return {@link #highscore}
      */
     public Highscore getHighscore() {
         return highscore;

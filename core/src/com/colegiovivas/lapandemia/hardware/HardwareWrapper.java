@@ -9,7 +9,14 @@ import com.badlogic.gdx.Preferences;
  * a sus configuraciones.
  */
 public class HardwareWrapper {
+    /**
+     * Preferencias compartidas del giroscopio.
+     */
     private final Preferences gyroscopePrefs;
+
+    /**
+     * Preferencias compartidas del vibrador.
+     */
     private final Preferences vibratorPrefs;
 
     /**
@@ -24,6 +31,9 @@ public class HardwareWrapper {
      */
     boolean vibratorEnabled;
 
+    /**
+     * Inicializa el contenedor.
+     */
     public HardwareWrapper() {
         gyroscopePrefs = Gdx.app.getPreferences("gyroscope");
         vibratorPrefs = Gdx.app.getPreferences("vibrator");
@@ -32,22 +42,34 @@ public class HardwareWrapper {
         vibratorEnabled = vibratorPrefs.getBoolean("enabled", true);
     }
 
+    /**
+     * @param enabled Si el giroscopio estará o no activado.
+     */
     public void setGyroscopeEnabled(boolean enabled) {
         gyroscopePrefs.putBoolean("enabled", enabled);
         gyroscopePrefs.flush();
         gyroscopeEnabled = enabled;
     }
 
+    /**
+     * @return Si el giroscopio está o no activado.
+     */
     public boolean getGyroscopeEnabled() {
         return gyroscopeEnabled;
     }
 
+    /**
+     * @param enabled Si el vibrador está o no activado.
+     */
     public void setVibratorEnabled(boolean enabled) {
         vibratorPrefs.putBoolean("enabled", enabled);
         vibratorPrefs.flush();
         vibratorEnabled = enabled;
     }
 
+    /**
+     * @return Si el vibrador está o no activado.
+     */
     public boolean getVibratorEnabled() {
         return vibratorEnabled;
     }

@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.ActorId;
 import com.colegiovivas.lapandemia.actors.world.PlayerActor;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
@@ -66,7 +65,14 @@ public class ActorGenerator {
      */
     private final Group destGroup;
 
+    /**
+     * Fondo de instancias de Array&lt;Actor&gt;.
+     */
     private final ActorArrayPool actorArrayPool;
+
+    /**
+     * Fondo de instancias de Rectangle.
+     */
     private final RectanglePool rectPool;
 
     /**
@@ -84,6 +90,21 @@ public class ActorGenerator {
      */
     private float lastActorTime;
 
+    /**
+     * Inicializa el generador.
+     * @param generableActorClass Clase de los actores generados. DEBE implementar un constructor de un único
+     *                            argumento de tipo AssetManager, que será el que será llamado para inicializar
+     *                            nuevas instancias.
+     * @param actorId ID del tipo de actor.
+     * @param destGroup Subgrupo del grupo raíz del mundo al que serán añadidos los actores.
+     * @param width Anchura de los actores.
+     * @param height Altura de los actores.
+     * @param tick Tiempo de espera en segundos entre la generación de actores.
+     * @param maxCount Número máximo de actores que podrán coexistir.
+     * @param ttl Tiempo de vida en segundos de los actores.
+     * @param assetManager Gestor de recursos utilizado por la aplicación.
+     * @param world Mundo en el que existirán los actores.
+     */
     public ActorGenerator(final Class<? extends GenerableActor> generableActorClass, ActorId actorId,
                           Group destGroup, float width, float height, float tick, int maxCount, Float ttl,
                           final AssetManager assetManager, World world)

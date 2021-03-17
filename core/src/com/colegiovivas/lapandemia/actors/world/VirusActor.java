@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.world.collision.CollisionableActor;
 import com.colegiovivas.lapandemia.actors.world.generator.GenerableActor;
 
@@ -84,6 +83,10 @@ public class VirusActor extends GenerableActor {
      */
     private float untraveledY;
 
+    /**
+     * Inicializa el actor.
+     * @param assetManager Gestor de recursos utilizado por la aplicación.
+     */
     public VirusActor(AssetManager assetManager) {
         animation = new Animation<TextureRegion>(0.2f,
                 ((TextureAtlas)assetManager.get("images.pack")).findRegions("virus"));

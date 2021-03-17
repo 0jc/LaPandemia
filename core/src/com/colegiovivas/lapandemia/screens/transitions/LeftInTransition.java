@@ -7,6 +7,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  * sentido de derecha a izquierda.
  */
 public class LeftInTransition extends Transition {
+    /**
+     * Inicializa la transición.
+     * @param prewait Valor para {@link Transition#prewait}.
+     * @param duration Valor para {@link Transition#duration}.
+     * @param postwait Valor para {@link Transition#postwait}.
+     */
     public LeftInTransition(float prewait, float duration, float postwait) {
         super(prewait, duration, postwait);
     }

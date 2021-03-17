@@ -12,12 +12,15 @@ public class WorldActor extends Actor {
      */
     private World world;
 
+    /**
+     * @param world Valor para {@link #world}.
+     */
     public void setWorld(World world) {
         this.world = world;
     }
 
     /**
-     * @return Controlador del mundo al que pertenece el actor.
+     * @return {@link #world}
      */
     public World getWorld() {
         return world;

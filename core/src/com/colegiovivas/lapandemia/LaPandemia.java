@@ -17,12 +17,9 @@ import com.colegiovivas.lapandemia.screens.LoadingScreen;
 import com.colegiovivas.lapandemia.screens.settings.SettingsScreen;
 
 /**
- * La clase principal del juego. Coordina la gestión de las pantallas y ofrece
- * acceso a varios elementos de uso global en la aplicación, como por ejemplo
- * los fondos de diversas clases, que permiten reciclar instancias liberadas
- * o preparadas de objetos de una clase determinada en lugar de tener que
- * instanciar otros nuevos para reducir la actividad del recolector de basura
- * y mejorar así el rendimiento del juego.
+ * La clase principal del juego. Coordina la gestión de las pantallas y contiene
+ * varios elementos de uso global en la aplicación, como el catálogo de niveles
+ * existentes o el AssetManager.
  */
 public class LaPandemia extends Game {
     /**
@@ -53,7 +50,8 @@ public class LaPandemia extends Game {
     private LevelCatalog levelCatalog;
 
     /**
-     * Inicializa una instancia de la aplicación.
+     * Inicializa una instancia de la aplicación y lanza la pantalla de carga de
+     * recursos.
      * @see Game#create()
      */
     @Override
@@ -188,6 +186,8 @@ public class LaPandemia extends Game {
     /**
      * Evento que un ResultsScreen lanza cuando ha finalizado su actividad.
      * @param resultsScreen La pantalla que ha lanzado el evento.
+     * @param playAgain True si y solo si el usuario ha decidido volver a jugar en el mapa.
+     * @param sourceLevel Nivel en el que se ha jugado la partida.
      */
     public void resultsAccepted(ResultsScreen resultsScreen, boolean playAgain, LevelInfo sourceLevel) {
         resultsScreen.dispose();
@@ -203,34 +203,7 @@ public class LaPandemia extends Game {
     public void dispose() {
         super.dispose();
         if (getScreen() != null) getScreen().dispose();
+        if (nextScreen != null) nextScreen.dispose();
         assetManager.dispose();
-    }
-
-    /**
-     * @return {@link #assetManager}
-     */
-    public AssetManager getAssetManagerOld() {
-        return assetManager;
-    }
-
-    /**
-     * @param assetManager El nuevo valor para {@link #assetManager}.
-     */
-    public void setAssetManagerOld(AssetManager assetManager) {
-        this.assetManager = assetManager;
-    }
-
-    /**
-     * @return {@link #hardwareWrapper}
-     */
-    public HardwareWrapper getHardwareWrapperOld() {
-        return hardwareWrapper;
-    }
-
-    /**
-     * @param hardwareWrapper El nuevo valor para {@link #hardwareWrapper}.
-     */
-    public void setHardwareWrapperOld(HardwareWrapper hardwareWrapper) {
-        this.hardwareWrapper = hardwareWrapper;
     }
 }

@@ -16,14 +16,26 @@ import com.colegiovivas.lapandemia.screens.transitions.TopInTransition;
 import com.colegiovivas.lapandemia.screens.transitions.Transition;
 
 /**
- * Pantalla que muestra los datos del récord en un nivel e incluye un botón para
- * empezar una partida en él.
+ * Pantalla en la que se muestran los datos del récord en un nivel y que incluye
+ * un botón para empezar una partida en él.
  */
 public class PreviewScreen extends MultistateScreen<PreviewScreen.States> {
+    /**
+     * Estados en los que se puede encontrar la pantalla.
+     */
     public enum States { IDLE, LEVEL_CHOSEN, CLOSING }
 
+    /**
+     * Vista de la pantalla.
+     */
     private final PreviewView previewView;
 
+    /**
+     * Inicializa la pantalla.
+     * @param main Clase principal a la que se notifica para volver atrás o empezar una partida.
+     * @param levelInfo Nivel cuyos datos se muestran en la pantalla y en el que se podrá jugar.
+     * @param assetManager Gestor de recursos de la aplicación, necesario para renderizar la pantalla.
+     */
     public PreviewScreen(final LaPandemia main, final LevelInfo levelInfo, AssetManager assetManager) {
         previewView = new PreviewView(assetManager, levelInfo);
 

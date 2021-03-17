@@ -27,6 +27,12 @@ class CounterAnimator {
      */
     private float currentTime;
 
+    /**
+     * Inicializa el contador.
+     * @param totalTime Valor para {@link #totalTime}.
+     * @param startValue Valor para {@link #startValue}.
+     * @param endValue Valor para {@link #endValue}.
+     */
     public CounterAnimator(float totalTime, float startValue, float endValue) {
         this.totalTime = totalTime;
         this.startValue = startValue;
@@ -35,8 +41,8 @@ class CounterAnimator {
     }
 
     /**
-     * Actualiza currentTime y reporta el valor actual del contador.
-     * @param delta Tiempo en segundos que ha transcurrido desde la última llamada.
+     * Actualiza {@link #currentTime} y reporta el valor actual del contador.
+     * @param delta Tiempo en segundos que ha transcurrido desde la última actualización.
      * @return El valor actual del contador.
      */
     public float update(float delta) {

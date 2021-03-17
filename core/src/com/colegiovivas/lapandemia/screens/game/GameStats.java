@@ -12,15 +12,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.colegiovivas.lapandemia.LaPandemia;
 import com.colegiovivas.lapandemia.actors.ingameui.GameTimerLabel;
 import com.colegiovivas.lapandemia.actors.ingameui.InvincibilityTimerLabel;
 import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
 /**
- * Controlador de la información que se muestra en la región superior de la pantalla.
+ * Vista para la información que se muestra en la región superior de la pantalla.
  */
 public class GameStats {
+    /**
+     * Stage que contiene la interfaz de la vista.
+     */
     private final Stage stage;
 
     /**
@@ -54,6 +56,10 @@ public class GameStats {
      */
     private boolean paused = false;
 
+    /**
+     * Inicializa la vista.
+     * @param assetManager Gestor de recursos de la aplicación, necesario para renderizar la vista.
+     */
     public GameStats(AssetManager assetManager) {
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(800, 40, camera);
@@ -108,7 +114,7 @@ public class GameStats {
     }
 
     /**
-     * Establecer el número de mascarillas que se muestra.
+     * Establece el número de mascarillas que se muestra.
      * @param total Nuevo valor.
      */
     public void setMaskCount(int total) {
@@ -116,7 +122,7 @@ public class GameStats {
     }
 
     /**
-     * Establecer el número de rollos de papel higiénico que se muestra.
+     * Establece el número de rollos de papel higiénico que se muestra.
      * @param total Nuevo valor.
      */
     public void setPaperCount(int total) {
@@ -124,7 +130,7 @@ public class GameStats {
     }
 
     /**
-     * Establecer el tiempo restante para que se agote el efecto de invencibilidad.
+     * Establece el tiempo restante para que se agote el efecto de invencibilidad.
      * @param totalTime Nuevo valor.
      */
     public void setInvincibilityTime(float totalTime) {
@@ -132,16 +138,16 @@ public class GameStats {
     }
 
     /**
-     * @return El Stage al que pertenece la tabla en la que se distribuye la interfaz de usuario.
+     * @return {@link #stage}
      */
     public Stage getStage() {
         return stage;
     }
 
     /**
-     * Establece si el juego está pausado o no, afectando a los contadores de tiempo, al
-     * indicador de pausa, etc.
-     * @param paused True si el juego está pausado o false en caso contrario.
+     * Establece el valor de {@link #paused} y muestra u oculta el indicador de que la
+     * partida está pausada.
+     * @param paused Valor para {@link #paused}.
      */
     public void setPaused(boolean paused) {
         this.paused = paused;
@@ -149,14 +155,14 @@ public class GameStats {
     }
 
     /**
-     * @return True si y solo si el juego está pausado.
+     * @return {@link #paused}
      */
     public boolean isPaused() {
         return paused;
     }
 
     /**
-     * Actualiza el estado del controlador, en caso de no estar pausado.
+     * Actualiza el estado de la vista, en caso de no estar pausado.
      * @param delta Segundos transcurridos desde la última actualización.
      */
     public void render(float delta) {

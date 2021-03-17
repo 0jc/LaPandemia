@@ -20,21 +20,21 @@ public class Highscore {
     }
 
     /**
-     * @return Puntuación más alta en el nivel.
+     * @return La puntuación más alta en el nivel.
      */
     public int getScore() {
         return levelPreferences.getInteger("score", 0);
     }
 
     /**
-     * @return Autor del récord.
+     * @return EL autor del récord actual.
      */
     public String getAuthor() {
         return levelPreferences.getString("author", "Nadie");
     }
 
     /**
-     * Establece un nuevo récord.
+     * Establece los datos de un nuevo récord.
      * @param score Puntuación para guardar.
      * @param author Nombre indicado por el jugador para guardar junto a la puntuación.
      */

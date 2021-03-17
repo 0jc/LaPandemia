@@ -14,7 +14,7 @@ import java.util.Iterator;
  */
 public abstract class MultistateScreen<T extends Enum<T>> implements Screen {
     /**
-     * Estados disponibles para la pantalla en función de su ID numérica única.
+     * Estados disponibles para la pantalla en función de sus IDs.
      */
     private final ArrayMap<T, State> states;
 
@@ -63,8 +63,12 @@ public abstract class MultistateScreen<T extends Enum<T>> implements Screen {
     }
 
     /**
-     * Cambia de estado, lanzando los eventos relevantes tanto a la
-     * pantalla original, si existía una, como a la nueva.
+     * Cambia de estado, lanzando los eventos relevantes tanto al estado
+     * original, si existía uno, como al nuevo.
+     *
+     * El estado original recibe el evento {@link State#leave()},
+     * mientras que el nuevo recibe los eventos {@link State#enter()} y
+     * {@link MultistateScreen#show()}.
      * @param stateId ID del estado al que se quiere cambiar.
      */
     public void setState(T stateId) {
@@ -83,8 +87,8 @@ public abstract class MultistateScreen<T extends Enum<T>> implements Screen {
     }
 
     /**
-     * Añade un estado para poder establecerlo más adelante mediante setState.
-     * @param id ID mediante la que se identificará a state.
+     * Registra un estado para poder establecerlo más adelante mediante setState.
+     * @param id ID mediante la que se identificará al estado.
      * @param state Estado que será añadido.
      */
     public void addState(T id, State state) {
@@ -95,6 +99,11 @@ public abstract class MultistateScreen<T extends Enum<T>> implements Screen {
         states.put(id, state);
     }
 
+    /**
+     * Libera los recursos utilizados por la pantalla, incluyendo llamadas a
+     * los {@link State#dispose()} de cada estado. También notifica al estado
+     * actual de un evento {@link State#leave()}.
+     */
     @Override
     public void dispose() {
         if (currentStateId != null) {

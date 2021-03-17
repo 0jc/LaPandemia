@@ -19,15 +19,32 @@ import com.colegiovivas.lapandemia.levels.LevelCatalog;
 import com.colegiovivas.lapandemia.levels.LevelInfo;
 import com.colegiovivas.lapandemia.screens.MonochromaticDrawable;
 
+/**
+ * Pantalla de selección de mapas.
+ */
 public class MapSelectionScreen extends ScreenAdapter {
-    private final LaPandemia main;
+    /**
+     * Stage que contiene la interfaz de la pantalla.
+     */
     private final Stage stage;
+
+    /**
+     * Procesador de entrada de datos de la pantalla para la interfaz y para el botón de retroceso.
+     */
     private final InputMultiplexer inputProcessor;
+
+    /**
+     * Procesador para la no captura de entrada de datos.
+     */
     private final InputProcessor noInput;
 
-    public MapSelectionScreen(LaPandemia main, LevelCatalog levelCatalog, AssetManager assetManager) {
-        this.main = main;
-
+    /**
+     * Inicializa la pantalla.
+     * @param main Pantalla principal, a la que se notifica de un mapa elegido o de volver atrás.
+     * @param levelCatalog Catálogo de niveles que se muestran en la pantalla.
+     * @param assetManager Gestor de recursos de la aplicación, necesario para renderizar la pantalla.
+     */
+    public MapSelectionScreen(final LaPandemia main, LevelCatalog levelCatalog, AssetManager assetManager) {
         Camera camera = new OrthographicCamera();
         Viewport viewport = new StretchViewport(400, 240, camera);
         stage = new Stage(viewport);
@@ -57,7 +74,7 @@ public class MapSelectionScreen extends ScreenAdapter {
             button.addListener(new ClickListener() {
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    preview(levelInfo);
+                    main.previewScreenChosen(MapSelectionScreen.this, levelInfo);
                 }
             });
             Cell<TextButton> cell = innerTable.add(button).padTop(20).fillX().expandX();
@@ -83,17 +100,13 @@ public class MapSelectionScreen extends ScreenAdapter {
             @Override
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.BACK) {
-                    MapSelectionScreen.this.main.navigatedBackToMain(MapSelectionScreen.this);
+                    main.navigatedBackToMain(MapSelectionScreen.this);
                     return true;
                 }
 
                 return false;
             }
         });
-    }
-
-    private void preview(LevelInfo levelInfo) {
-        main.previewScreenChosen(this, levelInfo);
     }
 
     @Override

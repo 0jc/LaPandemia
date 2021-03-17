@@ -4,7 +4,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.colegiovivas.lapandemia.actors.world.PlayerActor;
 
 /**
- * Reporta cambios de dirección a un PlayerActor.
+ * Procesador de entrada de datos para cambios de dirección de {@link PlayerActor}.
  */
 public class MovePlayerGestureListener extends GestureDetector.GestureAdapter {
     /**
@@ -17,6 +17,10 @@ public class MovePlayerGestureListener extends GestureDetector.GestureAdapter {
      */
     private final PlayerActor playerActor;
 
+    /**
+     * Inicializa el procesador.
+     * @param playerActor Actor personaje que será notificado de los cambios de dirección.
+     */
     public MovePlayerGestureListener(final PlayerActor playerActor) {
         this.playerActor = playerActor;
     }

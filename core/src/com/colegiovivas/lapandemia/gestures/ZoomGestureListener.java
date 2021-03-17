@@ -3,6 +3,9 @@ package com.colegiovivas.lapandemia.gestures;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Procesador de entrada de datos para gestos de cambiar el zoom.
+ */
 public class ZoomGestureListener extends GestureDetector.GestureAdapter {
     /**
      * Razón que indica cuánto se modifica el zoom en función de cuántos píxeles se
@@ -78,7 +81,10 @@ public class ZoomGestureListener extends GestureDetector.GestureAdapter {
         return false;
     }
 
-    public static interface ZoomListener {
+    /**
+     * Evento de solicitud de cambio de zoom.
+     */
+    public interface ZoomListener {
         /**
          * Evento que indica que el zoom actual debe variar.
          * @param delta Diferencia de zoom que se debe aplicar.

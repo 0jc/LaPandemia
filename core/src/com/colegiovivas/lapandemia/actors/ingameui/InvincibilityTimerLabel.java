@@ -19,6 +19,11 @@ public class InvincibilityTimerLabel extends Label {
      */
     private final InvincibilityTimerListener invincibilityTimerListener;
 
+    /**
+     * Inicializa la etiqueta.
+     * @param style Estilo de la etiqueta.
+     * @param invincibilityTimerListener Valor para {@link #invincibilityTimerListener}.
+     */
     public InvincibilityTimerLabel(Label.LabelStyle style, InvincibilityTimerListener invincibilityTimerListener) {
         super("", style);
         this.invincibilityTimerListener = invincibilityTimerListener;
@@ -26,10 +31,6 @@ public class InvincibilityTimerLabel extends Label {
         valueUpdated();
     }
 
-    /**
-     * Actualiza el estado del contador.
-     * @param delta Segundos transcurridos desde la última actualización.
-     */
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -43,8 +44,7 @@ public class InvincibilityTimerLabel extends Label {
     }
 
     /**
-     * Establece el tiempo restante para que se termine el efecto de invencibilidad.
-     * @param timeLeft
+     * @param timeLeft Tiempo restante para que se termine el efecto de invencibilidad.
      */
     public void setTimeLeft(float timeLeft) {
         this.timeLeft = timeLeft;
@@ -65,6 +65,9 @@ public class InvincibilityTimerLabel extends Label {
         invincibilityTimerListener.newValueSet(rounded);
     }
 
+    /**
+     * Evento de cambio del los segundos de tiempo de invencibilidad.
+     */
     public interface InvincibilityTimerListener {
         /**
          * Reporta de que el valor que se muestra en el contador ha cambiado.

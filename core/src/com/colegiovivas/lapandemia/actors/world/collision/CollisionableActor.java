@@ -1,7 +1,6 @@
 package com.colegiovivas.lapandemia.actors.world.collision;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.colegiovivas.lapandemia.actors.WorldActor;
 import com.colegiovivas.lapandemia.actors.world.ActorId;
 
@@ -15,7 +14,7 @@ public abstract class CollisionableActor extends WorldActor {
     protected CollisionDispatcher collisionDispatcher;
 
     /**
-     * @param collisionDispatcher Gestor de colisiones al que el actor reporta cambios de posición.
+     * @param collisionDispatcher Valor para {@link #collisionDispatcher}.
      */
     public void setCollisionDispatcher(CollisionDispatcher collisionDispatcher) {
         this.collisionDispatcher = collisionDispatcher;

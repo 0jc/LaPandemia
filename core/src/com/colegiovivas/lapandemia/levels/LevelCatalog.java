@@ -19,6 +19,9 @@ public class LevelCatalog {
      */
     private final Array<LevelInfo> catalog;
 
+    /**
+     * Inicializa el catálogo.
+     */
     public LevelCatalog() {
         catalog = new Array<>();
 

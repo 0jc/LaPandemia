@@ -27,12 +27,12 @@ import com.colegiovivas.lapandemia.levels.json.WallActorJsonEntry;
  */
 public class World implements ZoomGestureListener.ZoomListener {
     /**
-     * Stage de Libgdx que contiene los actores (personajes, muros, etc.).
+     * Stage de los actores (muros, virus, el personaje principal, etc.).
      */
     private final WorldStage stage;
 
     /**
-     * Personaje controlado por el jugador.
+     * Personaje principal, controlado por el jugador.
      */
     private PlayerActor playerActor;
 
@@ -54,11 +54,10 @@ public class World implements ZoomGestureListener.ZoomListener {
     private final CollisionDispatcher collisionDispatcher;
 
     /**
-     * Grupo que contiene todos los actores pertenecientes al mundo. Se excluye
-     * de él únicamente el indicador de salud del personaje. Esta exclusión
-     * garantiza que dicho indicador se pueda mostrar siempre por encima de
-     * todos los demás actores, ya que realmente es un componente de interfaz
-     * de usuario.
+     * Grupo que contiene todos los actores pertenecientes al mundo. Dentro de
+     * la región de pantalla destinada a mostrar el mundo, el único actor que
+     * se excluye de este grupo es el indicador de salud, de forma que se muestra
+     * por encima de todos los demás actores y no es colisionable.
      */
     private final Group rootGroup;
 
@@ -91,6 +90,12 @@ public class World implements ZoomGestureListener.ZoomListener {
      */
     private boolean paused = false;
 
+    /**
+     * Inicializa el mundo.
+     * @param assetManager Gestor de recursos de la aplicación.
+     * @param hardwareWrapper Interfaz hacia los sensores hardware tal y como los ha configurado el usuario.
+     * @param level Nivel en el que se desarrolla la partida.
+     */
     public World(AssetManager assetManager, HardwareWrapper hardwareWrapper, LevelInfo level) {
         OrthographicCamera worldCamera = new OrthographicCamera();
         Viewport worldViewport = new StretchViewport(800, 480, worldCamera);
@@ -115,9 +120,9 @@ public class World implements ZoomGestureListener.ZoomListener {
     /**
      * Carga un mapa de juego, añadiendo actores, calculando parámetros como el zoom
      * máximo y creando los generadores de actores.
-     * @param assetManager ...
-     * @param hardwareWrapper ...
-     * @param level El mapa para cargar.
+     * @param assetManager Gestor de recursos de la aplicación.
+     * @param hardwareWrapper Interfaz hacia los sensores hardware tal y como los ha configurado el usuario.
+     * @param level Nivel en el que se desarrolla la partida.
      */
     private void setUpMap(AssetManager assetManager, HardwareWrapper hardwareWrapper, LevelInfo level) {
         Json json = new Json();
@@ -195,57 +200,56 @@ public class World implements ZoomGestureListener.ZoomListener {
     }
 
     /**
-     * @return True si y solo si el juego está pausado.
+     * @return {@link #paused}
      */
     public boolean isPaused() {
         return paused;
     }
 
     /**
-     * @return El Stage de Libgdx del mundo.
+     * @return {@link #stage}
      */
     public Stage getStage() {
         return stage;
     }
 
     /**
-     * @return La anchura del mundo.
+     * @return {@link #width}
      */
     public int getWidth() {
         return width;
     }
 
     /**
-     * @return La altura del mundo.
+     * @return {@link #height}
      */
     public int getHeight() {
         return height;
     }
 
     /**
-     * @return El grupo que contiene todos los actores del mundo excepto el indicador
-     * de salud.
+     * @return {@link #rootGroup}
      */
     public Group getRootGroup() {
         return rootGroup;
     }
 
     /**
-     * @return El gestor de colisiones.
+     * @return {@link #collisionDispatcher}
      */
     public CollisionDispatcher getCollisionDispatcher() {
         return collisionDispatcher;
     }
 
     /**
-     * @return El personaje principal.
+     * @return {@link #playerActor}
      */
     public PlayerActor getPlayerActor() {
         return playerActor;
     }
 
     /**
-     * @return El zoom máximo que se puede aplicar al mapa.
+     * @return {@link #maxZoom}
      */
     public float getMaxZoom() {
         return maxZoom;
@@ -259,7 +263,7 @@ public class World implements ZoomGestureListener.ZoomListener {
     }
 
     /**
-     * @return El tiempo que la partida lleva jugándose en segundos.
+     * @return {@link #runningTime}
      */
     public float getRunningTime() {
         return runningTime;
@@ -273,7 +277,7 @@ public class World implements ZoomGestureListener.ZoomListener {
     }
 
     /**
-     * Modifica el zoom actual.
+     * Altera el zoom actual por una diferencia.
      * @param delta Diferencia del nuevo zoom con respecto al valor actual.
      */
     @Override
@@ -313,9 +317,21 @@ public class World implements ZoomGestureListener.ZoomListener {
         collisionDispatcher.dispose();
     }
 
+    /**
+     * Stage del mundo. Tiene como característica que gestiona automáticamente la
+     * posición de la cámara al dibujarse para implementar el scroll con el que se
+     * sigue a {@link #playerActor}.
+     */
     private class WorldStage extends Stage {
+        /**
+         * Cámara del mundo.
+         */
         private final OrthographicCamera camera;
 
+        /**
+         * Inicializa el Stage.
+         * @param viewport Viewport del Stage.
+         */
         public WorldStage(Viewport viewport) {
             super(viewport);
             camera = (OrthographicCamera)getCamera();
@@ -327,6 +343,10 @@ public class World implements ZoomGestureListener.ZoomListener {
             super.draw();
         }
 
+        /**
+         * Ajusta la posición de la cámara en función de la posición de {@link #playerActor}
+         * en el mundo.
+         */
         private void adjustCamera() {
             // Se muestra siempre el mayor espacio posible alrededor del personaje, pero sin
             // hacer scroll más allá de los límites del mapa. Cuando el personaje no está

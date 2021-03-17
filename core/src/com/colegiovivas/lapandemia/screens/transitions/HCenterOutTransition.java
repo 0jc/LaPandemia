@@ -3,9 +3,15 @@ package com.colegiovivas.lapandemia.screens.transitions;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
- * Transición de dos rectángulos separándose desde el centro sobre el eje horizontal.
+ * Transición de dos rectángulos separándose del centro por el eje horizontal.
  */
 public class HCenterOutTransition extends Transition {
+    /**
+     * Inicializa la transición.
+     * @param prewait Valor para {@link Transition#prewait}.
+     * @param duration Valor para {@link Transition#duration}.
+     * @param postwait Valor para {@link Transition#postwait}.
+     */
     public HCenterOutTransition(float prewait, float duration, float postwait) {
         super(prewait, duration, postwait);
     }
