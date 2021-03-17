@@ -202,8 +202,8 @@ public class LaPandemia extends Game {
     @Override
     public void dispose() {
         super.dispose();
+        if (nextScreen != null && nextScreen != getScreen()) nextScreen.dispose();
         if (getScreen() != null) getScreen().dispose();
-        if (nextScreen != null) nextScreen.dispose();
         assetManager.dispose();
     }
 }
