@@ -1,4 +1,5 @@
 # La Pandemia
+_Translations available in: [English](README.en.md)._
 
 - [Introducción](#introducción)
 - [Historia, objetivo y normas](#historia-objetivo-y-normas)
