@@ -29,7 +29,7 @@ I've put together a much more in-depth video presentation where I explain (in Sp
 ## Installation
 The game is currently not available on app markets such as Google Play. Hence, an APK file for the project must be compiled, downloaded into an Android device and run from it in order to play.
 
-To compile the APK file, you must first install an Android SDK with support for API level 14 (for Android 4.0) or newer, and then run the Gradle task ```assembleDebug```.
+To compile the APK file, you must first install an Android SDK with support for API level 14 (for Android 4.0) or newer, and then run the ```assembleDebug``` Gradle task.
 
 Below I'll be showing as an example how one would go about doing this on an UNIX environment:
 
