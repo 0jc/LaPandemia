@@ -5,12 +5,21 @@
 - [Instalación](#instalación)
   - [Clona localmente el repositorio y accede a él](#clona-localmente-el-repositorio-y-accede-a-él)
   - [Establece la variable de entorno ANDROID_SDK_ROOT](#establece-la-variable-de-entorno-android_sdk_root)
-  - [Ejecuta la tarea assembleDebug](#ejecuta-la-tarea-assembleDebug)
+  - [Ejecuta la tarea assembleDebug](#ejecuta-la-tarea-assembledebug)
 
 ## Introducción
 _La Pandemia_ es un juego para dispositivos Android que he desarrollado como proyecto del segundo trimestre de _Programación Multimedia y Dispositivos Móviles_, uno de los módulos del segundo curso del _Grado Superior en Desarrollo de Aplicaciones Multiplataforma_ que he cursado en el Colegio Vivas.
 
 ## Historia, objetivo y normas
+![Cuenta atrás](markdown/countdown.gif)
+![Cambiando el zoom](markdown/zooming-out.gif)
+![Moviéndose](markdown/moving-around-1.gif)
+![Recolectando powerups](markdown/getting-powerups.gif)
+![Vacuna](markdown/vaccine.gif)
+![Salud](markdown/health.gif)
+![Pausando y reanudando](markdown/pausing.gif)
+![Muriendo](markdown/dying.gif)
+
 En _La Pandemia_, un personaje principal se encuentra encerrado en un mapa de juego a elección del usuario en el que aparecen cada vez más _virus_, que se mueven de manera aleatoria. El jugador posee un número determinado de mascarillas que va perdiendo según entra en contacto con los virus, hasta que finalmente colisiona con uno sin tener ninguna mascarilla, terminándose así la partida.
 
 El jugador obtiene mascarillas recolectándolas por el mapa de juego, donde van apareciendo también aleatoriamente de forma periódica. Además de estas, también aparecen rollos de papel higiénico. El objetivo del juego es coleccionar todos los rollos que se pueda hasta que la partida se termine, y la puntuación final es el recuento total de rollos obtenidos.
