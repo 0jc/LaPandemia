@@ -25,7 +25,7 @@ En _La Pandemia_, un personaje principal se encuentra encerrado en un mapa de ju
 
 El jugador obtiene mascarillas recolectándolas por el mapa de juego, donde van apareciendo también aleatoriamente de forma periódica. Además de estas, también aparecen rollos de papel higiénico. El objetivo del juego es coleccionar todos los rollos que se pueda hasta que la partida se termine, y la puntuación final es el recuento total de rollos obtenidos.
 
-Existe una presentación en vídeo mucho más completa en la que se explica con más detenimiento todo lo que tiene para ofrecer este juego. Pronto será subida al canal de YouTube del colegio, y una vez se haya hecho la adjuntaré aquí.
+Como parte del trabajo de clase, existe [una presentación en vídeo mucho más completa](https://www.youtube.com/watch?v=kve6q9e5Lc8) en la que se explica con más detenimiento todo lo que tiene para ofrecer este juego.
 
 ## Instalación
 Actualmente, el juego no está disponible en tiendas de aplicaciones como Google Play. Por tanto, para jugar se debe compilar el APK, descargarlo en el dispositivo y ejecutarlo desde él.

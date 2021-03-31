@@ -24,14 +24,14 @@ In _La Pandemia_, a main character is stuck in a user-selected game map where in
 
 The player gets masks by collecting them from the game map, where more and more also keep appearing periodically in random places. Besides the masks, toilet paper rolls also keep appearing. The goal is to collect as many such rolls as possible until the game ends, and the final score is the total amount of them collected.
 
-I've put together a much more in-depth video presentation where I explain (in Spanish) everything that this game has to offer. It'll soon be uploaded to my school's YouTube channel, and once it's done it'll be added to this document too.
+As part of the class assignment, I've put together [a much more in-depth video presentation](https://youtube.com/watch?v=kve6q9e5Lc8) where I explain (in Spanish) everything that this game has to offer.
 
 ## Installation
 The game is currently not available on app markets such as Google Play. Hence, an APK file for the project must be compiled, downloaded into an Android device and run from it in order to play.
 
 To compile the APK file, you must first install an Android SDK with support for API level 14 (for Android 4.0) or newer, and then run the ```assembleDebug``` Gradle task.
 
-Below I'll be showing as an example how one would go about doing this on an UNIX environment:
+Below I'll be showing as an example how one would go about doing this on a UNIX environment:
 
 ### Make a local clone of the repository and enter it
 Naturally, you need to have Git installed on your system.
@@ -51,4 +51,4 @@ From the root directory of the repository, run:
 ```
 ./gradlew assembleDebug
 ```
-If the task is successful, the APK file will have been stored on ```./android/build/outputs/apk/debug/android-debug.apk```.
+If the task is successful, the APK file will have been stored at ```./android/build/outputs/apk/debug/android-debug.apk```.
